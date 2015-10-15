@@ -84,7 +84,7 @@ def main():
         time.sleep(frequency)
     
     #collect process information from student's machine at the end of the test
-    for datetime.datetime.now() == end_time:
+    if datetime.datetime.now() == end_time:
         
         collect_process_information(str(record_number), output_file)
         
