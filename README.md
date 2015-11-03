@@ -20,7 +20,7 @@ import ServerInteracter
 Now you have 2 functions available. ServerInteracter.setUpServer(pPort, pHost) and ServerInteracter.callFunctionOnServer(functionName)
 
 Before you can do any interactions with the server, you need to call ServerInteracter.setUpServer(pPort, pHost). The parameters are the port and the IP address provided by the professor.
-Until we actually are in a position to test this in a real setting call the function like so:
+Until we actually are in a position to test this in a real setting (test run) call the function like so:
 ServerIneracter.setUpServer(0, 0)
 
 Now the server is configured on the client side. If you want to interact with the server now you need to do this by telling the server what function to execute. Make sure the function you are trying to execute actually
@@ -32,7 +32,7 @@ ServerInteracter.callFunctionOnServer("myFunctionName")
 Currently parameters for server functions are not supported but that will change shortly (1 day or 2 tops!).
 
 The return value of this is either True or False dependent on whether the execution of the function on the server was successful or not.
-If you encounter the case that this function return False and no error message shows up on the Client side, go look at the error messages in Server.py .
+
 Either there was a problem when you set up the server, or the issue is more complicated, in which case I would suggest contacting me (Francois) or using your crazy coding skills to fix the issue yourself.
 
 Running code:
@@ -75,6 +75,6 @@ Running:
 Before running any client scripts, run Server.py . It sets up a server and it listens to the Clients.
 
 If you added both the import and the functions to the function table, the Server Side is all set. Now just go ahead and call your function from the Client like so:
-ServerIneracter.callFunctionOnServer("nameOfMyFunctionUNIQUE")
+ServerInteracter.callFunctionOnServer("nameOfMyFunctionUNIQUE")
 
 (make sure your client side is correctly set up ofc, please refer to the Client section)
