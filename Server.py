@@ -34,7 +34,9 @@ def main():
 
     # create a socket
     try:
+        # create Internet TCP socket (domain, type)
         lServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # bind address(gHost, gPort) to socket
         lServerSocket.bind((gHOST, gPORT))
 
         # accept "call" from client
@@ -49,8 +51,10 @@ def main():
     # main loop
     while 1:
         print "waiting for connection, so far: %s connections" %lTotalNumberOfConnections
+        # wait until connection arrives (blocking)
         lClientsocket, lAddr = lServerSocket.accept()
         print 'connection detected at:', lAddr
+        # starts new thread (function, args_tuple)
         thread.start_new_thread(handler, (lClientsocket, lAddr))
         lTotalNumberOfConnections += 1
 
@@ -58,19 +62,25 @@ def main():
 def handler(pClientsocket, addr):
     global lNumberOfClients, lNumberOfClientsLock
 
+    # acquire a lock, blocking = True, timeout = -1
     lNumberOfClientsLock.acquire()
     lNumberOfClients += 1
+    # unlock
     lNumberOfClientsLock.release()
-
+    
+    # while True
     while 1:
+        # receive TCP message
         data = pClientsocket.recv(1024)
         break
     lIsExecuted = interpreteClientString(data)
 
     if lIsExecuted:
        print "Function was properly executed"
+       # transmits TCP message: success
        pClientsocket.send("s")
     else:
+        # transmits message: fail
        pClientsocket.send("f")
 
     pClientsocket.close()
