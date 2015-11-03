@@ -10,6 +10,8 @@ gPORT = 20500 # hardcoding the port number TODO: make based on user input
 gHOST = socket.gethostname()
 
 # setter
+# pHost = IP address provided by prof
+# pPort = Port provided by prof
 def setUpServer(pHost, pPort):
     global gPORT, gHOST
 
@@ -25,12 +27,16 @@ def callFunctionOnServer(functionName):
     # connection on localhost for now
     global gPORT, gHOST
     try:
+        # create local Internet TCP socket (domain, type)
         lSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # initiate server connection to global
         lSocket.connect( (gHOST, gPORT) )
         lSocket.send(functionName)
-
+    
+    #connection problem
     except socket.error, (value,message):
         if lSocket:
+            # close socket
             lSocket.close()
         raise RuntimeError("Could not open socket on Client: " + message)
         return False
