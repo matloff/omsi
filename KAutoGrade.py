@@ -2,6 +2,10 @@
 #Auto-grading program based on Norm Matloff's AutoGradeQuiz.R
 #program.  Translated into Python by Kiran Bhadury.
 #
+#Update 11/2/15: Files are now expected to be stored in a hierarchical
+#	directory format.  Each student has their own directory with their
+#	answer file and any other files inside.
+#
 #TODO:
 #	How do we get/use the teacher's global variables?
 #	Can't run R code (more details in the grade_student_ans function)
@@ -45,7 +49,7 @@
 
 __author__ = 'Kiran'
 
-import glob
+import os
 
 #Set up the default global variables
 test_id = None 				   #Example: test_id=3 for Quiz3
@@ -242,13 +246,16 @@ def grader(outfile, verbose = False):
 	f = open(outfile, 'a')
 	f.write('Exam ' + test_id + ' ' + str(test_value) + ' points\n')
 	
-	all_student_files = glob.glob('*.txt') #Assuming this program is in the same dir
+	all_student_dirs = os.listdir('.')
 	count_files = 0
 	bad_files = 0
-	for fl in all_student_files:
+	for stddir in all_student_dirs:
+		if not (os.path.isdir(stddir)):
+			continue #Skip past anything that isn't a directory
+		fl = os.path.join(stddir, 'answers.txt') #Look for student's answer file
 		count_files+=1
 		output_line = []
-		email = fl[:-4]
+		email = stddir
 		output_line.append(email)
 		read_student_file(fl)
 		
