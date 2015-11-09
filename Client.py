@@ -1,6 +1,7 @@
 __author__ = 'fdemoullin'
 
 import sys
+import Checksum
 
 try:
     import socket
@@ -63,3 +64,8 @@ def getResponseFromServer(pSocket):
     else:
         return False
 
+def computeChecksum(filename):
+
+    h = Checksum.checksum(filename)
+
+    print 'Please hand copy the following value and turn it into the professor: ' + h

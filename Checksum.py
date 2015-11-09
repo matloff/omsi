@@ -18,8 +18,5 @@ def checksum(filename = 'Checksum.py'):
     # compute secure hash of file contents
     h = hashlib.sha256(stream)
 
-    # print
-    print h.hexdigest()
-
     # return hash in hexadecimal
     return h.hexdigest()

@@ -19,7 +19,6 @@ except ImportError:
 
 # import modules that contain functions called by a client
 import ExampleScriptServerSide
-import Checksum
 
 # function dictionary
 # stores function names and corresponding functions that this server class uses
@@ -28,7 +27,6 @@ gFunctionDictionary = {
     # TODO: make this accept parameters
     'printA': ExampleScriptServerSide.printA,
     'printB': ExampleScriptServerSide.printB,
-    'checksum': Checksum.checksum
 }
 
 # associate the socket with a port

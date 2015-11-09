@@ -10,5 +10,5 @@ if Client.callFunctionOnServer("printA"):
     print "Hurray, I executed printA() on the server"
 if Client.callFunctionOnServer("printB"):
     print "Hurray, I executed printB() on the server"
-if Client.callFunctionOnServer("checksum"):
-    print "Hurray, I executed checksum() on the server"
+
+Client.computeChecksum('Checksum.py')
