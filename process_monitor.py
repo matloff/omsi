@@ -8,19 +8,19 @@ import sys
 try:
     import psutil
 except ImportError:
-    print 'Cannot import psutil library. Exiting...'
+    print 'Cannot import psutil. Exiting...'
     sys.exit()
 
 try:
     import time
 except ImportError:
-    print 'Cannot import time library. Exiting...'
+    print 'Cannot import time. Exiting...'
     sys.exit()
 
 try:
     import datetime
 except ImportError:
-    print 'Cannot import datetime library. Exiting...'
+    print 'Cannot import datetime. Exiting...'
     sys.exit()
 
 

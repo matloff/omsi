@@ -3,19 +3,32 @@ __author__ = 'fdemoullin'
 # this is the main script on the professor's machine, this needs to run without interruption
 # TODO: make this support ftp file transfers
 
-import socket
-import thread
 import sys
 
-# import any modules that contain functions called directly from the clients
-import ExampleScriptServerSide
+try:
+    import socket
+except ImportError:
+    print 'Cannot import socket. Exiting...'
+    sys.exit()
 
-# function dictionary, stores all the functions that this server class uses
+try:
+    import thread
+except ImportError:
+    print 'Cannot import thread. Exiting...'
+    sys.exit()
+
+# import modules that contain functions called by a client
+import ExampleScriptServerSide
+import Checksum
+
+# function dictionary
+# stores function names and corresponding functions that this server class uses
 gFunctionDictionary = {
     # associate the function name with the function first class object
     # TODO: make this accept parameters
     'printA': ExampleScriptServerSide.printA,
-    'printB': ExampleScriptServerSide.printB
+    'printB': ExampleScriptServerSide.printB,
+    'checksum': Checksum.checksum
 }
 
 # associate the socket with a port
@@ -24,6 +37,7 @@ gPORT = 20500 #int(sys.argv[1])
 
 # keep track of how many clients there are
 lNumberOfClients = 0
+
 # set up a lock to guard nclnt
 lNumberOfClientsLock = thread.allocate_lock()
 
@@ -36,6 +50,7 @@ def main():
     try:
         # create Internet TCP socket (domain, type)
         lServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         # bind address(gHost, gPort) to socket
         lServerSocket.bind((gHOST, gPORT))
 
@@ -49,12 +64,15 @@ def main():
         sys.exit(1)
 
     # main loop
-    while 1:
+    while True:
+
         print "waiting for connection, so far: %s connections" %lTotalNumberOfConnections
-        # wait until connection arrives (blocking)
+
+        # block until connection arrives
         lClientsocket, lAddr = lServerSocket.accept()
         print 'connection detected at:', lAddr
-        # starts new thread (function, args_tuple)
+
+        # starts new thread (function, args_tuple) for new client
         thread.start_new_thread(handler, (lClientsocket, lAddr))
         lTotalNumberOfConnections += 1
 
@@ -67,9 +85,8 @@ def handler(pClientsocket, addr):
     lNumberOfClients += 1
     # unlock
     lNumberOfClientsLock.release()
-    
-    # while True
-    while 1:
+
+    while True:
         # receive TCP message
         data = pClientsocket.recv(1024)
         break
@@ -77,11 +94,13 @@ def handler(pClientsocket, addr):
 
     if lIsExecuted:
        print "Function was properly executed"
+
        # transmits TCP message: success
-       pClientsocket.send("s")
+       pClientsocket.send("success")
+
     else:
         # transmits message: fail
-       pClientsocket.send("f")
+       pClientsocket.send("fail")
 
     pClientsocket.close()
 

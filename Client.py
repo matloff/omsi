@@ -1,8 +1,16 @@
-import socket
+__author__ = 'fdemoullin'
+
 import sys
 
+try:
+    import socket
+except ImportError:
+    print 'Cannot import socket. Exiting...'
+    sys.exit()
+
+
 # module that provides an interface for all server related requests
-# sets up connection with the running server on localhost and port 12345
+# sets up connection with the running server on localhost and port 20500
 # all methods are static and should be called statically
 
 # global variable to keep track of the socket
@@ -45,10 +53,12 @@ def callFunctionOnServer(functionName):
 
 # close the connection
 def getResponseFromServer(pSocket):
-    # this will block the client until response was received
-    lServerResponse = pSocket.recv(sys.getsizeof("f"))
+
+    # block until server response received
+    lServerResponse = pSocket.recv(sys.getsizeof("f")) #what is this
     pSocket.close()
-    if lServerResponse == "s":
+
+    if lServerResponse == "success":
         return True
     else:
         return False
