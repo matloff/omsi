@@ -2,6 +2,7 @@ __author__ = 'fdemoullin'
 
 import sys
 import Checksum
+import ProcessMonitor
 
 try:
     import socket
