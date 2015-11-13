@@ -2,7 +2,6 @@ __author__ = 'fdemoullin'
 
 import sys
 import Checksum
-import ProcessMonitor
 
 try:
     import socket
@@ -57,12 +56,13 @@ def callFunctionOnServer(functionName):
 def getResponseFromServer(pSocket):
 
     # block until server response received
-    lServerResponse = pSocket.recv(sys.getsizeof("f")) #what is this
+    lServerResponse = pSocket.recv(1024)
     pSocket.close()
 
-    if lServerResponse == "success":
+    if lServerResponse == "s":
         return True
     else:
+        print lServerResponse
         return False
 
 def computeChecksum(filename):

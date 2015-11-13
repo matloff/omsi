@@ -92,15 +92,15 @@ def handler(pClientsocket, addr):
 
     lIsExecuted = interpreteClientString(data)
 
-    if lIsExecuted:
+    if lIsExecuted == "s":
        print "Function was properly executed"
 
        # transmits TCP message: success
-       pClientsocket.send("success")
+       pClientsocket.send("s")
 
     else:
         # transmits message: fail
-       pClientsocket.send("fail")
+       pClientsocket.send(lIsExecuted)
 
     pClientsocket.close()
 
