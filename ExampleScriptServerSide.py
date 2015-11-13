@@ -14,3 +14,7 @@ def printA():
 def printB():
     print "B"
     return
+
+def printMyOwnWords(pToBePrinted):
+    print pToBePrinted
+    return

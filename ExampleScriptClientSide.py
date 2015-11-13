@@ -6,7 +6,9 @@ __author__ = 'fdemoullin'
 
 import ServerInteracter
 
-if ServerInteracter.callFunctionOnServer("printA"):
+if ServerInteracter.callFunctionOnServer("printA()"):
     print "Hurray, I executed printA() on the server"
 if ServerInteracter.callFunctionOnServer("printB"):
-    print "Hurray, I executed printB() on the server"
+     print "Hurray, I executed printB() on the server"
+if ServerInteracter.callFunctionOnServer("printMyOwnWords('print this silly text')"):
+    print "All right, now passing parameters to server function calls works too"
