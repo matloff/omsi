@@ -8,23 +8,23 @@ import sys
 try:
     import psutil
 except ImportError:
-    print 'Cannot import psutil library. Exiting...'
+    print 'Cannot import psutil. Exiting...'
     sys.exit()
 
 try:
     import time
 except ImportError:
-    print 'Cannot import time library. Exiting...'
+    print 'Cannot import time. Exiting...'
     sys.exit()
 
 try:
     import datetime
 except ImportError:
-    print 'Cannot import datetime library. Exiting...'
+    print 'Cannot import datetime. Exiting...'
     sys.exit()
 
 
-def collect_process_information(record_num, output_file):
+def collectProcessInformation(record_num, output_file):
 
     # write current time to file
     output_file.write(datetime.datetime.now().strftime('%Y%m%d%M%S') + '\n')
@@ -49,7 +49,7 @@ def collect_process_information(record_num, output_file):
     return
 
 
-def convert_to_int(input_str):
+def convertToInt(input_str):
     while True:
         try:
             output_int = int(input_str)
@@ -58,12 +58,12 @@ def convert_to_int(input_str):
             output_int = raw_input('Please enter an integer: ')
 
 
-def main():
+def monitorProcesses():
     # allow professor to set how frequently process information will be recorded
-    frequency = convert_to_int(raw_input('Please enter time spacing in seconds: '))
+    frequency = convertToInt(raw_input('Please enter time spacing in seconds: '))
 
     # allow user to decide how long the test will be
-    test_duration = convert_to_int(raw_input('Please enter test time in minutes: '))
+    test_duration = convertToInt(raw_input('Please enter test time in minutes: '))
 
     # calculate end time
     end_time = datetime.datetime.now() + datetime.timedelta(minutes=test_duration)
@@ -77,20 +77,15 @@ def main():
     # collect process information from student's machine as long as student hasn't exceeded end of test
     while datetime.datetime.now() < end_time:
 
-        collect_process_information(str(record_number), output_file)
+        collectProcessInformation(str(record_number), output_file)
 
         record_number += 1
 
         time.sleep(frequency)
     
     #collect process information from student's machine at the end of the test
-    if datetime.datetime.now() == end_time:
-        
-        collect_process_information(str(record_number), output_file)
+    if datetime.datetime.now() > end_time:
+        collectProcessInformation(str(record_number), output_file)
         
     # stop collecting process information once test has finished
     print 'Test is over\n'
-    sys.exit()
-
-if __name__ == '__main__':
-    main()

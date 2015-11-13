@@ -1,4 +1,4 @@
-#KBAutoGradeQuiz.py
+#AutoGradeQuiz.py
 #Auto-grading program based on Norm Matloff's AutoGradeQuiz.R
 #program.  Translated into Python by Kiran Bhadury.
 #
@@ -6,13 +6,17 @@
 #	directory format.  Each student has their own directory with their
 #	answer file and any other files inside.
 #
+#Update 11/4/15: Now supports multi-line answers.  Assumes that any
+#	line starting with a '#' is the question header, and any other
+#	line is part of the corresponding answer.
+#
 #TODO:
 #	How do we get/use the teacher's global variables?
 #	Can't run R code (more details in the grade_student_ans function)
 #	Doesn't currently support complex code evaluation.
-#		However, this can easily be added by using exec and the 
-#		compile() function. Then the issue would be grading the 
-#		code (i.e. grading against multiple test cases).
+#		I definitely feel like we can use Prof. Chen's GradeBot to
+#		do this.  However, if Prof. Matloff is against it, Python's
+#		subprocess module allows us to run external programs.
 #	Doesn't set letter grades.
 #		I held off on this one because I want us to find a good
 #		way to display class results (maybe a graph? or maybe
@@ -28,22 +32,27 @@
 #		email the results later on.)
 #
 #About the program
-#This program allows for semi-automated grading by parsing students'
-#answers and parsing a master answer file, and then displaying
-#both sets of answers to the teacher.  The teacher then decides how
-#many points to award and applies any late penalties.  All results are
-#stored in an output file.
+#	This program allows for semi-automated grading by parsing students'
+#	answers and parsing a master answer file, and then displaying
+#	both sets of answers to the teacher.  The teacher then decides how
+#	many points to award and applies any late penalties.  All results are
+#	stored in an output file.
 #
 #Conditions:
-#The students' answer files, the master answer file, and this program
-#must all be in the same directory.  The master answer file must be
-#named Answersx, where x is the test ID.  The students' files must be
-#named emailname.txt, where email name is the email address without
-#the @ucdavis.edu (i.e. jsmith@ucdavis.edu -> jsmith)
-#The files must be in a certain format (more on this is explained
-#in the methods below).  The program also alerts the teacher if
-#there are any formatting errors, and the teacher must manually fix
-#or grade those files.
+#	The students' answer directories, the master answer file, and this program
+#	must all be in the same directory.  The master answer file must be
+#	named Answersx, where x is the test ID.  The students' files must be
+#	in directories that are named according to their email address:
+#		emailname, where email name is the email address without
+#		the @ucdavis.edu (i.e. jsmith@ucdavis.edu -> jsmith)
+#	Their answers must be stored in a file called answers.txt within
+#	their student directory.
+#
+#	The files must be in a certain format (more on this is explained
+#	in the methods below).
+#
+#	The program also alerts the teacher if there are any formatting errors, 
+#	and the teacher must manually fix or grade those files.
 #
 #Detailed information about each method precedes the method declaration
 
@@ -55,13 +64,15 @@ import os
 test_id = None 				   #Example: test_id=3 for Quiz3
 test_value = -1				   #Total number of possible points
 output = [] 				   #Contains one output line per student
-student_anslist = [] 		   #The student's answers
+student_anslist = [[],[]]	   #The student's answers
+#More of student_anslist:
+#Initialized to two empty sublists in the following format:
+#	[[question #s],[answers]]
+#...so let's set up some constants to refer to student_anslist indices
+SNUM_INDEX = 0
+SANS_INDEX = 1
+#Same idea with master_anslist:
 master_anslist = [[],[],[],[]] #Data from the answer key
-#More on master_anslist:
-#Initialized to four empty sublists
-#sublists are in the following format...
-#	[[question #s],[question types],[point values],[correct answers]]
-#... so let's set up some constants to refer to master_anslist indices
 QNUM_INDEX = 0
 QTYPE_INDEX = 1
 QVAL_INDEX = 2
@@ -81,36 +92,39 @@ QANS_INDEX = 3
 # 
 #The resulting master_anslist is in the following format:
 #	[[#1,#2],['N','S'],[10,15],[2*(7/4),'Christopher Columbus']]
+#
+#Note that the answer may span multiple lines of the answer file
 def get_true_answers():
 	filename = 'Answers' + test_id
 	try:
-		answer_file = open(filename)
+		answer_file = open(filename,'r')
 	except IOError:
 		print 'Error: The answer file %s does not exist' % filename
-		exit()
+		exit() #Without the answer file, the program must close
 	file_contents = list(answer_file)
 	answer_file.close()
 	
-	#Get every even line (those containing question num, type, and value)
-	for header in file_contents[::2]:
-		vals = header.split(' ')
-		
-		#Make sure question header is in the right format
-		#There should be three values, and the line should start with a #
-		if (len(vals)!=3 or vals[0][0]!='#'):
-			print_ansfile_format()
-			exit()
-
-		master_anslist[QNUM_INDEX].append(vals[0])
-		master_anslist[QTYPE_INDEX].append(vals[1])
-		master_anslist[QVAL_INDEX].append(float(vals[2][:-1])) #Remove \n 
-		#Now we can calculate the test value
-		global test_value
-		test_value = sum(master_anslist[QVAL_INDEX])
+	ansindex = -1
+	for line in file_contents:
+		#Question header
+		if line[0] == '#':
+			vals = line.split(' ')
+			if len(vals) != 3:
+				print_ansfile_format()
+				exit()
+			master_anslist[QNUM_INDEX].append(vals[0])
+			master_anslist[QTYPE_INDEX].append(vals[1])
+			master_anslist[QVAL_INDEX].append(float(vals[2][:-1])) #Remove \n
+			master_anslist[QANS_INDEX].append("") #Anticipate answer
+			ansindex += 1
+		#Answer (may be multi-line)
+		else:
+			master_anslist[QANS_INDEX][ansindex] += (line + '\t\t\t') #Fancy formatting
 	
-	#Get every odd line (those containing the question answer)
-	for ans in file_contents[1::2]:
-		master_anslist[QANS_INDEX].append(ans[:-1]) #Remove \n
+	#Calculate how much the test is worth
+	global test_value
+	test_value = sum(master_anslist[QVAL_INDEX])
+			
 
 #Function print_ansfile_format
 #Input: none
@@ -130,38 +144,48 @@ Christopher Columbus
 
 #Function read_student_file
 #Input: string name of the file to be graded
-#Output: none
-#Read in the student's file (no fancy parsing here, just the list() function)
+#Output: Boolean for successful read (True) or not (False)
+#Read in the student's file
 #Student's answer file must be in the following format:
 #	#1
 #	2*(7/4)
 #	#2
 #	Leonardo da Vinci
-def read_student_file(file_name):
+#Resulting student_anslist is in the following format:
+#	[[#1, #2],[2*7/4,Leonardo da Vinci]]
+#
+#Note that the answer may span multiple lines of the answer file
+def read_student_file(filename):
 	try:
-		stdfile = open(file_name)
-		global student_anslist
-		student_anslist = list(stdfile)
-		stdfile.close()
+		student_file = open(filename,'r')
 	except IOError:
-		print 'Error: The student file %s does not exist' % filename
-		exit()
+		print '^^^Error: The student file %s does not exist^^^' % filename
+		return False
+	file_contents = list(student_file)
+	student_file.close()
+	
+	#Clear out current contents
+	global student_anslist
+	student_anslist = [[],[]]
+	
+	ansindex = -1
+	for line in file_contents:
+		if line[0]=='#':
+			student_anslist[SNUM_INDEX].append(line[:-1]) #Remove\n
+			ansindex+=1
+			student_anslist[SANS_INDEX].append("")
+		else:
+			student_anslist[SANS_INDEX][ansindex] += (line+'\t\t\t')
+			
+	return True
 
 #Function is_student_format_bad
 #Input: none
 #Output: boolean indicating if student's answer file format is incorrect
-#Performs a quick format check on the student's answer list (i.e. whatever
-#is currently stored in student_anslist)
-#Checks two main things:
-#	Whether it has the same number of question/answer pairs as the answer list
-#	Whether it properly alternates b/w question and answer
+#Checks to make sure the student has the same number of questions in
+#their file as the answer key
 def is_student_format_bad():
-	if len(student_anslist) != 2*len(master_anslist[QNUM_INDEX]):
-		return True
-	for line in student_anslist[::2]:
-		if line[0] != '#':
-			return True
-	return False
+	return len(student_anslist[SNUM_INDEX]) != len(master_anslist[QNUM_INDEX])
 
 #Function grade_student_ans
 #Input: int of the index in master_anslist of the question to be scored
@@ -171,35 +195,28 @@ def is_student_format_bad():
 #The teacher then decides how many points to award.
 def grade_student_ans(qnum_index):
 	#Set up variables with relevant question/answer info
-	student_ans = student_anslist[qnum_index*2+1][:-1] #Remove \n
-	ans_copy = student_ans
-	real_ans = master_anslist[QANS_INDEX][qnum_index]
+	student_ans = student_anslist[SANS_INDEX][qnum_index][:-4] #Remove \n\t\t\t
+	real_ans = master_anslist[QANS_INDEX][qnum_index][:-4] #Remove \n\t\t\t
 	qvalue = master_anslist[QVAL_INDEX][qnum_index]
 	qnum = master_anslist[QNUM_INDEX][qnum_index]
 	
 	#Handling an unanswered problem
 	if student_ans=='00':
-		print 'Problem %s was left unanswered' % qnum
-		return 0
-	
-	#If we have a numerical problem, evaluate it
-	#NOTE: currently only evaluates Python expressions
-	#It looks like there are packages to evaluate R
-	#expressions, but this may require extra installation
-	#on the user's part
-	if master_anslist[QTYPE_INDEX][qnum_index] == 'N':
-		if '/' in student_ans:
-			print 'WARNING: Integer division may cause evaluation issues.'  
-			print 'Check original student answer.'
-		student_ans = str(eval(student_ans))
+		print 'Problem %s was left unanswered\n' % qnum
+		return (0,qvalue)
 	
 	#Print out problem/answer information and let teacher determine
-	#if problem is correct or not
+	#if problem is correct or not.  Evaluate numerical answers
 	print '**Question %s, %s points**' % (qnum, qvalue)
-	print 'Student answered \t%s' % ans_copy
-	print 'Ans evaluated to \t%s' % student_ans
-	print 'Answer key shows \t%s' % real_ans
-	points_received = raw_input("How many points to award?  Leave blank for full credit >> ")
+	print 'Student answered \t%s' % student_ans
+	
+	#Note: this only evaluates python expressions
+	if master_anslist[QTYPE_INDEX][qnum_index] == 'N':
+		print 'Ans evaluated to \t%s' % str(eval(student_ans))
+		if '/' in student_ans: print 'WARNING: this problem contains division.'
+		
+	print '\nAnswer key shows \t%s' % real_ans
+	points_received = raw_input("\nHow many points to award?  Leave blank for full credit >> ")
 	if points_received == '':
 		points_received = qvalue
 	else:
@@ -246,22 +263,26 @@ def grader(outfile, verbose = False):
 	f = open(outfile, 'a')
 	f.write('Exam ' + test_id + ' ' + str(test_value) + ' points\n')
 	
-	all_student_dirs = os.listdir('.')
+	all_student_dirs = os.listdir('.');
 	count_files = 0
 	bad_files = 0
-	for stddir in all_student_dirs:
-		if not (os.path.isdir(stddir)):
+	not_found = ''
+	for dir in all_student_dirs:
+		if not (os.path.isdir(dir)):
 			continue #Skip past anything that isn't a directory
-		fl = os.path.join(stddir, 'answers.txt') #Look for student's answer file
+		fl = os.path.join(dir, 'answers.txt') #Look for student's answer file
 		count_files+=1
 		output_line = []
-		email = stddir
+		email = dir
 		output_line.append(email)
-		read_student_file(fl)
 		
 		print '\n### Grading next file... ###\n'
 		
-		#If format is bad, don't bother grading.  Just set score to -1
+		#Check to see if the file exists.  If not, skip it
+		if not read_student_file(fl):
+			not_found += (email + '\n')
+			continue
+		#If format is bad, don't bother grading.  Just set score to -1 and alert teacher
 		if is_student_format_bad():
 			bad_files+=1
 			output_line.append('-1')
@@ -298,13 +319,14 @@ def grader(outfile, verbose = False):
 		output.append(output_line)
 		
 		#Print a summary of the grading
-		print 'Summary for %s' % email
+		print '[[Summary for %s]]' % email
 		print 'Points received/total possible: %.2f/%.2f' % (total, test_value)
 		print 'Late penalty applied: %s' % is_late
 		if verbose:
 			print verbose_str
 		
-	print 'Finished grading %d files (%d with format errors)' % (count_files,bad_files)
+	print '\nFinished grading %d files (%d with format errors)' % (count_files,bad_files)
+	print 'Couldn\'t locate the following students\' answer files:\n%s' % not_found
 	print 'Results stored in %s\n' % outfile
 	f.close()
 
