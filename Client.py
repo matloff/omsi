@@ -33,23 +33,14 @@ def setUpServer(pHost, pPort):
 # input function name to be executed
 # return value True or False depending on success on server
 def callFunctionOnServer(functionName):
-    # connection on localhost for now
-    global gPORT, gHOST
-    try:
-        # create local Internet TCP socket (domain, type)
-        lSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # initiate server connection to global
-        lSocket.connect( (gHOST, gPORT) )
-        lSocket.send(functionName)
-    
-    #connection problem
-    except socket.error, (value,message):
-        if lSocket:
-            # close socket
-            lSocket.close()
-        raise RuntimeError("Could not open socket on Client: " + message)
-        return False
 
+    #create and configure the socket
+    lSocket = createAndSetUpSocket()
+
+    # execute the function
+    lSocket.send(functionName)
+
+    # see what the server has to say and return it
     return getResponseFromServer(lSocket)
 
 def sendFileToServer(pFileName):

@@ -165,6 +165,7 @@ def receiveFile(pClientSocket):
 
         print("Finished accepting file")
         lSuccess = "s"
+
     finally:
         if lSuccess == "f":
             # something went wrong
