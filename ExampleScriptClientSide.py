@@ -6,9 +6,5 @@ __author__ = 'fdemoullin'
 
 import Client
 
-if Client.callFunctionOnServer("printA()"):
-    print "Hurray, I executed printA() on the server"
-if Client.callFunctionOnServer("printB"):
-     print "Hurray, I executed printB() on the server"
-if Client.callFunctionOnServer("printMyOwnWords('print this silly text')"):
-    print "All right, now passing parameters to server function calls works too"
+if Client.sendFileToServer("ClientInputTest.txt"):
+    print "As far as the client is concerned: File seems to have been sent."

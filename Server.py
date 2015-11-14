@@ -4,6 +4,7 @@ __author__ = 'fdemoullin'
 # TODO: make this support ftp file transfers
 
 import sys
+import select
 
 try:
     import socket
@@ -47,6 +48,7 @@ def main():
 
     # create a socket
     try:
+
         # create Internet TCP socket (domain, type)
         lServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -73,11 +75,10 @@ def main():
 
         # starts new thread (function, args_tuple) for new client
         thread.start_new_thread(handler, (lClientsocket, lAddr))
-        thread.start_new_thread(handler, (lClientsocket,lAddr))
         lTotalNumberOfConnections += 1
 
 
-def handler(pClientsocket, addr):
+def handler(pClientSocket, addr):
     global lNumberOfClients, lNumberOfClientsLock
 
     # acquire a lock, blocking = True, timeout = -1
@@ -88,21 +89,24 @@ def handler(pClientsocket, addr):
 
     #print 'number of clinents currently connected: %s' %lTotalNumberOfConnections
 
-    data = pClientsocket.recv(1024)
+    data = pClientSocket.recv(1024)
 
-    lIsExecuted = interpreteClientString(data)
+    if data == "File":
+        lIsExecuted = receiveFile(pClientSocket)
+    else:
+        lIsExecuted = interpreteClientString(data)
 
     if lIsExecuted == "s":
        print "Function was properly executed"
 
        # transmits TCP message: success
-       pClientsocket.send("s")
+       pClientSocket.send("s")
 
     else:
         # transmits message: fail
-       pClientsocket.send(lIsExecuted)
+       pClientSocket.send("f")
 
-    pClientsocket.close()
+    pClientSocket.close()
 
     lNumberOfClientsLock.acquire()
     lNumberOfClients -= 1
@@ -129,6 +133,40 @@ def interpreteClientString(pClientString):
         lErrorMessage = "The function you are trying to call is not defined on the Server"
         raise RuntimeError(lErrorMessage)
         return lErrorMessage
+
+def receiveFile(pClientSocket):
+
+    # create new or trunctate old file - hence the w flag
+    try:
+        lNewFile = open("ServerOutput.txt", 'w')
+    except IOError:
+        print "File could not be created on the Server"
+        pClientSocket.send("abort")
+        return False
+
+    lSuccess = "f"
+    try:
+        # let the client know the server is ready
+        pClientSocket.send("ready")
+
+        # receive the file
+        while 1:
+            ready = select.select([pClientSocket], [], [], 2)
+            if ready[0]:
+                lChunkOfFile = pClientSocket.recv(1024)
+                lNewFile.write(lChunkOfFile)
+            else:
+                break
+        print("Finished accepting file")
+        lSuccess = "s"
+    finally:
+        if lSuccess == "f":
+            # something went wrong
+            print "File transfer was not successful"
+        # close file, regardless of success
+        lNewFile.close()
+        # let the client know everything went fine
+        return lSuccess
 
 # this scrip is the "Main" scrip on the back-end. It is supposed to be run by itself
 if __name__ == '__main__':

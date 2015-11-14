@@ -52,6 +52,45 @@ def callFunctionOnServer(functionName):
 
     return getResponseFromServer(lSocket)
 
+def sendFileToServer(pFileName):
+
+    #create and configure the socket
+    lSocket = createAndSetUpSocket()
+
+    #open the file
+    lOpenFile = openFile(pFileName)
+
+    if (lOpenFile):
+        # first tell the server that we are sending a file
+        lSocket.send("File")
+
+        # block client until server is ready to accept the file
+        lResponse = lSocket.recv(1024) #server will send "ready" or "abort"
+
+        # check if something went wrong server side
+        if lResponse != "ready":
+            print "The server aborted prior to transmission of file, check server logs for more deatils"
+            return
+
+        # send the file
+        lFileChunk = lOpenFile.read()
+        while (lFileChunk):
+            print 'Sending File'
+            lSocket.send(lFileChunk)
+            lFileChunk = lOpenFile.read(1024)
+    else:
+        print "This should not be reached"
+
+    return getResponseFromServer(lSocket)
+
+def openFile(pFileName):
+    try:
+      lOpenFile = open(pFileName, "r")
+      return lOpenFile
+    except IOError:
+      print "Error: File does not appear to exist."
+      return 0
+
 # close the connection
 def getResponseFromServer(pSocket):
 
@@ -63,6 +102,24 @@ def getResponseFromServer(pSocket):
         return True
     else:
         print lServerResponse
+        return False
+
+def createAndSetUpSocket():
+     # connection on localhost for now
+    global gPORT, gHOST
+    try:
+        # create local Internet TCP socket (domain, type)
+        pSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # initiate server connection to global
+        pSocket.connect( (gHOST, gPORT) )
+        return pSocket
+
+    #connection problem
+    except socket.error, (value,message):
+        if pSocket:
+            # close socket
+            pSocket.close()
+        raise RuntimeError("Could not open socket on Client: " + message)
         return False
 
 def computeChecksum(filename):
