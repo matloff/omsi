@@ -8,3 +8,7 @@ import Client
 
 if Client.sendFileToServer("ClientInputTest.txt"):
     print "As far as the client is concerned: File seems to have been sent."
+if Client.callFunctionOnServer("printA"):
+    print "old behavior hasnt been broken"
+if Client.callFunctionOnServer("printMyOwnWords('This is a parameter, you can input whatever you want')"):
+    print "old behavior hasnt been broken"
