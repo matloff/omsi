@@ -142,13 +142,11 @@ def interpreteClientString(pClientString):
 
 def receiveFile(pClientSocket):
 
-    # create new or trunctate old file - hence the w flag
-    try:
-        lNewFile = open("ServerOutput.txt", 'w')
-    except IOError:
-        print "File could not be created on the Server"
+    lNewFile = openNewFileServerSide()
+
+    # something went wrong when creating the file, let the client know
+    if (lNewFile == False):
         pClientSocket.send("abort")
-        return False
 
     lSuccess = "f"
     try:
@@ -157,12 +155,14 @@ def receiveFile(pClientSocket):
 
         # receive the file
         while 1:
+            # set a timeout for this
             ready = select.select([pClientSocket], [], [], 2)
             if ready[0]:
                 lChunkOfFile = pClientSocket.recv(1024)
                 lNewFile.write(lChunkOfFile)
             else:
                 break
+
         print("Finished accepting file")
         lSuccess = "s"
     finally:
@@ -171,8 +171,18 @@ def receiveFile(pClientSocket):
             print "File transfer was not successful"
         # close file, regardless of success
         lNewFile.close()
-        # let the client know everything went fine
+
+        # return success information
         return lSuccess
+
+def openNewFileServerSide(pNameOfNewFile):
+     # create new or trunctate old file - hence the w flag
+    try:
+        lNewFile = open(pNameOfNewFile, 'w')
+        return lNewFile
+    except IOError:
+        print "File could not be created on the Server"
+        return False
 
 # this scrip is the "Main" scrip on the back-end. It is supposed to be run by itself
 if __name__ == '__main__':
