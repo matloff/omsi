@@ -4,6 +4,7 @@ __author__ = 'fdemoullin'
 
 import sys
 import select
+import ServerRoutines
 
 try:
     import socket
@@ -33,6 +34,9 @@ gFunctionDictionary = {
 gHOST = "" # can leave this blank on the server side
 gPORT = 20500 #int(sys.argv[1])
 
+gServerHomeDirectory = ""
+gQuestionsFile
+
 # keep track of how many clients are connected right now
 # this needs to be an atomic variable
 lNumberOfClients = 0
@@ -41,6 +45,11 @@ lNumberOfClientsLock = thread.allocate_lock()
 
 # set up the connection, start listening, start the threads and send feedback to client
 def main():
+
+    global gQuestionsFile
+    #run the startup routine for the professor, this sets the home directory and returns the questions file
+    gQuestionsFile = ServerRoutines.startUpRoutineProfessor()
+
     # keep track of total traffic
     lTotalNumberOfConnections = 0
 
@@ -82,7 +91,7 @@ def createSocket():
     return lServerSocket
 
 def handler(pClientSocket, addr):
-    global lNumberOfClients, lNumberOfClientsLock
+    global lNumberOfClients, lNumberOfClientsLock, gQuestionsFile
 
     # acquire a lock, blocking = True, timeout = -1
     lNumberOfClientsLock.acquire()
@@ -107,7 +116,17 @@ def handler(pClientSocket, addr):
 
        # transmits TCP message: success
        pClientSocket.send("s")
-
+    elif lIsExecuted == "file":
+        #send the Questions File to the client
+        pClientSocket.send("file")
+        try:
+            lFileChunk = gQuestionsFile.read()
+        except IOError:
+            print "Soemthing went wrong while reading the Questions file"
+        while (lFileChunk):
+            print 'Sending File'
+            pClientSocket.send(lFileChunk)
+            lFileChunk = gQuestionsFile.read(1024)
     else:
        # transmits TCP message: fail
        pClientSocket.send("f")

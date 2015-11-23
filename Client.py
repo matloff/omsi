@@ -2,6 +2,7 @@ __author__ = 'fdemoullin'
 
 import sys
 import Checksum
+import select
 
 try:
     import socket
@@ -41,7 +42,14 @@ def callFunctionOnServer(functionName):
     lSocket.send(functionName)
 
     # see what the server has to say and return it
-    return getResponseFromServer(lSocket)
+    lServerResponse = getResponseFromServer(lSocket)
+
+    if lServerResponse == "s" or lServerResponse == "f":
+        return lServerResponse
+    else:
+        # the server is trying to send a file
+        return "A file"
+
 
 def sendFileToServer(pFileName):
 
@@ -60,7 +68,7 @@ def sendFileToServer(pFileName):
 
         # check if something went wrong server side
         if lResponse != "ready":
-            print "The server aborted prior to transmission of file, check server logs for more deatils"
+            print "The server aborted prior to transmission of file, check server logs for more details"
             return
 
         # send the file
@@ -118,3 +126,48 @@ def computeChecksum(filename):
     h = Checksum.checksum(filename)
 
     print 'Please hand copy the following value and turn it into the professor: ' + h
+
+def receiveFile(pClientSocket):
+
+    lQuestionsFile = createQuestionsFile()
+
+    # something went wrong when creating the file, let the client know
+    if (lQuestionsFile == False):
+        pClientSocket.send("abort")
+
+    lSuccess = "f"
+    try:
+        # let the client know the server is ready
+        pClientSocket.send("ready")
+
+        # receive the file
+        while 1:
+            # set a timeout for this
+            ready = select.select([pClientSocket], [], [], 2)
+            if ready[0]:
+                lChunkOfFile = pClientSocket.recv(1024)
+                lQuestionsFile.write(lChunkOfFile)
+            else:
+                break
+
+        print("Finished accepting file")
+        lSuccess = "s"
+
+    finally:
+        if lSuccess == "f":
+            # something went wrong
+            print "File transfer was not successful"
+        # close file, regardless of success
+        lQuestionsFile.close()
+
+        # return success information
+        return lSuccess
+
+def createQuestionsFile():
+# create new or trunctate old file - hence the w flag
+    try:
+        lNewFile = open("QuestionsStudent.txt", 'w')
+        return lNewFile
+    except IOError:
+        print "Questions file could not be created on the Client's machine"
+        return False
