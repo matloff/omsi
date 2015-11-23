@@ -35,7 +35,7 @@ gHOST = "" # can leave this blank on the server side
 gPORT = 20500 #int(sys.argv[1])
 
 gServerHomeDirectory = ""
-gQuestionsFile
+gQuestionsFile = ""
 
 # keep track of how many clients are connected right now
 # this needs to be an atomic variable

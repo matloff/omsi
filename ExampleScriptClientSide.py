@@ -12,3 +12,4 @@ if Client.callFunctionOnServer("printA"):
     print "old behavior hasnt been broken"
 if Client.callFunctionOnServer("printMyOwnWords('This is a parameter, you can input whatever you want')"):
     print "old behavior hasnt been broken"
+
