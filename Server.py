@@ -161,7 +161,7 @@ def interpreteClientString(pClientString):
 
 def receiveFile(pClientSocket):
 
-    lNewFile = openNewFileServerSide()
+    lNewFile = openNewFileServerSide("ServerOutput.txt")
 
     # something went wrong when creating the file, let the client know
     if (lNewFile == False):

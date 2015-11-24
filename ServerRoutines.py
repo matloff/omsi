@@ -24,8 +24,7 @@ def startUpRoutineProfessor():
     return lQuestionFile
 
 # creates a folder for each student that connects to the server
-# there is an issue still when a student connects twice, 2 different folders are created right now
-# We need student ID or somthing like that
+# sends the questions file to the student
 def startUpRoutineStudent(pQuestionFile, pStudentEmail):
     #create name for folder which is composed of sys.path (gloable in Server), last name and then first name
     lIdealPathName = Server.gServerHomeDirectory + pStudentEmail
