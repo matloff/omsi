@@ -70,6 +70,8 @@ def sendFileToServer(pFileName):
         if lResponse != "ready":
             print "The server aborted prior to transmission of file, check server logs for more details"
             return
+        
+        # codes for abort?
 
         # send the file
         lFileChunk = lOpenFile.read()
@@ -77,6 +79,10 @@ def sendFileToServer(pFileName):
             print 'Sending File'
             lSocket.send(lFileChunk)
             lFileChunk = lOpenFile.read(1024)
+            
+        # any chance that the file cant be sent?
+    
+    # print msg if file cannot be opened 
     else:
         print "This should not be reached"
 
@@ -122,7 +128,8 @@ def createAndSetUpSocket():
         return False
 
 def computeChecksum(filename):
-
+    
+    # values students need to copy down for reference
     h = Checksum.checksum(filename)
 
     print 'Please hand copy the following value and turn it into the professor: ' + h
