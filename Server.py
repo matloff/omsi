@@ -4,7 +4,6 @@ __author__ = 'fdemoullin'
 
 import sys
 import select
-import ServerRoutines
 
 try:
     import socket
@@ -20,6 +19,7 @@ except ImportError:
 
 # import modules that contain functions called by a client
 import ExampleScriptServerSide
+import ServerRoutines
 
 # function dictionary
 # stores function names and corresponding functions that this server class uses
@@ -27,7 +27,8 @@ gFunctionDictionary = {
     # associate the function name with the function first class object
     'printA': ExampleScriptServerSide.printA,
     'printB': ExampleScriptServerSide.printB,
-    'printMyOwnWords': ExampleScriptServerSide.printMyOwnWords
+    'printMyOwnWords': ExampleScriptServerSide.printMyOwnWords,
+    #'startUpRoutineStudent': startUpRoutineStudent,
 }
 
 # associate the socket with a port
@@ -35,7 +36,7 @@ gHOST = "" # can leave this blank on the server side
 gPORT = 20500 #int(sys.argv[1])
 
 gServerHomeDirectory = ""
-gQuestionsFile = ""
+gQuestionsFilePath = ""
 
 # keep track of how many clients are connected right now
 # this needs to be an atomic variable
@@ -46,9 +47,9 @@ lNumberOfClientsLock = thread.allocate_lock()
 # set up the connection, start listening, start the threads and send feedback to client
 def main():
 
-    global gQuestionsFile
-    #run the startup routine for the professor, this sets the home directory and returns the questions file
-    gQuestionsFile = ServerRoutines.startUpRoutineProfessor()
+    global gQuestionsFilePath
+    #run the startup routine for the professor, this sets the home directory and returns the questions file location as a string
+    gQuestionsFilePath = ServerRoutines.startUpRoutineProfessor()
 
     # keep track of total traffic
     lTotalNumberOfConnections = 0
@@ -91,7 +92,7 @@ def createSocket():
     return lServerSocket
 
 def handler(pClientSocket, addr):
-    global lNumberOfClients, lNumberOfClientsLock, gQuestionsFile
+    global lNumberOfClients, lNumberOfClientsLock, gQuestionsFilePath
 
     # acquire a lock, blocking = True, timeout = -1
     lNumberOfClientsLock.acquire()
@@ -99,7 +100,7 @@ def handler(pClientSocket, addr):
     # unlock
     lNumberOfClientsLock.release()
 
-    #print 'number of clinents currently connected: %s' %lTotalNumberOfConnections
+    #print 'number of cliennts currently connected: %s' %lTotalNumberOfConnections
 
     # accept initial request
     data = pClientSocket.recv(1024)
@@ -116,17 +117,27 @@ def handler(pClientSocket, addr):
 
        # transmits TCP message: success
        pClientSocket.send("s")
+
     elif lIsExecuted == "file":
         #send the Questions File to the client
         pClientSocket.send("file")
         try:
-            lFileChunk = gQuestionsFile.read()
+            lOpenedQuestions = open(gQuestionsFilePath, 'r')
+            lFileChunk = lOpenedQuestions.read()
         except IOError:
             print "Soemthing went wrong while reading the Questions file"
+            return
+         # block this thread until client is ready to accept the file
+        lResponse = pClientSocket.recv(1024) # client will send "ready" or "abort"
+        # make sure the client respoinse was positive
+        if lResponse != "ready":
+            print "The server aborted prior to transmission of file, check server logs for more details"
+            return
         while (lFileChunk):
             print 'Sending File'
             pClientSocket.send(lFileChunk)
-            lFileChunk = gQuestionsFile.read(1024)
+            lFileChunk = lOpenedQuestions.read(1024)
+        print 'Finished sending the file'
     else:
        # transmits TCP message: fail
        pClientSocket.send("f")
@@ -155,9 +166,15 @@ def interpreteClientString(pClientString):
                 gFunctionDictionary[lFunctionName](lParameters)
         return "s"
     else:
-        lErrorMessage = "The function you are trying to call is not defined on the Server"
-        raise RuntimeError(lErrorMessage)
-        return lErrorMessage
+        # special case for start up routines
+        if lSplitUpFunction[0] == "startUpRoutineStudent":
+            lParameters = lSplitUpFunction[1].split(")")[0]
+            ServerRoutines.startUpRoutineStudent(lParameters)
+            return "file"
+        else:
+            lErrorMessage = "The function you are trying to call is not defined on the Server"
+            raise RuntimeError(lErrorMessage)
+            return lErrorMessage
 
 def receiveFile(pClientSocket):
 
@@ -203,6 +220,7 @@ def openNewFileServerSide(pNameOfNewFile):
     except IOError:
         print "File could not be created on the Server"
         return False
+
 
 # this scrip is the "Main" scrip on the back-end. It is supposed to be run by itself
 if __name__ == '__main__':

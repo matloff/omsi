@@ -48,7 +48,10 @@ def callFunctionOnServer(functionName):
         return lServerResponse
     else:
         # the server is trying to send a file
-        return "A file"
+        if lServerResponse == "file":
+            receiveFile(lSocket)
+        else:
+            return "f"
 
 
 def sendFileToServer(pFileName):
@@ -80,6 +83,8 @@ def sendFileToServer(pFileName):
     else:
         print "This should not be reached"
 
+    # closing the file
+    lOpenFile.close()
     return getResponseFromServer(lSocket)
 
 def openFile(pFileName):
@@ -92,16 +97,17 @@ def openFile(pFileName):
 
 # close the connection
 def getResponseFromServer(pSocket):
-
     # block until server response received
     lServerResponse = pSocket.recv(1024)
-    pSocket.close()
-
-    if lServerResponse == "s":
-        return True
+    if lServerResponse != "file":
+        pSocket.close()
+        if lServerResponse == "s":
+            return True
+        else:
+            print lServerResponse
+            return False
     else:
-        print lServerResponse
-        return False
+        return "file"
 
 def createAndSetUpSocket():
      # connection on localhost for now
@@ -141,16 +147,11 @@ def receiveFile(pClientSocket):
         pClientSocket.send("ready")
 
         # receive the file
-        while 1:
-            # set a timeout for this
-            ready = select.select([pClientSocket], [], [], 2)
-            if ready[0]:
-                lChunkOfFile = pClientSocket.recv(1024)
-                lQuestionsFile.write(lChunkOfFile)
-            else:
-                break
+        lChunkOfFile = pClientSocket.recv(1000300)
+        print 'writing the Question file'
+        lQuestionsFile.write(lChunkOfFile)
 
-        print("Finished accepting file")
+        print "Finished accepting file"
         lSuccess = "s"
 
     finally:
@@ -167,6 +168,7 @@ def createQuestionsFile():
 # create new or trunctate old file - hence the w flag
     try:
         lNewFile = open("QuestionsStudent.txt", 'w')
+        lNewFile.write("test i am writing to the file")
         return lNewFile
     except IOError:
         print "Questions file could not be created on the Client's machine"
