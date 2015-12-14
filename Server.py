@@ -123,9 +123,9 @@ def handler(pClientSocket, addr):
         pClientSocket.send("file")
         try:
             lOpenedQuestions = open(gQuestionsFilePath, 'r')
-            lFileChunk = lOpenedQuestions.read()
+            lFileChunk = lOpenedQuestions.read(1024)
         except IOError:
-            print "Soemthing went wrong while reading the Questions file"
+            print "Something went wrong while reading the Questions file"
             return
          # block this thread until client is ready to accept the file
         lResponse = pClientSocket.recv(1024) # client will send "ready" or "abort"
@@ -134,7 +134,6 @@ def handler(pClientSocket, addr):
             print "The server aborted prior to transmission of file, check server logs for more details"
             return
         while (lFileChunk):
-            print 'Sending File'
             pClientSocket.send(lFileChunk)
             lFileChunk = lOpenedQuestions.read(1024)
         print 'Finished sending the file'

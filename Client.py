@@ -16,17 +16,15 @@ except ImportError:
 # all methods are static and should be called statically
 
 # global variable to keep track of the socket
-gPORT = 20500 # hardcoding the port number TODO: make based on user input
-gHOST = socket.gethostname()
+gPORT = 20500 # hardcoding the port number for now TODO: make based on user input
+gHOST = socket.gethostname() # getting the hostname of this machine for now too
 
-# setter
+# simple setter
 # pHost = IP address provided by prof
 # pPort = Port provided by prof
 def setUpServer(pHost, pPort):
     global gPORT, gHOST
-
     # deactivated during testing phase! The connection is set up on localhost
-
     # gPORT = pPort
     # gHOST = pHost
 
@@ -53,21 +51,23 @@ def callFunctionOnServer(functionName):
         else:
             return "f"
 
-
+# sends a file from the student to the professor
+# submission of file
 def sendFileToServer(pFileName):
 
-    #create and configure the socket
+    # create and configure the socket
     lSocket = createAndSetUpSocket()
 
-    #open the file
+    # open the file
     lOpenFile = openFile(pFileName)
 
     if (lOpenFile):
+
         # first tell the server that we are sending a file
         lSocket.send("File")
 
         # block client until server is ready to accept the file
-        lResponse = lSocket.recv(1024) #server will send "ready" or "abort"
+        lResponse = lSocket.recv(1024) # server will send "ready" or "abort"
 
         # check if something went wrong server side
         if lResponse != "ready":
@@ -81,12 +81,16 @@ def sendFileToServer(pFileName):
             lSocket.send(lFileChunk)
             lFileChunk = lOpenFile.read(1024)
     else:
-        print "This should not be reached"
-
+        # Error message for a bad student submission file
+        print "Unable to read file: " + pFileName + "." \
+                                                    "Make sure your submission file is in the " \
+                                                    "right directory and is of type .txt."
     # closing the file
     lOpenFile.close()
     return getResponseFromServer(lSocket)
 
+# this opens a file with read permissions on the file
+# ATTENTION: an open file is returned! Call file.close() on the returned object
 def openFile(pFileName):
     try:
       lOpenFile = open(pFileName, "r")
@@ -96,6 +100,7 @@ def openFile(pFileName):
       return 0
 
 # close the connection
+# returning success/failure message or initiating a file transfer from server to student
 def getResponseFromServer(pSocket):
     # block until server response received
     lServerResponse = pSocket.recv(1024)
@@ -109,6 +114,7 @@ def getResponseFromServer(pSocket):
     else:
         return "file"
 
+# initialization of socket, no connection is established yet
 def createAndSetUpSocket():
      # connection on localhost for now
     global gPORT, gHOST
@@ -133,6 +139,9 @@ def computeChecksum(filename):
 
     print 'Please hand copy the following value and turn it into the professor: ' + h
 
+
+# routine for receiving files from the server
+#
 def receiveFile(pClientSocket):
 
     lQuestionsFile = createQuestionsFile()
@@ -172,10 +181,9 @@ def receiveFile(pClientSocket):
         return lSuccess
 
 def createQuestionsFile():
-# create new or trunctate old file - hence the w flag
+    # create new or trunctate old file - hence the w flag
     try:
         lNewFile = open("QuestionsStudent.txt", 'w')
-        lNewFile.write("test i am writing to the file")
         return lNewFile
     except IOError:
         print "Questions file could not be created on the Client's machine"
