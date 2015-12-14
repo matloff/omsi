@@ -146,10 +146,17 @@ def receiveFile(pClientSocket):
         # let the client know the server is ready
         pClientSocket.send("ready")
 
+        print "Entering the while loop"
         # receive the file
-        lChunkOfFile = pClientSocket.recv(1000300)
-        print 'writing the Question file'
-        lQuestionsFile.write(lChunkOfFile)
+        while 1:
+            ready = select.select([pClientSocket], [], [], 2)
+            lChunkOfFile = pClientSocket.recv(1024)
+            if ready[0] and lChunkOfFile != '':
+                lQuestionsFile.write(lChunkOfFile)
+            else:
+                break
+        #print 'writing the Question file'
+        #lQuestionsFile.write(lChunkOfFile)
 
         print "Finished accepting file"
         lSuccess = "s"
