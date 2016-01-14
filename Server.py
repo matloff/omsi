@@ -1,30 +1,20 @@
 __author__ = 'fdemoullin'
 
-# this is the main script on the professor's machine, this needs to run without interruption
+# server script
+# should be run without interruption on professor's machine
 
 import sys
 import select
-
-try:
-    import socket
-except ImportError:
-    print 'Cannot import socket. Exiting...'
-    sys.exit()
-
-try:
-    import thread
-except ImportError:
-    print 'Cannot import thread. Exiting...'
-    sys.exit()
+import socket
+import thread
 
 # import modules that contain functions called by a client
 import ExampleScriptServerSide
 import ServerRoutines
 
-# function dictionary
-# stores function names and corresponding functions that this server class uses
+# dictionary to associate the function name with the function first class object
 gFunctionDictionary = {
-    # associate the function name with the function first class object
+
     'printA': ExampleScriptServerSide.printA,
     'printB': ExampleScriptServerSide.printB,
     'printMyOwnWords': ExampleScriptServerSide.printMyOwnWords,
@@ -48,26 +38,30 @@ lNumberOfClientsLock = thread.allocate_lock()
 def main():
 
     global gQuestionsFilePath
-    #run the startup routine for the professor, this sets the home directory and returns the questions file location as a string
+
+    # run startup routine for the professor
+    #    sets up directory to accept student submissions
+    #    confirms that professor has uploaded test questions
+    #    returns path of file containing test questions
     gQuestionsFilePath = ServerRoutines.startUpRoutineProfessor()
 
-    # keep track of total traffic
+    # keep track of total number of connections
     lTotalNumberOfConnections = 0
 
-    # create a socket
+    # create socket
     lServerSocket = createSocket()
 
-    # main loop
     while True:
         # server is now ready to accept connections
-        print "waiting for connection, so far: %s connections" %lTotalNumberOfConnections
+        print "Total Number of Connections, thus far: %s" %lTotalNumberOfConnections
 
         # block until connection arrives
         lClientsocket, lAddr = lServerSocket.accept()
-        print 'connection detected at:', lAddr
+        print "Connection detected at:", lAddr
 
-        # starts new thread (function, args_tuple) for new client
-        thread.start_new_thread(handler, (lClientsocket, lAddr)) # lAddr is not used right now. However python syntax requires a tuple as input parameters to a new thread
+        # start new thread (function, args_tuple) for new client
+        # lAddr is not used right now. However python syntax requires a tuple as input parameters to a new thread
+        thread.start_new_thread(clientHandler, (lClientsocket, lAddr))
 
         # increase total number of connections
         lTotalNumberOfConnections += 1
@@ -83,15 +77,16 @@ def createSocket():
         # accept "call" from client
         lServerSocket.listen(5) # maximum number of 5 queued connections, should be irrelevant as all connections fork into a new thread
 
+        # TODO: might need to be placed after except block
+        return lServerSocket
+
     except socket.error, (value,message):
         if lServerSocket:
             lServerSocket.close()
         print "Could not open socket on Server: " + message
         sys.exit(1)
 
-    return lServerSocket
-
-def handler(pClientSocket, addr):
+def clientHandler(pClientSocket, addr):
     global lNumberOfClients, lNumberOfClientsLock, gQuestionsFilePath
 
     # acquire a lock, blocking = True, timeout = -1
@@ -100,16 +95,15 @@ def handler(pClientSocket, addr):
     # unlock
     lNumberOfClientsLock.release()
 
-    #print 'number of cliennts currently connected: %s' %lTotalNumberOfConnections
-
     # accept initial request
     data = pClientSocket.recv(1024)
 
+    # client is sending a file
     if data == "File":
-        # client is sending a file
         lIsExecuted = receiveFile(pClientSocket)
+
+    # client is executing a function
     else:
-        # client is executing a function
         lIsExecuted = interpreteClientString(data)
 
     if lIsExecuted == "s":

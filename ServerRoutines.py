@@ -2,51 +2,60 @@
 import Server
 import os
 
-# creates a folder for each student that connects to the server
-# sends the questions file to the student
+# for each student that connects to the server, create a folder
+# send file containing test questions to the student
 def startUpRoutineStudent(pStudentEmail):
-    #create name for folder which is composed of sys.path (gloable in Server), last name and then first name
+
+    # create folder name as sys.path (global in Server) + email
     lIdealPathName = Server.gServerHomeDirectory + pStudentEmail
-    # create new folder
+
+    # create folder
     if not os.path.exists(lIdealPathName):
         os.makedirs(lIdealPathName)
+
     # initiate the questions to be sent to the student. Done in Server.py, based on socket
     return "file"
 
-# Lets professor specify a home directory for the entire application
-# returns the question file for the exam
+
+
+# requests professor select which directory to store test questions, student submissions
+# return path of file containing test questions
 def startUpRoutineProfessor():
-    print('Please enter a home directory for the application.')
-    print("This will be the directory that all students' files will be stored in")
-    print("Please store the exam questions in the directory and name that file 'Questions.txt'")
 
-    #get the new path, we assume the prof is capable of getting it right
-    lNewHomeDirectory = raw_input()
-    #change system path was not generally supported on Slack, this is a workaround
-    Server.gServerHomeDirectory = lNewHomeDirectory
+    lQuestionFilePath = 1
 
-    # open the QuestionFile
-    lQuestionFilePath = openFile(lNewHomeDirectory)
+    while(lQuestionFilePath):
+        print('Please enter a home directory for the application.')
+        print("This will be the directory that all students' files will be stored in.")
+        print("Before pressing enter, check that the exam questions are in the directory and named 'Questions.txt'.")
+
+        # professor enters directory path
+        Server.gServerHomeDirectory = raw_input()
+
+        # attempt to open file containing test questions
+        lQuestionFilePath = openFile(Server.gServerHomeDirectory)
 
     return lQuestionFilePath
 
-# tries to open the question file
-# returns the question file if it is found
-# re-runs startUpRoutineProfessor if it fails
+
+# if file found, return file path
+# if file not found, print error message and return
 def openFile(pNewHomeDirectory):
+
+    # test to make sure file can be read
+    # if this fails, IOError will be thrown
     try:
       lFilePath = os.path.join(pNewHomeDirectory, 'Questions.txt')
       lOpenFile = open(lFilePath, 'r')
-
-      # test to make sure we can open the file, if this failes, an IOException will be thrown
       lTest = lOpenFile.readline()
       lOpenFile.close()
       return lFilePath
 
     except IOError:
-      print "Error: File does not appear to exist, create a file called 'Questions.txt' and make sure you store it in the specified directory."
-      # try again
-      startUpRoutineProfessor()
+      print "Error: File does not appear to exist."
+      print "Please check that the specified path is spelled correctly and a file named 'Questions.txt' " \
+            "is in the specified directory."
+      return 1
 
 
 

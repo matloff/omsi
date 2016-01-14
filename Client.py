@@ -1,15 +1,9 @@
 __author__ = 'fdemoullin'
 
 import sys
-import Checksum
 import select
-
-try:
-    import socket
-except ImportError:
-    print 'Cannot import socket. Exiting...'
-    sys.exit()
-
+import socket
+import Checksum
 
 # module that provides an interface for all server related requests
 # sets up connection with the running server on localhost and port 20500
