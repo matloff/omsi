@@ -10,13 +10,13 @@ import ClientRoutines
 def main():
     # user inputs host, port number
     # socket and port hard-coded for now
+    lHost = socket.gethostname()
     lPort = 20500
-    lPort = socket.gethostname()
     #lHost = raw_input("Please enter host name: ")
     #lPort = int(raw_input("Please enter port number: "))
 
     # create file to store test questions
-    lQuestionsFile = ClientRoutines.receiveExamQuestionsFile()
+    lQuestionsFile = ClientRoutines.receiveExamQuestionsFile(lHost)
 
 
 

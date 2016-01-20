@@ -1,4 +1,5 @@
 import thread
+
 import ExampleScriptServerSide
 
 # dictionary to associate the function name with the function first class object
@@ -20,5 +21,11 @@ gExamQuestionsFilePath = ""
 # variable to track number of currently connected clients
 gNumCurrentClients = 0
 
-# set up a lock to guard gNumCurrentClients
+# lock to guard gNumCurrentClients
 gNumCurrentClientsLock = thread.allocate_lock()
+
+# variable to track number of total client connections
+gNumTotalClients = 0
+
+# lock to guard gNumTotalClients
+gNumTotalClientsLock = thread.allocate_lock()
