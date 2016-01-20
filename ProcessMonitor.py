@@ -8,7 +8,7 @@ import ClientGlobals
 def collectProcessInformation(output_file):
 
     # write current time to file
-    output_file.write(datetime.datetime.now().strftime('%Y%m%d%M%S') + '\n')
+    output_file.write('processes '+ datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '\n')
 
     # write each process name, id, cpu percent and memory percent to file
     for proc in psutil.process_iter():

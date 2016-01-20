@@ -110,10 +110,6 @@ def monitorProcesses(pSamplingFrequency, pExamDuration):
 
         time.sleep(pSamplingFrequency)
 
-    # collect process information from student's machine at the end of the test
-    if datetime.datetime.now() > lEndTime:
-        ProcessMonitor.collectProcessInformation(lOutputFile)
-
     # stop collecting process information once test has finished
     print 'Test is over\n'
 

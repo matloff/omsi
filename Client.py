@@ -1,5 +1,5 @@
 import sys
-import thread
+from threading import Thread
 
 import ClientGlobals
 import ClientRoutines
@@ -30,13 +30,13 @@ def main():
     # begin monitoring processes
     # TODO: Need some method by which professor can specify duration of test, frequency of process sampling
     # allow professor to set how frequently process information will be recorded
-    lSamplingFrequency = int(raw_input('Please enter time spacing in seconds: '))
+    lSamplingFrequency = 10#int(raw_input('Please enter time spacing in seconds: '))
 
     # professor specifies duration of exam
-    lExamDuration = int(raw_input('Please enter test time in minutes: '))
+    lExamDuration = 1#int(raw_input('Please enter test time in minutes: '))
 
     # create thread to monitor processes on student machine for duration of exam
-    thread.start_new_thread(ClientRoutines.monitorProcesses, (lSamplingFrequency, lExamDuration))
+    Thread(target=ClientRoutines.monitorProcesses, args=(lSamplingFrequency, lExamDuration)).start()
 
     # begin monitoring network traffic
 
