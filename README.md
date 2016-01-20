@@ -48,8 +48,7 @@ For all the code that is supposed to be run on the Server side, please follow th
 Coding:
 
 If you are coding a script that is supposed to be triggered by a certain command from the client, or if you are writing something that needs to always run on the Server you need to link it to Server.py .
-Server.py is the main method on the professor's machine. It should be executed by the professor once and then it is supposed to be running for the entire duration of the exam. Serve.py accepts request from clients, it lets students dump files (not yet, but eventually it will!)
-and it lets students start the grading system etc.
+Server.py is the main method on the professor's machine. It should be executed by the professor ONCE and then it is supposed to be running for the entire duration of the exam. Serve.py accepts request from clients, allows students dump files and start the grading system etc.
 
 If you are coding a class/module that is supposed to be run upon a client request please do not put your functions or any code into Server.py. Write your code in your class and then link it to Serve.py via an import. Simply add
 import MyClassName
@@ -62,18 +61,18 @@ gFunctionDictionary = { ... a bunch of functions ...}
 Add your function to that table as follows:
 'nameOfMyFunctionUNIQUE': MyCLassWhichIImported.nameOfMyFunction,
 
-it is important that the first sting (in my example: "nameOfMyFunctionUNIQUE") is indeed unique. I would try to keep it as close to the actual name of the function, but still different from the other functions in the table.
+it is important that the first string (in my example: "nameOfMyFunctionUNIQUE") is indeed unique. I would try to keep it as close to the actual name of the function as possible, but still different from the other functions in the table.
 
 As of right now, any functions you add to the function table will be called without passing in any parameters. In my example, at some point the program would call:
 MyCLassWhichIImported.nameOfMyFunction()
 
-This should match your actual function, so please do not make them accept parameters (I will change this soon!) .
+This should match your actual function, so please do not make them accept parameters.
 
 Running:
 
-Before running any client scripts, run Server.py . It sets up a server and it listens to the Clients.
+Before running any client scripts, run Server.py . It sets up a server and listens to the Clients.
 
 If you added both the import and the functions to the function table, the Server Side is all set. Now just go ahead and call your function from the Client like so:
 Client.callFunctionOnServer("nameOfMyFunctionUNIQUE")
 
-(make sure your client side is correctly set up ofc, please refer to the Client section)
+(make sure your client side is correctly set up, please refer to the Client section should you encounter any difficulties)
