@@ -54,7 +54,7 @@ def configureSocket():
         return pSocket
 
     #connection problem
-    except socket.error, (value,message):
+    except socket.error, (value, message):
         if pSocket:
             # close socket
             pSocket.close()
@@ -63,7 +63,7 @@ def configureSocket():
 
 
 def createExamQuestionsFile():
-    # create new or trunctate old file - hence the w flag
+    # create new or truncate old file - hence the w flag
     try:
         lNewFile = open("ExamQuestions.txt", 'w')
         return lNewFile
@@ -112,6 +112,7 @@ def receiveExamQuestionsFile(pClientSocket):
     lSuccess = False
     try:
         # if file was successfully created, notify server to begin sending exam questions
+        #TODO: Figure out why this line fails
         pClientSocket.send("ready")
 
         print "Reading file from server\n"

@@ -12,7 +12,7 @@ def createSocket():
         lServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # bind address(gHost, gPort) to socket
-        lServerSocket.bind((ServerGlobals.gHOST, ServerGlobals.gPORT))
+        lServerSocket.bind((ServerGlobals.gHost, ServerGlobals.gPort))
 
         # accept "call" from client
         lServerSocket.listen(5) # maximum number of 5 queued connections, should be irrelevant as all connections fork into a new thread
@@ -28,13 +28,11 @@ def createSocket():
 
 
 def clientHandler(pClientSocket, addr):
-    global gNumCurrentClients, gNumCurrentClientsLock, gExamQuestionsFilePath
 
-    # acquire a lock, blocking = True, timeout = -1
-    gNumCurrentClientsLock.acquire()
-    gNumCurrentClients += 1
-    # unlock
-    gNumCurrentClientsLock.release()
+    # increment number of current clients
+    ServerGlobals.gNumCurrentClientsLock.acquire()
+    ServerGlobals.gNumCurrentClients += 1
+    ServerGlobals.gNumCurrentClientsLock.release()
 
     # accept initial request
     data = pClientSocket.recv(1024)
@@ -57,7 +55,7 @@ def clientHandler(pClientSocket, addr):
         #send the Questions File to the client
         pClientSocket.send("file")
         try:
-            lOpenedQuestions = open(gExamQuestionsFilePath, 'r')
+            lOpenedQuestions = open(ServerGlobals.gExamQuestionsFilePath, 'r')
             lFileChunk = lOpenedQuestions.read(1024)
         except IOError:
             print "Something went wrong while reading the Questions file"
@@ -78,9 +76,9 @@ def clientHandler(pClientSocket, addr):
 
     pClientSocket.close()
 
-    gNumCurrentClientsLock.acquire()
-    gNumCurrentClients -= 1
-    gNumCurrentClientsLock.release()
+    ServerGlobals.gNumCurrentClientsLock.acquire()
+    ServerGlobals.gNumCurrentClients -= 1
+    ServerGlobals.gNumCurrentClientsLock.release()
     return
 
 

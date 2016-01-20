@@ -22,7 +22,7 @@ def main():
     # connect to server
 
 
-    # create file to store test questions
+    # store exam questions file from server on local machine
     lQuestionsFile = ClientRoutines.receiveExamQuestionsFile(ClientGlobals.gHost)
 
 

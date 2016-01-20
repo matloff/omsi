@@ -25,8 +25,8 @@ def main():
 
     while True:
         # server is now ready to accept connections
-        print "Number of Current Connections: %s" %ServerGlobals.gNumCurrentClients
-        print "Number of Total Connections: %s" %ServerGlobals.gNumTotalClients
+        print "Number of Current Connections: %s" % ServerGlobals.gNumCurrentClients
+        print "Number of Total Connections: %s" % ServerGlobals.gNumTotalClients
 
         # block until connection arrives
         lClientsocket, lAddr = lServerSocket.accept()
