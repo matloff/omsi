@@ -1,8 +1,11 @@
+import datetime
 import select
 import socket
+import time
 
 import Checksum
 import ClientGlobals
+import ProcessMonitor
 
 
 # module that provides an interface for all server related requests
@@ -86,6 +89,34 @@ def getResponseFromServer(pSocket):
             return False
     else:
         return "file"
+
+
+
+def monitorProcesses(pSamplingFrequency, pExamDuration):
+
+    # calculate end time
+    lEndTime = datetime.datetime.now() + datetime.timedelta(minutes=pExamDuration)
+
+    # collect process information from student's machine as long as student hasn't exceeded end of test
+    while datetime.datetime.now() < lEndTime:
+
+        # open file to store process information
+        lOutputFile = open('processes-'+ datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.txt', 'w')
+
+        # write process information to file
+        ProcessMonitor.collectProcessInformation(lOutputFile)
+
+        lOutputFile.close()
+
+        time.sleep(pSamplingFrequency)
+
+    # collect process information from student's machine at the end of the test
+    if datetime.datetime.now() > lEndTime:
+        ProcessMonitor.collectProcessInformation(lOutputFile)
+
+    # stop collecting process information once test has finished
+    print 'Test is over\n'
+
 
 # this opens a file with read permissions on the file
 # ATTENTION: an open file is returned! Call file.close() on the returned object
