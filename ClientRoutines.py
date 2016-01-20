@@ -2,6 +2,7 @@ import select
 import socket
 
 import Checksum
+import ClientGlobals
 
 
 # module that provides an interface for all server related requests
@@ -43,13 +44,13 @@ def computeChecksum(filename):
 
 # initialization of socket, no connection is established yet
 def configureSocket():
-     # connection on localhost for now
-    global gPORT, gHOST
+    # connection on localhost for now
+
     try:
         # create local Internet TCP socket (domain, type)
         pSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # initiate server connection to global
-        pSocket.connect( (gHOST, gPORT) )
+        pSocket.connect( (ClientGlobals.gHost, ClientGlobals.gPort) )
         return pSocket
 
     #connection problem
