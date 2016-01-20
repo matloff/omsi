@@ -26,8 +26,8 @@ gFunctionDictionary = {
 gHOST = ""
 gPORT = 20500 #int(sys.argv[1])
 
-gServerHomeDirectory = ""
-gQuestionsFilePath = ""
+gServerExamDirectory = ""
+gExamQuestionsFilePath = ""
 
 # keep track of how many clients are connected right now
 # this needs to be an atomic variable
@@ -39,13 +39,13 @@ lNumberOfClientsLock = thread.allocate_lock()
 # set up the connection, start listening, start the threads and send feedback to client
 def main():
 
-    global gQuestionsFilePath
+    global gExamQuestionsFilePath
 
     # run startup routine for the professor
-    #    sets up directory to accept student submissions
-    #    confirms that professor has uploaded test questions
-    #    returns path of file containing test questions
-    gQuestionsFilePath = ServerRoutines.startUpRoutineProfessor()
+    #    professor specifies the directory that will store student submissions
+    #    program confirms that the directory contains the exam questions file,
+    #       returns path of exam questions file
+    gExamQuestionsFilePath = ServerRoutines.startUpExamDirectory()
 
     # keep track of total number of connections
     lTotalNumberOfConnections = 0
@@ -89,7 +89,7 @@ def createSocket():
         sys.exit(1)
 
 def clientHandler(pClientSocket, addr):
-    global lNumberOfClients, lNumberOfClientsLock, gQuestionsFilePath
+    global lNumberOfClients, lNumberOfClientsLock, gExamQuestionsFilePath
 
     # acquire a lock, blocking = True, timeout = -1
     lNumberOfClientsLock.acquire()
@@ -118,7 +118,7 @@ def clientHandler(pClientSocket, addr):
         #send the Questions File to the client
         pClientSocket.send("file")
         try:
-            lOpenedQuestions = open(gQuestionsFilePath, 'r')
+            lOpenedQuestions = open(gExamQuestionsFilePath, 'r')
             lFileChunk = lOpenedQuestions.read(1024)
         except IOError:
             print "Something went wrong while reading the Questions file"

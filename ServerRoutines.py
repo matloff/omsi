@@ -18,44 +18,46 @@ def startUpRoutineStudent(pStudentEmail):
 
 
 
-# requests professor select which directory to store test questions, student submissions
-# return path of file containing test questions
-def startUpRoutineProfessor():
+# asks professor to specify directory to store exam questions and student submissions
+# confirms that the exam questions file is in the directory, returns path of file
+def startUpExamDirectory():
 
-    lQuestionFilePath = 1
+    lExamQuestionsFilePath = False
 
-    while(lQuestionFilePath):
-        print('Please enter a home directory for the application.')
-        print("This will be the directory that all students' files will be stored in.")
-        print("Before pressing enter, check that the exam questions are in the directory and named 'Questions.txt'.")
+    while not lExamQuestionsFilePath:
+        print 'Please enter a home directory for the exam. This will be the directory that all students\' files will ' \
+              'be stored in.\nBefore pressing enter, please check that the exam questions are in the directory and ' \
+              'named \'Questions.txt\'.'
 
         # professor enters directory path
-        Server.gServerHomeDirectory = raw_input()
+        # hard coded for testing on Rylan's machine
+        #Server.gServerHomeDirectory = raw_input()
+        Server.gServerExamDirectory = "/home/rylan/Documents/omsi/professorFileDirectory/"
 
-        # attempt to open file containing test questions
-        lQuestionFilePath = openFile(Server.gServerHomeDirectory)
+        # confirm that exam questions file containing test questions
+        lExamQuestionsFilePath = verifyExamQuestionsFile(Server.gServerExamDirectory)
 
-    return lQuestionFilePath
+        print lExamQuestionsFilePath
+
+    return lExamQuestionsFilePath
 
 
-# if file found, return file path
-# if file not found, print error message and return
-def openFile(pNewHomeDirectory):
+# verify that specified directory contains exam questions file, returns file path
+# if file not found or not readable, print error message and return false
+def verifyExamQuestionsFile(pExamDirectory):
 
-    # test to make sure file can be read
-    # if this fails, IOError will be thrown
+    # return path of exam questions file
     try:
-      lFilePath = os.path.join(pNewHomeDirectory, 'Questions.txt')
-      lOpenFile = open(lFilePath, 'r')
-      lTest = lOpenFile.readline()
-      lOpenFile.close()
-      return lFilePath
+        lExamQuestionsFilePath = os.path.join(pExamDirectory, 'Questions.txt')
+        lOpenFile = open(lExamQuestionsFilePath, 'r')
+        lOpenFile.close()
+        return lExamQuestionsFilePath
 
+    # if attempt to open file fails, print error and return false
     except IOError:
-      print "Error: File does not appear to exist."
-      print "Please check that the specified path is spelled correctly and a file named 'Questions.txt' " \
-            "is in the specified directory."
-      return 1
+        print 'Error: File does not exist or is not readable. Please check that the specified path is spelled ' \
+              'correctly and a file named \'Questions.txt\' is in the specified directory.'
+        return False
 
 
 

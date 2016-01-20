@@ -142,33 +142,33 @@ def receiveExamQuestionsFile(pClientSocket):
     lExamQuestionsFile = createExamQuestionsFile()
 
     # if file was not created, notify the server
-    if (lExamQuestionsFile == False):
+    if not lExamQuestionsFile:
         pClientSocket.send("abort")
 
-    lSuccess = "f"
+    # create boolean to track
+    lSuccess = False
     try:
-        # if file was successfully created, notify the server
+        # if file was successfully created, notify server to begin sending exam questions
         pClientSocket.send("ready")
 
-        print "Entering the while loop"
-        # receive the file
-        while 1:
+        print "Reading file from server\n"
+
+        # write data from server to file
+        while True:
             ready = select.select([pClientSocket], [], [], 2)
             lChunkOfFile = pClientSocket.recv(1024)
             if ready[0] and lChunkOfFile != '':
                 lExamQuestionsFile.write(lChunkOfFile)
             else:
+                print "Finished accepting file"
+                lSuccess = True
                 break
-        #print 'writing the Question file'
-        #lQuestionsFile.write(lChunkOfFile)
-
-        print "Finished accepting file"
-        lSuccess = "s"
 
     finally:
-        if lSuccess == "f":
-            # something went wrong
-            print "File transfer was not successful"
+        # if exam questions were not successfully downloaded, print error
+        if not lSuccess:
+            print "Error: File transfer was not successful"
+
         # close file, regardless of success
         lExamQuestionsFile.close()
 
