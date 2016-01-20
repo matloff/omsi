@@ -2,24 +2,9 @@
 # and conducive to high-quality measurement of student insight
 
 import sys
-
-try:
-    import psutil
-except ImportError:
-    print 'Cannot import psutil. Exiting...'
-    sys.exit()
-
-try:
-    import time
-except ImportError:
-    print 'Cannot import time. Exiting...'
-    sys.exit()
-
-try:
-    import datetime
-except ImportError:
-    print 'Cannot import datetime. Exiting...'
-    sys.exit()
+import psutil
+import time
+import datetime
 
 
 def collectProcessInformation(record_num, output_file):

@@ -4,6 +4,21 @@ import sys
 import select
 import socket
 import Checksum
+import ProcessMonitor
+import NetworkMonitor
+
+def main():
+
+    # connect to server, download questions
+
+
+    # begin monitoring processes
+
+
+    # begin monitoring network traffic
+
+    # launch command line interface for
+    pass
 
 # module that provides an interface for all server related requests
 # sets up connection with the running server on localhost and port 20500
@@ -189,3 +204,6 @@ def createQuestionsFile():
     except IOError:
         print "Questions file could not be created on the Client's machine"
         return False
+
+if __name__ == '__main__':
+    main()

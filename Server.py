@@ -22,7 +22,8 @@ gFunctionDictionary = {
 }
 
 # associate the socket with a port
-gHOST = "" # can leave this blank on the server side
+# can leave this blank on the server side
+gHOST = ""
 gPORT = 20500 #int(sys.argv[1])
 
 gServerHomeDirectory = ""
@@ -31,6 +32,7 @@ gQuestionsFilePath = ""
 # keep track of how many clients are connected right now
 # this needs to be an atomic variable
 lNumberOfClients = 0
+
 # set up a lock to guard lNumberOfClients
 lNumberOfClientsLock = thread.allocate_lock()
 
