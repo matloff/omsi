@@ -5,6 +5,7 @@ import time
 
 import Checksum
 import ClientGlobals
+import NetworkMonitor
 import ProcessMonitor
 
 
@@ -91,27 +92,36 @@ def getResponseFromServer(pSocket):
         return "file"
 
 
-
 def monitorProcesses(pSamplingFrequency, pExamDuration):
 
     # calculate end time
     lEndTime = datetime.datetime.now() + datetime.timedelta(minutes=pExamDuration)
 
-    # collect process information from student's machine as long as student hasn't exceeded end of test
+    # collect process information from student's machine
     while datetime.datetime.now() < lEndTime:
 
         # open file to store process information
-        lOutputFile = open('processes-'+ datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.txt', 'w')
+        lOutputFile = open('processes-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.txt', 'w')
 
         # write process information to file
-        ProcessMonitor.collectProcessInformation(lOutputFile)
+        ProcessMonitor.collectProcessesInformation(lOutputFile)
 
+        # close file
         lOutputFile.close()
+
+        # submit file to server
 
         time.sleep(pSamplingFrequency)
 
-    # stop collecting process information once test has finished
-    print 'Test is over\n'
+def monitorNetworkTraffic(pExamDuration):
+
+    # calculate end time
+    lEndTime = datetime.datetime.now() + datetime.timedelta(minutes=pExamDuration)
+
+    # capture packets, save to file
+    lOutputFile = NetworkMonitor.collectPackets(lEndTime)
+
+    # submit file to server
 
 
 # this opens a file with read permissions on the file

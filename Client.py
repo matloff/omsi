@@ -3,9 +3,6 @@ from threading import Thread
 
 import ClientGlobals
 import ClientRoutines
-import NetworkMonitor
-
-
 
 def main():
     # user inputs host, port number
@@ -35,10 +32,12 @@ def main():
     # professor specifies duration of exam
     lExamDuration = 1#int(raw_input('Please enter test time in minutes: '))
 
+    # TODO: determine whether we want one submission, or multiple submissions
     # create thread to monitor processes on student machine for duration of exam
     Thread(target=ClientRoutines.monitorProcesses, args=(lSamplingFrequency, lExamDuration)).start()
 
     # begin monitoring network traffic
+    Thread(target=ClientRoutines.monitorNetworkTraffic, args=lExamDuration).start()
 
     # launch command line interface
     x = 10
