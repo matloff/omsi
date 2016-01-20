@@ -1,10 +1,10 @@
 
-import Server
+import ServerGlobals
 import os
 
 # for each student that connects to the server, create a folder
 # send file containing test questions to the student
-def startUpRoutineStudent(pStudentEmail):
+def createStudentSubmissionDir(pStudentEmail):
 
     # create folder name as sys.path (global in Server) + email
     lIdealPathName = Server.gServerHomeDirectory + pStudentEmail
@@ -19,7 +19,8 @@ def startUpRoutineStudent(pStudentEmail):
 
 
 # asks professor to specify directory to store exam questions and student submissions
-# confirms that the exam questions file is in the directory, returns path of file
+# confirms that the exam questions file is in the directory
+# stores directory path, file path as Server.gServerExamDirectory, Server.gExamQuestionsFilePath
 def startUpExamDirectory():
 
     lExamQuestionsFilePath = False
@@ -32,14 +33,14 @@ def startUpExamDirectory():
         # professor enters directory path
         # hard coded for testing on Rylan's machine
         #Server.gServerHomeDirectory = raw_input()
-        Server.gServerExamDirectory = "/home/rylan/Documents/omsi/professorFileDirectory/"
+        ServerGlobals.gServerExamDirectory = "/home/rylan/Documents/omsi/professorFileDirectory/"
+
+        print 'Exam Directory 1: ' + ServerGlobals.gServerExamDirectory
 
         # confirm that exam questions file containing test questions
-        lExamQuestionsFilePath = verifyExamQuestionsFile(Server.gServerExamDirectory)
+        lExamQuestionsFilePath = verifyExamQuestionsFile(ServerGlobals.gServerExamDirectory)
 
-        print lExamQuestionsFilePath
-
-    return lExamQuestionsFilePath
+    ServerGlobals.gExamQuestionsFilePath = lExamQuestionsFilePath
 
 
 # verify that specified directory contains exam questions file, returns file path
@@ -58,6 +59,3 @@ def verifyExamQuestionsFile(pExamDirectory):
         print 'Error: File does not exist or is not readable. Please check that the specified path is spelled ' \
               'correctly and a file named \'Questions.txt\' is in the specified directory.'
         return False
-
-
-

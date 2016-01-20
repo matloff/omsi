@@ -9,43 +9,20 @@ import socket
 import thread
 
 # import modules that contain functions called by a client
-import ExampleScriptServerSide
+import ServerGlobals
 import ServerRoutines
-
-# dictionary to associate the function name with the function first class object
-gFunctionDictionary = {
-
-    'printA': ExampleScriptServerSide.printA,
-    'printB': ExampleScriptServerSide.printB,
-    'printMyOwnWords': ExampleScriptServerSide.printMyOwnWords,
-    #'startUpRoutineStudent': startUpRoutineStudent,
-}
-
-# associate the socket with a port
-# can leave this blank on the server side
-gHOST = ""
-gPORT = 20500 #int(sys.argv[1])
-
-gServerExamDirectory = ""
-gExamQuestionsFilePath = ""
-
-# keep track of how many clients are connected right now
-# this needs to be an atomic variable
-lNumberOfClients = 0
-
-# set up a lock to guard lNumberOfClients
-lNumberOfClientsLock = thread.allocate_lock()
 
 # set up the connection, start listening, start the threads and send feedback to client
 def main():
 
-    global gExamQuestionsFilePath
-
     # run startup routine for the professor
     #    professor specifies the directory that will store student submissions
-    #    program confirms that the directory contains the exam questions file,
-    #       returns path of exam questions file
-    gExamQuestionsFilePath = ServerRoutines.startUpExamDirectory()
+    #    program confirms that the directory contains the exam questions file
+    ServerRoutines.startUpExamDirectory()
+
+    print "Exam Directory 2: " + ServerGlobals.gServerExamDirectory
+
+    print "Test:" + ServerGlobals.gExamQuestionsFilePath
 
     # keep track of total number of connections
     lTotalNumberOfConnections = 0
@@ -74,7 +51,7 @@ def createSocket():
         lServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         # bind address(gHost, gPort) to socket
-        lServerSocket.bind((gHOST, gPORT))
+        lServerSocket.bind((ServerGlobals.gHOST, ServerGlobals.gPORT))
 
         # accept "call" from client
         lServerSocket.listen(5) # maximum number of 5 queued connections, should be irrelevant as all connections fork into a new thread
@@ -89,13 +66,13 @@ def createSocket():
         sys.exit(1)
 
 def clientHandler(pClientSocket, addr):
-    global lNumberOfClients, lNumberOfClientsLock, gExamQuestionsFilePath
+    global gNumCurrentClients, gNumCurrentClientsLock, gExamQuestionsFilePath
 
     # acquire a lock, blocking = True, timeout = -1
-    lNumberOfClientsLock.acquire()
-    lNumberOfClients += 1
+    gNumCurrentClientsLock.acquire()
+    gNumCurrentClients += 1
     # unlock
-    lNumberOfClientsLock.release()
+    gNumCurrentClientsLock.release()
 
     # accept initial request
     data = pClientSocket.recv(1024)
@@ -139,9 +116,9 @@ def clientHandler(pClientSocket, addr):
 
     pClientSocket.close()
 
-    lNumberOfClientsLock.acquire()
-    lNumberOfClients -= 1
-    lNumberOfClientsLock.release()
+    gNumCurrentClientsLock.acquire()
+    gNumCurrentClients -= 1
+    gNumCurrentClientsLock.release()
 
     return
 
@@ -151,20 +128,20 @@ def interpreteClientString(pClientString):
     lSplitUpFunction = pClientString.split("(")
     lFunctionName = lSplitUpFunction[0]
 
-    if lSplitUpFunction[0] in gFunctionDictionary:
+    if lSplitUpFunction[0] in ServerGlobals.gFunctionDictionary:
         # look up function in dictionary and make the call
         if len(lSplitUpFunction) == 1:
-            gFunctionDictionary[lFunctionName]()
+            ServerGlobals.gFunctionDictionary[lFunctionName]()
         else:
             lParameters = lSplitUpFunction[1].split(")")[0]
             if lParameters:
-                gFunctionDictionary[lFunctionName](lParameters)
+                ServerGlobals.gFunctionDictionary[lFunctionName](lParameters)
         return "s"
     else:
         # special case for start up routines
-        if lSplitUpFunction[0] == "startUpRoutineStudent":
+        if lSplitUpFunction[0] == "createStudentSubmissionDir":
             lParameters = lSplitUpFunction[1].split(")")[0]
-            ServerRoutines.startUpRoutineStudent(lParameters)
+            ServerRoutines.createStudentSubmissionDir(lParameters)
             return "file"
         else:
             lErrorMessage = "The function you are trying to call is not defined on the Server"
