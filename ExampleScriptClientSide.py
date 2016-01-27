@@ -9,6 +9,6 @@ import Client
 
 if Client.callFunctionOnServer("startUpRoutineStudent(fdemoullin@gmail.com)"):
     print "Question File was received"
-#if Client.sendFileToServer("ClientInputTest.txt"):
-    #print "As far as the client is concerned: File seems to have been sent."
+if Client.sendFileToServer("ClientInputTest.txt"):
+    print "As far as the client is concerned: File seems to have been sent."
 

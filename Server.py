@@ -177,6 +177,8 @@ def interpreteClientString(pClientString):
 
 def receiveFile(pClientSocket):
 
+    pClientSocket.send("email")
+
     lNewFile = openNewFileServerSide("ServerOutput.txt")
 
     # something went wrong when creating the file, let the client know
