@@ -43,7 +43,7 @@ def clientHandler(pClientSocket, addr):
 
     # client is executing a function
     else:
-        lIsExecuted = interpreteClientString(data)
+        lIsExecuted = interpretClientString(data)
 
     if lIsExecuted == "s":
        print "Action was properly executed"
@@ -101,7 +101,7 @@ def createStudentSubmissionDir(pStudentEmail):
 
 
 # transform input string into function object and make the call to the corresponding function in the back-end
-def interpreteClientString(pClientString):
+def interpretClientString(pClientString):
 
     lSplitUpFunction = pClientString.split("(")
     lFunctionName = lSplitUpFunction[0]
