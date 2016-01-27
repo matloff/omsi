@@ -76,9 +76,12 @@ def clientHandler(pClientSocket, addr):
 
     pClientSocket.close()
 
+
+    # decrease number of current connections
     ServerGlobals.gNumCurrentClientsLock.acquire()
     ServerGlobals.gNumCurrentClients -= 1
     ServerGlobals.gNumCurrentClientsLock.release()
+
     return
 
 
@@ -116,7 +119,7 @@ def interpreteClientString(pClientString):
         # special case for start up routines
         if lSplitUpFunction[0] == "createStudentSubmissionDir":
             lParameters = lSplitUpFunction[1].split(")")[0]
-            ServerRoutines.createStudentSubmissionDir(lParameters)
+            createStudentSubmissionDir(lParameters)
             return "file"
         else:
             lErrorMessage = "The function you are trying to call is not defined on the Server"

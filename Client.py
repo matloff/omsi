@@ -12,17 +12,14 @@ def main():
     #lPort = int(raw_input("Please enter port number: "))
 
     # prepare socket to connect to server
-    #ClientRoutines.configureSocket()
+    lSocket = ClientRoutines.configureSocket()
 
-    # connect to server
+    # connect to server to download questions
 
 
     # store exam questions file from server on local machine
-    #lQuestionsFile = ClientRoutines.receiveExamQuestionsFile(ClientGlobals.gHost)
+    lQuestionsFile = ClientRoutines.receiveExamQuestionsFile(lSocket)
 
-
-
-    # connect to server to download questions
 
     # begin monitoring processes
     # TODO: Need some method by which professor can specify duration of test, frequency of process sampling
@@ -34,10 +31,10 @@ def main():
 
     # TODO: determine whether we want one submission, or multiple submissions
     # create thread to monitor processes on student machine for duration of exam
-    Thread(target=ClientRoutines.monitorProcesses, args=(lSamplingFrequency, lExamDuration)).start()
+    # Thread(target=ClientRoutines.monitorProcesses, args=(lSamplingFrequency, lExamDuration)).start()
 
     # begin monitoring network traffic
-    Thread(target=ClientRoutines.monitorNetworkTraffic, args=lExamDuration).start()
+    # Thread(target=ClientRoutines.monitorNetworkTraffic, args=(lExamDuration)).start()
 
     # launch command line interface
     x = 10
