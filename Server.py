@@ -32,15 +32,21 @@ def main():
         lClientsocket, lAddr = lServerSocket.accept()
         print "Connection detected at:", lAddr
 
-        # increase total number of connections
-        ServerGlobals.gNumTotalClientsLock.acquire()
+        # increase number of current connections
+        ServerGlobals.gNumCurrentClientsLock.acquire()
         ServerGlobals.gNumCurrentClients += 1
+        ServerGlobals.gNumCurrentClientsLock.release()
+
+        # increase number of total connections
+        ServerGlobals.gNumTotalClientsLock.acquire()
+        ServerGlobals.gNumTotalClients += 1
         ServerGlobals.gNumTotalClientsLock.release()
+
 
         # start new thread (function, args_tuple) for each new connection
         # lAddr is not used right now. However python syntax requires a tuple as input parameters to a new thread
         thread.start_new_thread(ServerRoutines.clientHandler, (lClientsocket, lAddr))
 
-# this scrip is the "Main" scrip on the back-end. It is supposed to be run by itself
+# this script is the "Main" script on the back-end. It is supposed to be run by itself
 if __name__ == '__main__':
     main()
