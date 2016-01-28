@@ -1,0 +1,15 @@
+;;vim - go to the Vim cheat sheet.
+
+;;help - go to the exam tool cheat sheet
+
+;;b no- go to the buffer for exam problem n (creating it if not there already)
+
+;;rn - compile (skip for interpreted languages) and run the code in the currently displayed buffer.
+
+;;eval - evaluate mathematical expression in the current buffer (for mathematical problems, basically a syntax check)
+
+;;sv - save the current buffer*
+
+;;sva - save all exam problem buffers*
+
+pppanic - panic button; works in either insert or noninsert mode
