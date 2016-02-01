@@ -14,9 +14,6 @@ def main():
     # prepare socket to connect to server
     lSocket = ClientRoutines.configureSocket()
 
-    # connect to server to download questions
-
-
     # store exam questions file from server on local machine
     lQuestionsFile = ClientRoutines.receiveExamQuestionsFile(lSocket)
 
