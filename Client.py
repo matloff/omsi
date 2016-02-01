@@ -8,8 +8,8 @@ def main():
     # user inputs host, port number
     # socket and port hard-coded for now
 
-    #lHost = raw_input("Please enter host name: ")
-    #lPort = int(raw_input("Please enter port number: "))
+    ClientGlobals.gHost = '168.150.21.93' #raw_input("Please enter host address: ")
+    ClientGlobals.gPort = int(raw_input("Please enter port number: "))
 
     # prepare socket to connect to server
     lSocket = ClientRoutines.configureSocket()

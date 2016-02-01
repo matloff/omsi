@@ -13,7 +13,7 @@ gFunctionDictionary = {
 # associate the socket with a port
 # can leave this blank on the server side
 gHost = ""
-gPort = 20500 #int(sys.argv[1])
+gPort = 20500
 
 gServerExamDirectory = ""
 gExamQuestionsFilePath = ""
