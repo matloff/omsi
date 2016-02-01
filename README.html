@@ -1,10 +1,49 @@
 
-##What is OMSI?##
+What is OMSI?
 
 Tools for conducting and grading examinations in a manner that is both
 secure and conducive to high-quality measurement of student insight.
 
-##Documentation##
+Summary of each file on this site (in alphabetical order)
+
+AutoGrade.py
+A program to grade the students' answer electronically and automatically (translated from Prof. N. Matloff's AutoGrade.R, included in this site).
+
+Checksum.py
+A program to convert content of students' answer to hexadecimal for grading.
+
+Client.py
+A program that gets host, port number, exam files, duration of examination from user, and monitor process on students' machine during the examination.
+
+ClientGlobals.py
+A program that provides global variables of host socket to be used by other programs.
+
+ClientRoutines.py
+A program that connects the localhost server to the port 20500, providing an interface for server related activities.
+
+ExampleScriptClientSide.py
+A sample script on how to use Client interface.
+
+ExampleScriptServerSide.py
+A sample script on how grading scripts can be run on Server.
+
+NetworkMonitor.py
+A program to store network traffic of students' machines while students are taking the examination.
+
+ProcessMonitor.py
+A program to store the start time of the examination and process attributes e.g. name, record number, process id.
+
+Server.py
+A program to display whether connection can be made between the Client and the server, if success, the address of the connection.
+
+ServerGlobals.py
+A program that provides the number of active and nonactive clients(students) during the examination.
+
+ServerRoutines.py
+A program that allows students to connect to the server to access the examination materials.
+
+
+Documentation
 
 Server Client Interaction:
 
