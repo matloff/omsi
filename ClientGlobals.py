@@ -1,4 +1,6 @@
 import socket
 
-gHost = 0
-gPort = 20500
+gHost = socket.gethostbyname(socket.gethostname())
+gPort = 5000
+
+gStudentEmail = "fdemoullin@ucdavis.edu"

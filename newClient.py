@@ -15,6 +15,7 @@ def main():
     lSocket = ClientRoutines.configureSocket()
 
     # store exam questions file from server on local machine
+    # TODO: figure out why this appends an f at the very end of the questions file on the Client side
     lQuestionsFile = ClientRoutines.receiveExamQuestionsFile(lSocket)
 
 

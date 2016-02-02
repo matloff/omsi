@@ -23,6 +23,11 @@ def main():
     # create socket
     lServerSocket = ServerRoutines.createSocket()
 
+    # print information about ip and port
+    print "Host address: %s" % ServerGlobals.gHost
+    print "Port number: %s" % ServerGlobals.gPort
+
+
     while True:
         # server is now ready to accept connections
         print "Number of Current Connections: %s" % ServerGlobals.gNumCurrentClients

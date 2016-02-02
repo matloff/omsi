@@ -5,7 +5,6 @@ import sys
 
 import ServerGlobals
 
-
 def createSocket():
     try:
         # create Internet TCP socket (domain, type)
@@ -37,9 +36,38 @@ def clientHandler(pClientSocket, addr):
     # accept initial request
     data = pClientSocket.recv(1024)
 
+    #
+    lIsExecuted = ""
+
     # client is sending a file
-    if data == "File":
-        lIsExecuted = receiveFile(pClientSocket)
+    if data == "ClientIsSendingAFile":
+
+        # tell the client that we are ready to accept the file name
+        pClientSocket.send("WhatIsTheFileName?")
+        # now actually read the file name
+        lFileName = pClientSocket.recv(1024)
+
+        # tell the client that we are ready to accept the student email
+        pClientSocket.send("WhatIsTheStudentName?")
+        lStudentEmail = pClientSocket.recv(2048)
+
+        lIsExecuted = receiveFile(pClientSocket, lFileName, lStudentEmail)
+
+    # client is requesting the questions file
+    elif data == "ClientWantsQuestions":
+        #send the Questions File to the client
+        #pClientSocket.send("file")
+        try:
+            lOpenedQuestions = open(ServerGlobals.gExamQuestionsFilePath, 'r')
+            lFileChunk = lOpenedQuestions.read(1024)
+        except IOError:
+            print "Something went wrong while reading the Questions file"
+
+        # send the file
+        while (lFileChunk):
+            pClientSocket.send(lFileChunk)
+            lFileChunk = lOpenedQuestions.read(1024)
+        print 'Finished sending the questions file to a client'
 
     # client is executing a function
     else:
@@ -51,25 +79,7 @@ def clientHandler(pClientSocket, addr):
        # transmits TCP message: success
        pClientSocket.send("s")
 
-    elif lIsExecuted == "file":
-        #send the Questions File to the client
-        pClientSocket.send("file")
-        try:
-            lOpenedQuestions = open(ServerGlobals.gExamQuestionsFilePath, 'r')
-            lFileChunk = lOpenedQuestions.read(1024)
-        except IOError:
-            print "Something went wrong while reading the Questions file"
-            return
-         # block this thread until client is ready to accept the file
-        lResponse = pClientSocket.recv(1024) # client will send "ready" or "abort"
-        # make sure the client respoinse was positive
-        if lResponse != "ready":
-            print "The server aborted prior to transmission of file, check server logs for more details"
-            return
-        while (lFileChunk):
-            pClientSocket.send(lFileChunk)
-            lFileChunk = lOpenedQuestions.read(1024)
-        print 'Finished sending the file'
+
     else:
        # transmits TCP message: fail
        pClientSocket.send("f")
@@ -127,28 +137,47 @@ def interpretClientString(pClientString):
             return lErrorMessage
 
 
-def openNewFileServerSide(pNameOfNewFile):
+def openNewFileServerSide(pNameOfNewFile, pStudentEmail):
+
+    # TODO: incorportate pStudentEmail into file path
+    # TODO: check if student has a directory already, if not create it, else write file into it
+
      # create new or trunctate old file - hence the w flag
     try:
-        lNewFile = open(pNameOfNewFile, 'w')
+        # home directory has to exist, we just assert this
+        assert os.path.exists(ServerGlobals.gServerExamDirectory)
+
+        # append student email to Server home directory
+        lDirectoryPath = os.path.join(ServerGlobals.gServerExamDirectory, pStudentEmail)
+
+        # check if directory exists, if not we create it
+        if os.path.exists(lDirectoryPath) == False:
+            os.mkdir(lDirectoryPath)
+
+        lDebugging = 'debuggingFile.txt'
+
+        # append fileName to ServerDirectory + Email subdirectory
+        # create / override file
+        # TODO: keep track of all versions of a submission file
+        lFilePath = os.path.join(lDirectoryPath, lDebugging)
+        lNewFile = open(lFilePath, 'wb')
+
         return lNewFile
     except IOError:
         print "File could not be created on the Server"
         return False
 
 
-def receiveFile(pClientSocket):
+def receiveFile(pClientSocket, pFileName, pStudentEmail):
 
-    lNewFile = openNewFileServerSide("ServerOutput.txt")
+    # open new file on the server
+    lNewFile = openNewFileServerSide(pFileName, pStudentEmail)
 
-    # something went wrong when creating the file, let the client know
-    if (lNewFile == False):
-        pClientSocket.send("abort")
-
+    # initialize success indicator to false
     lSuccess = "f"
     try:
         # let the client know the server is ready
-        pClientSocket.send("ready")
+        pClientSocket.send("ReadyToAcceptClientFile")
 
         # receive the file
         while 1:
@@ -189,7 +218,7 @@ def startUpExamDirectory():
         # professor enters directory path
         # hard coded for testing on Rylan's machine
         #Server.gServerHomeDirectory = raw_input()
-        ServerGlobals.gServerExamDirectory = "/home/rylan/Documents/omsi/professorFileDirectory/"
+        ServerGlobals.gServerExamDirectory = "ProfessorHomeDirectory"
 
         # confirm that exam questions file containing test questions
         lExamQuestionsFilePath = verifyExamQuestionsFile(ServerGlobals.gServerExamDirectory)

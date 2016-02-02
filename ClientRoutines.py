@@ -69,7 +69,8 @@ def configureSocket():
 def createExamQuestionsFile():
     # create new or truncate old file - hence the w flag
     try:
-        lNewFile = open("ExamQuestions.txt", 'w')
+        # TODO: path is for testing only, get rid of "StudentHomeDirectory/" when in prod
+        lNewFile = open("StudentHomeDirectory/ExamQuestions.txt", 'w')
         return lNewFile
     except IOError:
         print "Error: Exam questions file could not be created on Client's machine\n"
@@ -149,10 +150,9 @@ def receiveExamQuestionsFile(pClientSocket):
     lSuccess = False
     try:
         # if file was successfully created, notify server to begin sending exam questions
-        #TODO: Figure out why this line fails
-        pClientSocket.send("ready")
+        pClientSocket.send("ClientWantsQuestions")
 
-        print "Reading file from server\n"
+        print "Reading Questions file from server\n"
 
         # write data from server to file
         while True:
@@ -161,7 +161,7 @@ def receiveExamQuestionsFile(pClientSocket):
             if ready[0] and lChunkOfFile != '':
                 lExamQuestionsFile.write(lChunkOfFile)
             else:
-                print "Finished accepting file"
+                print "Finished reading Questions file from server"
                 lSuccess = True
                 break
 
@@ -173,8 +173,8 @@ def receiveExamQuestionsFile(pClientSocket):
         # close file, regardless of success
         lExamQuestionsFile.close()
 
-        # return success information
-        return lSuccess
+        # return File
+        return lExamQuestionsFile
 
 
 # sends a file from the student to the professor
@@ -186,30 +186,45 @@ def sendFileToServer(pFileName):
 
     # open the file
     lOpenFile = openFile(pFileName)
+    lFileChunk = lOpenFile.read(1024)
 
-    if (lOpenFile):
+    if (lFileChunk != ""):
+
+        lOpenFile.close()
 
         # first tell the server that we are sending a file
-        lSocket.send("File")
+        lSocket.send("ClientIsSendingAFile")
 
-        # block client until server is ready to accept the file
-        lResponse = lSocket.recv(1024) # server will send "ready" or "abort"
+        # block this before sending the filename, otherwise both the command and the file name will be appended on the server
+        lDebugging = lSocket.recv(1024);
+
+        # send the name of the file
+        lSocket.send(pFileName)
+
+        # block client until server is ready to accept the email of the student
+        lDebugging = lSocket.recv(1024)
+
+        #send the student email
+        lSocket.send(ClientGlobals.gStudentEmail)
+
+        # all information has been sent, get the go sign from the server
+        lResponse = lSocket.recv(1024)
 
         # check if something went wrong server side
-        if lResponse != "ready":
+        if lResponse != "ReadyToAcceptClientFile":
             print "The server aborted prior to transmission of file, check server logs for more details"
             return
 
-        # codes for abort?
-
         # send the file
-        lFileChunk = lOpenFile.read()
+        lOpenFile = open(pFileName, "r")
+        lFileChunk = lOpenFile.read(1024)
         while (lFileChunk):
-            print 'Sending File'
+            print "Sending File %s" % pFileName
             lSocket.send(lFileChunk)
             lFileChunk = lOpenFile.read(1024)
 
         # any chance that the file cant be sent?
+        lOpenFile.close()
 
     # print msg if file cannot be opened
     else:

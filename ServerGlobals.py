@@ -1,4 +1,5 @@
 import thread
+import socket
 
 import ExampleScriptServerSide
 
@@ -12,10 +13,10 @@ gFunctionDictionary = {
 
 # associate the socket with a port
 # can leave this blank on the server side
-gHost = ""
-gPort = 20500
+gHost = socket.gethostbyname(socket.gethostname())
+gPort = 5000
 
-gServerExamDirectory = ""
+gServerExamDirectory = "ProfessorHomeDirectory"
 gExamQuestionsFilePath = ""
 
 # variable to track number of currently connected clients

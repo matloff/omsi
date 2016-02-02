@@ -1,5 +1,4 @@
 import datetime
-import scapy
 import socket
 
 # TODO: do we need to parse packets? what info should we save?
