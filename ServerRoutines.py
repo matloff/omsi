@@ -70,6 +70,7 @@ def clientHandler(pClientSocket, addr):
         print 'Finished sending the questions file to a client'
 
     # client is executing a function
+    # TODO: refactor this or just get rid of it!
     else:
         lIsExecuted = interpretClientString(data)
 

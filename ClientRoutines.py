@@ -2,6 +2,7 @@ import datetime
 import select
 import socket
 import time
+import os
 
 import Checksum
 import ClientGlobals
@@ -69,8 +70,8 @@ def configureSocket():
 def createExamQuestionsFile():
     # create new or truncate old file - hence the w flag
     try:
-        # TODO: path is for testing only, get rid of "StudentHomeDirectory/" when in prod
-        lNewFile = open("StudentHomeDirectory/ExamQuestions.txt", 'w')
+        lFilePath = os.path.join(ClientGlobals.gStudentHomeDirectory, "ExamQuestions.txt")
+        lNewFile = open(lFilePath, 'w')
         return lNewFile
     except IOError:
         print "Error: Exam questions file could not be created on Client's machine\n"
@@ -127,12 +128,12 @@ def monitorNetworkTraffic(pExamDuration):
 
 # this opens a file with read permissions on the file
 # ATTENTION: an open file is returned! Call file.close() on the returned object
-def openFile(pFileName):
+def openFileOnClient(pFileName):
     try:
       lOpenFile = open(pFileName, "r")
       return lOpenFile
     except IOError:
-      print "Error: File does not appear to exist."
+      print "Error: File %s could not be opened. Make sure you entered the correct filename " % pFileName
       return 0
 
 
@@ -185,7 +186,9 @@ def sendFileToServer(pFileName):
     lSocket = configureSocket()
 
     # open the file
-    lOpenFile = openFile(pFileName)
+
+    lOpenFile = openFileOnClient(pFileName)
+
     lFileChunk = lOpenFile.read(1024)
 
     if (lFileChunk != ""):
