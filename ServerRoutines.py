@@ -55,19 +55,8 @@ def clientHandler(pClientSocket, addr):
 
     # client is requesting the questions file
     elif data == "ClientWantsQuestions":
-        #send the Questions File to the client
-        #pClientSocket.send("file")
-        try:
-            lOpenedQuestions = open(ServerGlobals.gExamQuestionsFilePath, 'r')
-            lFileChunk = lOpenedQuestions.read(1024)
-        except IOError:
-            print "Something went wrong while reading the Questions file"
-
-        # send the file
-        while (lFileChunk):
-            pClientSocket.send(lFileChunk)
-            lFileChunk = lOpenedQuestions.read(1024)
-        print 'Finished sending the questions file to a client'
+        # this function handles error messages + edge cases
+        sendQuestionsToClient(pClientSocket)
 
     # client is executing a function
     # TODO: refactor this or just get rid of it!
@@ -203,6 +192,30 @@ def receiveFile(pClientSocket, pFileName, pStudentEmail):
         # return success information
         return lSuccess
 
+
+def sendQuestionsToClient(pClientSocket):
+
+    #send the Questions File to the client
+    try:
+        lOpenedQuestions = open(ServerGlobals.gExamQuestionsFilePath, 'r')
+        lFileChunk = lOpenedQuestions.read(1024)
+        lExceptionOccurred = False
+    except IOError:
+        print "Something went wrong while reading the Questions file"
+        lFileChunk = ""
+        lExceptionOccurred = True
+
+    # send the file
+    while (lFileChunk):
+        pClientSocket.send(lFileChunk)
+        lFileChunk = lOpenedQuestions.read(1024)
+
+    # display success message for debugging purposes only
+    # TODO: comment this out for prod. It clogs up the command prompt unnecessarily
+    if lExceptionOccurred == False:
+        print 'Successfully sent the questions file to a client'
+
+    return
 
 # asks professor to specify directory to store exam questions and student submissions
 # confirms that the exam questions file is in the directory

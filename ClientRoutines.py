@@ -82,8 +82,8 @@ def createExamQuestionsFile():
             # This takes away the difficulty of getting the path right
             lFilePath = "ExamQuestions.txt"
             lNewFile = open(lFilePath, 'w')
-            print "Your home directory: %s was not accessible! Please make sure the directory exists" \
-                  "The questions file was successfully created in the directory where this code is located."
+            print "Your home directory: %s is not accessible! Please make sure the directory exists" \
+                  "The questions file was successfully created in the directory where this code is located." % ClientGlobals.gStudentHomeDirectory
             return lNewFile
         except IOError:
             # something went super wrong. The file cannot be created at all
@@ -160,6 +160,7 @@ def receiveExamQuestionsFile(pClientSocket):
     if not lExamQuestionsFile:
         print "We could not create a local file for the questions. /n " \
               "Please try again. Make sure your directory exists and is set properly"
+        return
 
     # create boolean to track
     lSuccess = False
@@ -196,11 +197,7 @@ def receiveExamQuestionsFile(pClientSocket):
 # submission of file
 def sendFileToServer(pFileName):
 
-    # create and configure the socket
-    lSocket = configureSocket()
-
     # open the file
-
     lOpenFile = openFileOnClient(pFileName)
 
     lFileChunk = lOpenFile.read(1024)
@@ -208,6 +205,9 @@ def sendFileToServer(pFileName):
     if (lFileChunk != ""):
 
         lOpenFile.close()
+
+        # create and configure the socket
+        lSocket = configureSocket()
 
         # first tell the server that we are sending a file
         lSocket.send("ClientIsSendingAFile")
