@@ -1,1 +1,8 @@
-ready
+
+Questions on the server
+
+The prof writes these before the exams start
+
+This file needs to be transferred to the Client upon first connection of the client.
+
+YadyYadaf

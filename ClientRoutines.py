@@ -69,13 +69,20 @@ def configureSocket():
 
 def createExamQuestionsFile():
     # create new or truncate old file - hence the w flag
+
+    # first try creating the file in the desired directory
     try:
         lFilePath = os.path.join(ClientGlobals.gStudentHomeDirectory, "ExamQuestions.txt")
         lNewFile = open(lFilePath, 'w')
         return lNewFile
     except IOError:
-        print "Error: Exam questions file could not be created on Client's machine\n"
-        return False
+        try:
+            lFilePath = "ExamQuestions.txt"
+            lNewFile = open(lFilePath, 'w')
+            return lNewFile
+        except IOError:
+            print "Error: Exam questions file could not be created on Client's machine\n"
+            return False
 
 
 # close the connection
@@ -145,7 +152,8 @@ def receiveExamQuestionsFile(pClientSocket):
 
     # if file was not created, notify the server
     if not lExamQuestionsFile:
-        pClientSocket.send("abort")
+        print "We could not create a local file for the questions. /n " \
+              "Please try again. Make sure your directory exists and is set properly"
 
     # create boolean to track
     lSuccess = False
