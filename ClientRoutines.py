@@ -76,13 +76,17 @@ def createExamQuestionsFile():
         lNewFile = open(lFilePath, 'w')
         return lNewFile
     except IOError:
+        # something went wrong. The path the student entered was most likely wrong
         try:
+            # try to open a file in THIS directory instead
+            # This takes away the difficulty of getting the path right
             lFilePath = "ExamQuestions.txt"
             lNewFile = open(lFilePath, 'w')
             print "Your home directory: %s was not accessible! Please make sure the directory exists" \
                   "The questions file was successfully created in the directory where this code is located."
             return lNewFile
         except IOError:
+            # something went super wrong. The file cannot be created at all
             print "Error: Exam questions file could not be created on Client's machine\n"
             return False
 
