@@ -64,12 +64,13 @@ Execute the Client script, but do not execute Client, for it is not supposed to 
 
 After everything is properly connected, students will connect to their server on their machines with their email addresses. When
 sussecssful, the server will calculate and display the number of current connections and total connections to the professor, so that it is
-detectable how many students are taking the exam, and is detectable when students face connection problem. Server.py then creates folders
-for each individual student, uses the folders to store students' answer and send the test questions to the students. Once the students
-receive their test questions, the internal clock will start to count down the time remaining for the students to do the test. Once the
-time is up, the program will automatically save the students' answer. During the time from students' first connection to the server till
-the end of the test, their activities on their laptops are being monitored by an external program PyShark, the data is stored in the
-file specially created for inidivual students along with their test answers.
+detectable how many students are taking the exam, and is detectable when students face connection problem. Server.py then creates
+directories for each individual student under the professor's home directory, uses the directory to store students' answer file. The
+program will then send the test questions to the students. Once the students receive their test questions, the internal clock will start
+to count down the time remaining for the students to do the test. Once the time is up, the program will automatically save the students'
+answer. During the time from students' first connection to the server till the end of the test, their activities on their laptops are being
+monitored by an external program PyShark, the data is stored in the file specially created for inidivual students along with their test
+answers.
 
 <b>What happen after the test end? How does to autograding work?</b>
 
