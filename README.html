@@ -67,6 +67,11 @@ the end of the test, their activities on their laptops are being monitored by an
 file specially created for inidivual students along with their test answers.
 
 What happen after the test end? How does to autograding work?
+The autograding program is semi-autograded. It goes through the students' file answers.txt in their individual directory with the name of
+their emailname (e.g. jsmith@ucdavis.edu -> jsmith) to parse students' answer and a master answer file with the name Answerx, where x is
+the test ID. It then displays both sets of answers to the professor. If there are any formatting errors, the program will alert the
+professor. The professor needs to manually fix the files and decides how many points to award and applies any
+late penalties if deemed necessary. All results are then stored in an output file.
 
 Summary of each file on this site (in alphabetical order)
 
