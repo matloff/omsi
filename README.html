@@ -1,9 +1,11 @@
 
 What is OMSI?
 
-OMSI, short for Online Measurement of Student Insight, is a Python project made for conducting and grading examinations in a manner that is both
-secure and conducive to high-quality measurement of student insight. It is suitable for small or large class quizz, test or exam:
+OMSI, short for Online Measurement of Student Insight, is a Python project made for conducting and grading examinations in a manner that is
+both secure and conducive to high-quality measurement of student insight. It is suitable for small or large class quizz, test or exam:
 be it essay, programming, math or multiple choice question.
+
+How to use this project package?
 
 Step 1a: Coding a script
 
@@ -54,7 +56,17 @@ complicated, which you are free to contact Francios to fix the problem.
 Step 5: Running Client.py
 Execute the Client script, but do not execute Client, for it is not supposed to be executed by itself.
 
+What does the program do when executing Server.py and Client.py?
+After everything is properly connected, students will connect to their server on their machines with their email addresses. When
+sussecssful, the server will calculate and display the number of current connections and total connections to the professor, so that it is
+detectable how many students are taking the exam, and is detectable when students face connection problem. Server.py then creates folders
+for each individual student, uses the folders to store students' answer and send the test questions to the students. Once the students
+receive their test questions, the internal clock will start to count down the time remaining for the students to do the test. Once the
+time is up, the program will automatically save the students' answer. During the time from students' first connection to the server till
+the end of the test, their activities on their laptops are being monitored by an external program PyShark, the data is stored in the
+file specially created for inidivual students along with their test answers.
 
+What happen after the test end? How does to autograding work?
 
 Summary of each file on this site (in alphabetical order)
 
