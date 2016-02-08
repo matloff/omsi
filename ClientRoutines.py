@@ -49,8 +49,6 @@ def computeChecksum(filename):
 
 # initialization of socket, no connection is established yet
 def configureSocket():
-    # connection on localhost for now
-
     try:
         # create local Internet TCP socket (domain, type)
         pSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -143,11 +141,18 @@ def monitorNetworkTraffic(pExamDuration):
 # ATTENTION: an open file is returned! Call file.close() on the returned object
 def openFileOnClient(pFileName):
     try:
-      lOpenFile = open(pFileName, "r")
+      lFilePath = os.path.join(ClientGlobals.gStudentHomeDirectory, pFileName)
+      lOpenFile = open(lFilePath, "r")
       return lOpenFile
     except IOError:
-      print "Error: File %s could not be opened. Make sure you entered the correct filename " % pFileName
-      return 0
+        try:
+            # file was not in the home directory, try to see id the file is in the code's directory
+            lOpenFile = open(pFileName, "r")
+            return lOpenFile
+        except:
+            # file was not to be found at all. The name is wrong or the file is somewhere unexpected
+            print "Error: File %s could not be opened. Make sure you entered the correct filename and the file is in your home directory" % pFileName
+            return False
 
 
 # download exam questions from professor's machine
@@ -197,14 +202,19 @@ def receiveExamQuestionsFile(pClientSocket):
 # submission of file
 def sendFileToServer(pFileName):
 
-    # open the file
+    # open the file -> this handles exceptions effectively
     lOpenFile = openFileOnClient(pFileName)
 
-    lFileChunk = lOpenFile.read(1024)
-
-    if (lFileChunk != ""):
-
+    try:
+        ldebugging = lOpenFile.read(1024)
         lOpenFile.close()
+        lCanIReadFromFile = True
+    except:
+        lCanIReadFromFile = False
+
+    if (lCanIReadFromFile):
+
+        # we know the file is ok and ready to be sent, connect to the server now
 
         # create and configure the socket
         lSocket = configureSocket()
@@ -232,8 +242,8 @@ def sendFileToServer(pFileName):
             print "The server aborted prior to transmission of file, check server logs for more details"
             return
 
-        # send the file
-        lOpenFile = open(pFileName, "r")
+        # we are all set: send the file
+        lOpenFile = openFileOnClient(pFileName)
         lFileChunk = lOpenFile.read(1024)
         while (lFileChunk):
             print "Sending File %s" % pFileName
@@ -246,11 +256,11 @@ def sendFileToServer(pFileName):
     # print msg if file cannot be opened
     else:
         # Error message for a bad student submission file
-        print "Unable to read file: " + pFileName + "." \
-                                                    "Make sure your submission file is in the " \
-                                                    "right directory and is of type .txt."
-    # closing the file
-    lOpenFile.close()
+        print "File was not submitted! Please retry and make sure you are submitting a valid file."
+        return
+
+    # TODO: look into this!
+    # what does this do? what are we even returning here!
     return getResponseFromServer(lSocket)
 
 # simple setter

@@ -69,13 +69,11 @@ def clientHandler(pClientSocket, addr):
        # transmits TCP message: success
        pClientSocket.send("s")
 
-
     else:
        # transmits TCP message: fail
        pClientSocket.send("f")
 
     pClientSocket.close()
-
 
     # decrease number of current connections
     ServerGlobals.gNumCurrentClientsLock.acquire()
@@ -128,10 +126,6 @@ def interpretClientString(pClientString):
 
 
 def openNewFileServerSide(pNameOfNewFile, pStudentEmail):
-
-    # TODO: incorportate pStudentEmail into file path
-    # TODO: check if student has a directory already, if not create it, else write file into it
-
      # create new or trunctate old file - hence the w flag
     try:
         # home directory has to exist, we just assert this
@@ -144,12 +138,10 @@ def openNewFileServerSide(pNameOfNewFile, pStudentEmail):
         if os.path.exists(lDirectoryPath) == False:
             os.mkdir(lDirectoryPath)
 
-        lDebugging = 'debuggingFile.txt'
-
         # append fileName to ServerDirectory + Email subdirectory
         # create / override file
         # TODO: keep track of all versions of a submission file
-        lFilePath = os.path.join(lDirectoryPath, lDebugging)
+        lFilePath = os.path.join(lDirectoryPath, pNameOfNewFile)
         lNewFile = open(lFilePath, 'wb')
 
         return lNewFile
