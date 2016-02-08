@@ -2,11 +2,19 @@
 
 function! VimCheatSheet()
 
+if winnr('$') > 1
+    hide
+endif
+
 :b 1
 
 endfunction
 
 function! HelpCheatSheet()
+
+if winnr('$') > 1
+    hide
+endif
 
 :b 2
 
@@ -31,15 +39,29 @@ endpython
 endfunction
 
 function! Save()
+w
 python << endpython
-
-print("This saves the current buffer")
+import ClientRoutines
+fName = vim.eval("bufname('%')")
+ClientRoutines.sendFileToServer(fName)
+print("Saving file {0}...".format(fName) )
 
 endpython
 endfunction
 
 function! SaveAll()
+wa
 python << endpython
+import ClientRoutines
+import re
+
+count = int(vim.eval("bufnr('$')"))
+
+for i in range(2,count+1):
+    name = "bufname({0})".format(i)
+    if re.match(r"answer\d+\.[a-zA-Z]+$", vim.eval(name)):
+        ClientRoutines.sendFileToServer(vim.eval(name))
+
 
 print("This will save all buffers")
 
@@ -50,6 +72,13 @@ function! Connect()
 python << endpython
 
 print ("Attempting to connect to {0} at port {1}".format(vim.eval("g:serverName"),vim.eval("g:port")))
+
+import Client
+import ClientGlobals
+ClientGlobals.gHost = vim.eval("g:serverName")
+ClientGlobals.gPort = int(vim.eval("g:port"))
+ClientGlobals.gStudentEmail = vim.eval("g:studentEmail")
+Client.main()
 
 endpython
 endfunction
@@ -98,6 +127,26 @@ for q in questions:
 endpython
 endfunction
 
+function! HideQuestion()
+    wincmd k
+    hide
+endfunction
+
+function! ShowQuestion()
+python  << endpython
+import re
+fName = vim.eval("bufname('%')")
+print fName
+match = re.match("[a-zA-Z]+(\d+)\.", fName)
+num = 1
+if match:
+    num = int(match.group(1))
+command = ":call ChangeQuestions({0})".format(num)
+vim.command(command)
+
+endpython
+endfunction
+
 function! ChangeQuestions(number)
 let a:fName =  "answer".a:number.".txt"
 let a:qName = "question".a:number.".txt"
@@ -117,6 +166,8 @@ endfunction
 :nmap ;;eval :call Evaluate()<CR>
 :nmap ;;sv :call Save()<CR>
 :nmap ;;sva :call SaveAll()<CR>
+:nmap ;;hide :call HideQuestion()<CR>
+:nmap ;;show :call ShowQuestion()<CR>
 
 
 python << endpython
@@ -124,9 +175,17 @@ import vim
 import sys
 import os
 vim.command('call inputsave()')
-    
+while True:
+    vim.command("let g:studentEmail = input('Enter your student email: ')")
+    s = "'You entered \"" + vim.eval('g:studentEmail') + "\" is that correct? (Y/N) '"
+    vim.command("let g:correctEmail = input("+s+")")
+    resp = vim.eval("g:correctEmail")
+    resp = resp.strip().lower()
+    if resp in ["y","yes"]:
+        break
 
 while True:
+    
     vim.command("let g:connectedMode = input('Is this exam online?(Y/N) ')")
     response = vim.eval("g:connectedMode")
     response = response.strip().lower() 
@@ -149,11 +208,9 @@ vim.command("call inputrestore()")
 p = os.getcwd()
 sys.path.insert(0,p)
 
-import Client
-Client.setUpServer(vim.eval("serverName"), vim.eval("port"))
 
 endpython
-let g:questionsFileName = "questions.txt"
+let g:questionsFileName = "ExamQuestions.txt"
 call GetCheatSheetBuffers()
 call Connect()
 call ParseQuestions()
