@@ -5,10 +5,25 @@ __author__ = 'fdemoullin'
 # This abstracts networking details like sockets, ports, and TCP byte separation
 
 import ClientRoutines
+import ClientGlobals
 
 
-#if Client.callFunctionOnServer("startUpRoutineStudent(fdemoullin@gmail.com)"):
-    #print "Question File was received"
-if ClientRoutines.sendFileToServer("Question1.txt"):
-    print "As far as the client is concerned: File seems to have been sent."
+ClientGlobals.gStudentEmail = raw_input("Enter email for this test suite: ")
+ClientGlobals.gHost = raw_input("Enter Host name: ")
+ClientGlobals.gPort = int(raw_input("Enter Port name: "))
+
+
+print "File was downloaded"
+
+i = 0
+while (i < 100):
+
+    lSocket = ClientRoutines.configureSocket()
+    ClientRoutines.receiveExamQuestionsFile(lSocket)
+
+    ClientRoutines.sendFileToServer("Question1.txt")
+
+    ClientRoutines.sendFileToServer("Question2.txt")
+
+    i = i + 1
 
