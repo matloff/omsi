@@ -6,3 +6,15 @@ The prof writes these before the exams start
 This file needs to be transferred to the Client upon first connection of the client.
 
 YadyYada
+
+QUESTION
+
+This should be question 1
+
+QUESTION
+
+this should be question 2
+
+QUESTION 
+
+this should be question 3

@@ -2,7 +2,11 @@
 
 ;;help - go to the exam tool cheat sheet
 
-;;b no- go to the buffer for exam problem n (creating it if not there already)
+;;qn- go to question n 
+
+;;hide - hides the question when viewing the question/answer split view
+
+;;show - puts the question back in question/answer split view
 
 ;;rn - compile (skip for interpreted languages) and run the code in the currently displayed buffer.
 
