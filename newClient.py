@@ -1,5 +1,7 @@
 import sys
 import os
+import time
+import re
 from threading import Thread
 
 import ClientGlobals
@@ -37,6 +39,23 @@ def main():
 
     # launch command line interface
     x = 10
+
+
+    fName = os.path.expanduser("~/.vimrc")
+    path = os.getcwd() + "/vimtest.vim"
+
+
+    f = open(fName,'a')
+
+    command = ';load'
+    
+    # for line in f:
+    #     match = re.match()
+    command = "nmap ;load :source " + path + "<CR>\n"
+    f.write(command)
+    f.flush()
+    f.close
+
     os.system("vim")
 
 
