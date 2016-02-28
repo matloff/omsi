@@ -190,17 +190,28 @@ while True:
     response = vim.eval("g:connectedMode")
     response = response.strip().lower() 
     if response in ["n","no"]:
-        vim.command("let g:qCount = input('How many questions are on the exam?')")
-        c = vim.eval("g:qCount")
+        vim.command("let g:qCount = input('How many questions are on the exam? ')")
+        c = int(vim.eval("g:qCount"))
+        
+        for count in range(1,c+1):
+            print "The count is {0}".format(count)
+            answerFile = "answer{0}.txt".format(count)
+            f = open(answerFile,'w')
+            f.close()
+            command = "execute 'nmap ;;q{0} :call ChangeQuestions({1})<CR>'".format(count,count)
+            vim.command(command)
         
 	break
     elif response in ["y","yes"]:
         vim.command("let g:serverName = input('Enter the server name: ')")
         vim.command("let g:port = input('Enter the port: ')")
         vim.command("echo \"\n\"")
+        vim.command("call Connect()")
+
+        vim.command("call ParseQuestions()")
         break
     else:
-	print response + " is an invalid response. Please enter Y or N"
+        print response + " is an invalid response. Please enter Y or N"
 
 vim.command("call inputrestore()")
 
@@ -212,7 +223,6 @@ sys.path.insert(0,p)
 endpython
 let g:questionsFileName = "ExamQuestions.txt"
 call GetCheatSheetBuffers()
-call Connect()
-call ParseQuestions()
+
 
 
