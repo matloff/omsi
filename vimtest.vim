@@ -206,9 +206,8 @@ while True:
         vim.command("let g:serverName = input('Enter the server name: ')")
         vim.command("let g:port = input('Enter the port: ')")
         vim.command("echo \"\n\"")
-        vim.command("call Connect()")
-
-        vim.command("call ParseQuestions()")
+        
+ 
         break
     else:
         print response + " is an invalid response. Please enter Y or N"
@@ -223,6 +222,8 @@ sys.path.insert(0,p)
 endpython
 let g:questionsFileName = "ExamQuestions.txt"
 call GetCheatSheetBuffers()
+call Connect()
+call ParseQuestions()
 
 
 
