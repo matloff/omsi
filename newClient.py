@@ -1,4 +1,5 @@
 import sys
+import os
 from threading import Thread
 
 import ClientGlobals
@@ -12,11 +13,11 @@ def main():
     #ClientGlobals.gPort = int(raw_input("Please enter port number: "))
 
     # prepare socket to connect to server
-    lSocket = ClientRoutines.configureSocket()
+    # lSocket = ClientRoutines.configureSocket()
 
     # store exam questions file from server on local machine
     # TODO: figure out why this appends an f at the very end of the questions file on the Client side
-    lQuestionsFile = ClientRoutines.receiveExamQuestionsFile(lSocket)
+    # lQuestionsFile = ClientRoutines.receiveExamQuestionsFile(lSocket)
 
 
     # begin monitoring processes
@@ -36,6 +37,7 @@ def main():
 
     # launch command line interface
     x = 10
+    os.system("vim")
 
 
 if __name__ == '__main__':
