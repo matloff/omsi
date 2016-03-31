@@ -45,19 +45,28 @@ def main():
     path = os.getcwd() + "/vimtest.vim"
 
 
-    f = open(fName,'a')
+    f = open(fName,'r+')
 
-    command = ';load'
+    command = "nmap ;loadomsi :source " + path + "<CR>"
+
+    lineFound = False
     
-    # for line in f:
-    #     match = re.match()
-    command = "nmap ;load :source " + path + "<CR>\n"
-    f.write(command)
-    f.flush()
-    f.close
+    for line in f:
+        if re.match(command, line):
+            lineFound = True
+            break
+
+    if not lineFound:
+        command = "nmap ;loadomsi :source " + path + "<CR>\n"
+        f.write(command)
+        f.flush()
+        f.close
+
+    raw_input("\n\nGetting ready to launch vim. Once vim is launched type the command ';loadomsi' to begin. Press enter to continue...\n")
 
     os.system("vim")
 
 
 if __name__ == '__main__':
     main()
+
