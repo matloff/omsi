@@ -7,6 +7,8 @@ from threading import Thread
 import ClientGlobals
 import ClientRoutines
 
+
+# main method client side
 def main():
     # user inputs host, port number
     # socket and port hard-coded for now
