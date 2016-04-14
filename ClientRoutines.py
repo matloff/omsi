@@ -64,7 +64,7 @@ def configureSocket():
         raise RuntimeError("Could not open socket on Client: " + message)
         return False
 
-
+# creates file with the questions on the client's machine
 def createExamQuestionsFile():
     # create new or truncate old file - hence the w flag
 

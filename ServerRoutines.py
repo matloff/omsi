@@ -5,6 +5,7 @@ import sys
 
 import ServerGlobals
 
+# sets up the socket that the students connect to
 def createSocket():
     try:
         # create Internet TCP socket (domain, type)
@@ -25,7 +26,7 @@ def createSocket():
         print "Could not open socket on Server: " + message
         sys.exit(1)
 
-
+# handles client interaction: detects client connection delegates requests to the corresponding routines
 def clientHandler(pClientSocket, addr):
 
     # increment number of current clients
@@ -124,7 +125,7 @@ def interpretClientString(pClientString):
             raise RuntimeError(lErrorMessage)
             return lErrorMessage
 
-
+# opens new file in a directory on the server
 def openNewFileServerSide(pNameOfNewFile, pStudentEmail):
      # create new or trunctate old file - hence the w flag
     try:
@@ -149,7 +150,7 @@ def openNewFileServerSide(pNameOfNewFile, pStudentEmail):
         print "File could not be created on the Server"
         return False
 
-
+# routine for receiving a file from a student
 def receiveFile(pClientSocket, pFileName, pStudentEmail):
 
     # open new file on the server
@@ -184,7 +185,7 @@ def receiveFile(pClientSocket, pFileName, pStudentEmail):
         # return success information
         return lSuccess
 
-
+# routine for sending the questions file to a student
 def sendQuestionsToClient(pClientSocket):
 
     #send the Questions File to the client

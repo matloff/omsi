@@ -89,13 +89,14 @@ Checksum.py
 A program to convert content of students' answer to hexadecimal for grading.
 
 Client.py
-A program that gets host, port number, exam files, duration of examination from user, and monitor process on students' machine during the examination.
+Main function Client side. This function connect to the server, it allows students to cache username and email for easy submission of files to the server.
 
 ClientGlobals.py
-A program that provides global variables of host socket to be used by other programs.
+Global variables client side.
 
 ClientRoutines.py
-A program that connects the localhost server to the port 20500, providing an interface for server related activities.
+A set of routines relevant to the client. The routines include file transfer from Client to Server, file transfer from Server to Client,
+a "log in"/authentication system requiring students to input their email addresses for authentication.
 
 ExampleScriptClientSide.py
 A sample script on how to use Client interface.
@@ -110,10 +111,12 @@ ProcessMonitor.py
 A program to store the start time of the examination and process attributes e.g. name, record number, process id.
 
 Server.py
-A program to display whether connection can be made between the Client and the server, if success, the address of the connection.
+Main function server side. This routine runs during the entire duration of the exam. This routine allows for
+students to connect to the server and it delegates requests on the Server.
 
 ServerGlobals.py
-A program that provides the number of active and nonactive clients(students) during the examination.
+Global variables server side.
 
 ServerRoutines.py
-A program that allows students to connect to the server to access the examination materials.
+Routines that can be called via Server.py. Routines include file transfer from Server to Client, file transfer from Client to Server, file storage Server side
+as well as routines for setting up the Server and terminating it.
