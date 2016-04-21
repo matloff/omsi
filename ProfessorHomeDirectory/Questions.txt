@@ -8,6 +8,10 @@ The prof writes these before the exams start
 This file needs to be transferred to the Client upon first connection of the client.
 
 YadyYada
+DESCRIPTION
+Here would be a description of the test. This is REQUIRED. Here the Prof would put some stuff like they put on the front page of an exam. Like saying students have an hour and better
+not
+cheat.
 
 QUESTION
 

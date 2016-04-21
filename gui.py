@@ -60,8 +60,8 @@ class Example(Frame):
 		w = evt.widget
 		index = int(w.curselection()[0])
 		value = w.get(index)
-		self.updateQuestionBox(index-1)
-		self.updateAnswerBox(index-1)
+		self.updateQuestionBox(index)
+		self.updateAnswerBox(index)
 
 	def enteredServerInfo(self):
 		if not self.validate():
@@ -146,11 +146,11 @@ class Example(Frame):
 	def getQuestions(self):
 		import utility
 		self.QuestionsArr = utility.ParseQuestions("ExamQuestions.txt")
-		self.lb.delete(1)
-		self.lb.insert(1,"Description")
+		self.lb.delete(0,END)
+		self.lb.insert(END,"Description")
 		self.answersArr = []
 		for i in range(1,len(self.QuestionsArr)):
-			self.lb.insert(i+1,"Question {0}".format(i))
+			self.lb.insert(END,"Question {0}".format(i))
 			self.answersArr.append("Put your answer for question {0} here.".format(i))
 
 
@@ -190,13 +190,13 @@ class Example(Frame):
 		self.parent.config(menu=menubar)
 		
 		
-		self.questionFrame = Frame(self.parent,bg="yellow")
+		self.questionFrame = Frame(self.parent,bg="#003366")
 		self.questionFrame.grid(row = 0,column=0,sticky="nswe")
 
 		# btn = Button(self.questionFrame,text="hi",command=self.helloCalself.lback)
 		# btn.pack()
 		print "Parent height = {0}".format(self.parent.winfo_height())
-		self.lb = Listbox(self.questionFrame,width=20)
+		self.lb = Listbox(self.questionFrame,width=20,bg = "#808080")
 		self.lb.insert(1,"Connect to server to get quesions...")
 		self.lb.bind('<<ListboxSelect>>',self.listboxSelected)
 
@@ -204,20 +204,24 @@ class Example(Frame):
 		# pdb.set_trace()
 
 		#Frame for the question and answer text boxes
-		self.textFrame = Frame(self.parent)
+		self.textFrame = Frame(self.parent,bg="#003366")
+		pWindow = PanedWindow(self.textFrame,orient=VERTICAL,bg="#003333")
+
 		self.textFrame.grid(row=0,column=1,sticky="nswe")
 		self.textFrame.grid_rowconfigure(0,weight=1)
 		self.textFrame.grid_rowconfigure(1,weight=6)
 		self.textFrame.grid_columnconfigure(0,weight=1)
 
 		#Question text box
-		self.question = Text(self.textFrame,bg="red")
-		self.question.grid(row=0,sticky="nswe",padx=5,pady =5)
+		self.question = Text(pWindow,bg="#d3d3d3",font=("Purisa", 20))
+		pWindow.add(self.question)
+		# self.question.grid(row=0,sticky="nswe",padx=5,pady =5)
 
 		#Answer text box
-		self.txt = Text(self.textFrame,bg="orange")
-		self.txt.grid(row=1,sticky="nswe",padx=5,pady=5)
-
+		self.txt = Text(pWindow,bg="white",font=("Purisa",16))
+		pWindow.add(self.txt);
+		# self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
+		pWindow.pack(fill=BOTH,expand=1,pady=5)
 
 
 def main():
