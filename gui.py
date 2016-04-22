@@ -190,13 +190,13 @@ class Example(Frame):
 		self.parent.config(menu=menubar)
 		
 		
-		self.questionFrame = Frame(self.parent,bg="#003366")
+		self.questionFrame = Frame(self.parent,bg="ghost white")
 		self.questionFrame.grid(row = 0,column=0,sticky="nswe")
 
 		# btn = Button(self.questionFrame,text="hi",command=self.helloCalself.lback)
 		# btn.pack()
 		print "Parent height = {0}".format(self.parent.winfo_height())
-		self.lb = Listbox(self.questionFrame,width=20,bg = "#808080")
+		self.lb = Listbox(self.questionFrame,width=20,bg = "lavender")
 		self.lb.insert(1,"Connect to server to get quesions...")
 		self.lb.bind('<<ListboxSelect>>',self.listboxSelected)
 
@@ -204,8 +204,8 @@ class Example(Frame):
 		# pdb.set_trace()
 
 		#Frame for the question and answer text boxes
-		self.textFrame = Frame(self.parent,bg="#003366")
-		pWindow = PanedWindow(self.textFrame,orient=VERTICAL,bg="#003333")
+		self.textFrame = Frame(self.parent,bg="azure")
+		pWindow = PanedWindow(self.textFrame,orient=VERTICAL,bg="LightBlue1")
 
 		self.textFrame.grid(row=0,column=1,sticky="nswe")
 		self.textFrame.grid_rowconfigure(0,weight=1)
@@ -213,12 +213,12 @@ class Example(Frame):
 		self.textFrame.grid_columnconfigure(0,weight=1)
 
 		#Question text box
-		self.question = Text(pWindow,bg="#d3d3d3",font=("Purisa", 20))
+		self.question = Text(pWindow,bg="pale turquoise",font=("Purisa", 20))
 		pWindow.add(self.question)
 		# self.question.grid(row=0,sticky="nswe",padx=5,pady =5)
 
 		#Answer text box
-		self.txt = Text(pWindow,bg="white",font=("Purisa",16))
+		self.txt = Text(pWindow,bg="LightBlue2",font=("Purisa",16))
 		pWindow.add(self.txt);
 		# self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
 		pWindow.pack(fill=BOTH,expand=1,pady=5)
