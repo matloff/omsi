@@ -1,5 +1,6 @@
 #Testing tkinter
 from Tkinter import *
+from threading import Timer
 import tkMessageBox
 import tkFileDialog
 import tkSimpleDialog
@@ -8,13 +9,12 @@ import os
 
 
 
-
 class Example(Frame):
 
 	def __init__(self,master):
 		Frame.__init__(self,master)
 		self.parent = master
-		self.lastqNum = -1
+		self.curqNum = -1
 		self.widgets()
 
 	def donothing(self):
@@ -35,26 +35,30 @@ class Example(Frame):
 		s = "This size is {0}".format(self.parent.winfo_height())
 		tkMessageBox.showinfo("Hello Python", s)
 
+	#Updates the question box with the question when a question
+	#is clicked in the listbox
 	def updateQuestionBox(self,qNum = None):
 		# pdb.set_trace()
 		
-		if self.lastqNum == qNum:
+		if self.curqNum == qNum:
 			return
 		self.question.delete("1.0",END)
 		self.question.insert(END,self.QuestionsArr[qNum])
 
+	#Updates the answer box when the question is clicked
+	#in the listbox
 	def updateAnswerBox(self,qNum = None):
 		#qNum 0 refers to the description
-		if qNum == self.lastqNum:
+		if qNum == self.curqNum:
 			return
 
-		if self.lastqNum > 0:
-			self.answersArr[self.lastqNum-1] = self.txt.get("1.0",END)
+		if self.curqNum > 0:
+			self.answersArr[self.curqNum-1] = self.txt.get("1.0",END)
 
 		self.txt.delete("1.0",END)
 		if not qNum == None and qNum > 0:
 			self.txt.insert(END,self.answersArr[qNum-1])
-		self.lastqNum = qNum
+		self.curqNum = qNum
 
 	def listboxSelected(self,evt):
 		w = evt.widget
@@ -76,6 +80,34 @@ class Example(Frame):
 	def cancel(self,event=None):
 		self.parent.focus_set()
 		self.dBox.destroy()
+
+	def autoSave(self):
+		t = Timer(60,self.autoSave)
+		#Guy on stack overflow said this helps with
+		#being able to end the main thread without complications
+		t.daemon = True 
+		t.start()
+		if self.curqNum > 0:
+			self.saveAnswer(self.curqNum)
+
+	def saveAllAnswers(self):
+		for i in range(1,len(self.answersArr)+1):
+			self.saveAnswer(i)
+
+	def saveAnswer(self,qNum = None):
+		if not qNum:
+			qNum = self.curqNum
+
+		if qNum == 0:
+			return
+
+		if qNum == self.curqNum:
+			self.answersArr[qNum-1] = self.txt.get("1.0", END)
+
+		filename = "omsi_answer{0}.txt".format(qNum)
+		with open(filename,'w') as f:
+			f.write(self.answersArr[qNum-1])
+
 
 
 	#Makes a dialog window pop up asking for host port and email
@@ -121,6 +153,7 @@ class Example(Frame):
 		self.connectToServer()
 		self.getQuestions()
 
+
 	def connectToServer(self):
 		import Client
 		import ClientGlobals
@@ -151,7 +184,16 @@ class Example(Frame):
 		self.answersArr = []
 		for i in range(1,len(self.QuestionsArr)):
 			self.lb.insert(END,"Question {0}".format(i))
-			self.answersArr.append("Put your answer for question {0} here.".format(i))
+			if(os.path.isfile("omsi_answer{0}.txt".format(i))):
+				with open("omsi_answer{0}.txt".format(i)) as f:
+					st =""
+					for line in f.readlines():
+						st += line
+					self.answersArr.append(st)
+			else:
+				self.answersArr.append("Put your answer for question {0} here.".format(i))
+
+		self.autoSave()
 
 
 
@@ -163,11 +205,11 @@ class Example(Frame):
 		menubar = Menu(self.parent)
 		filemenu = Menu(menubar, tearoff = 0)
 		filemenu.add_command(label="New",command = self.donothing)
-		filemenu.add_command(label="Open", command = self.onOpen)
+		# filemenu.add_command(label="Open", command = self.onOpen)
 		filemenu.add_command(label="Connect",command = self.getConnectionInfo)
-		filemenu.add_command(label="Save", command=self.donothing)
-		filemenu.add_command(label="Save as...", command=self.donothing)
-		filemenu.add_command(label="Close", command=self.donothing)
+		filemenu.add_command(label="Save", command=self.saveAnswer)
+		filemenu.add_command(label="Save All", command=self.saveAllAnswers)
+		# filemenu.add_command(label="Close", command=self.donothing)
 
 		filemenu.add_separator()
 
@@ -228,7 +270,7 @@ def main():
 	top = Tk()
 	top.geometry("{0}x{1}".format(top.winfo_screenwidth(),top.winfo_screenheight()))
 	top.update()
-	top.minsize(top.winfo_width(),top.winfo_height())
+	# top.minsize(top.winfo_width(),top.winfo_height())
 	app  =  Example(top)
 	
 	top.mainloop()
