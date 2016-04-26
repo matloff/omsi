@@ -12,10 +12,15 @@ def main():
     #ClientGlobals.gPort = int(raw_input("Please enter port number: "))
 
     # prepare socket to connect to server
-    lSocket = ClientRoutines.configureSocket()
+    result = ClientRoutines.configureSocket()
+
+    #Connection failed
+    if not result[0]:
+        #Return the error message
+        return result
 
     # store exam questions file from server on local machine
-    lQuestionsFile = ClientRoutines.receiveExamQuestionsFile(lSocket)
+    result = ClientRoutines.receiveExamQuestionsFile(lSocket)
 
 
     # begin monitoring processes
@@ -35,6 +40,7 @@ def main():
 
     # launch command line interface
     x = 10
+    return result
 
 
 if __name__ == '__main__':

@@ -18,6 +18,9 @@ class Example(Frame):
         self.QuestionsArr = []
         self.curqNum = -1
         self.widgets()
+        self.host = None
+        self.port = None
+        self.email = None
 
     def donothing(self):
         filewin = Toplevel(self.parent)
@@ -74,6 +77,12 @@ class Example(Frame):
         self.updateQuestionBox(index)
         self.updateAnswerBox(index)
 
+    def disconnectFromServer(self):
+        self.host = None
+        self.port = None
+        self.email = None
+        self.cancel()
+
     def enteredServerInfo(self):
         if not self.validate():
             self.hostEntry.focus_set()
@@ -89,7 +98,7 @@ class Example(Frame):
         self.dBox.destroy()
 
     def autoSave(self):
-        t = Timer(60, self.autoSave)
+        t = Timer(120, self.autoSave)
         # Guy on stack overflow said this helps with
         # being able to end the main thread without complications
         t.daemon = True
@@ -108,6 +117,7 @@ class Example(Frame):
         if qNum == 0:
             return
 
+        #Make sure what is in the array is the most up to date
         if qNum == self.curqNum:
             self.answersArr[qNum - 1] = self.txt.get("1.0", END)
 
@@ -141,30 +151,46 @@ class Example(Frame):
         self.dBox.transient(self.parent)
 
         body = Frame(self.dBox)
-
-        Label(body, text="Host:").grid(row=0)
-        Label(body, text="Port:").grid(row=1)
-        Label(body, text="Student email:").grid(row=2)
-
         self.hostEntry = Entry(body)
         self.portEntry = Entry(body)
         self.emailEntry = Entry(body)
 
-        self.hostEntry.grid(row=0, column=1)
-        self.portEntry.grid(row=1, column=1)
-        self.emailEntry.grid(row=2, column=1)
+
+        connected = "Not connected"
+        if self.host:
+            connected = "Connected"
+            self.hostEntry.insert(0,self.host)
+            self.portEntry.insert(0,self.port)
+            self.emailEntry.insert(0,self.email)
+
+        Label(body,text=connected).grid(row=0)
+        Label(body, text="Host:").grid(row=1)
+        Label(body, text="Port:").grid(row=2)
+        Label(body, text="Student email:").grid(row=3)
+
+        
+
+        self.hostEntry.grid(row=1, column=1)
+        self.portEntry.grid(row=2, column=1)
+        self.emailEntry.grid(row=3, column=1)
 
         self.hostEntry.focus_set()
         body.pack()
 
         buttonBox = Frame(self.dBox)
-        ok = Button(buttonBox, text="Enter", width=10, command=self.enteredServerInfo, default=ACTIVE)
-        ok.pack(side=LEFT, padx=5, pady=5)
-        cancel = Button(buttonBox, text="Cancel", width=10, command=self.cancel)
-        cancel.pack(side=RIGHT, padx=5, pady=5)
+        if not self.host:
+            ok = Button(buttonBox, text="Enter", width=10, command=self.enteredServerInfo, default=ACTIVE)
+            ok.pack(side=LEFT, padx=5, pady=5)
+            cancel = Button(buttonBox, text="Cancel", width=10, command=self.cancel)
+            cancel.pack(side=RIGHT, padx=5, pady=5)
 
-        # Bind enter and escape to respective methods
-        self.dBox.bind("<Return>", self.enteredServerInfo)
+            # Bind enter and escape to respective methods
+            self.dBox.bind("<Return>", self.enteredServerInfo)
+            
+        else:
+            disconn = Button(buttonBox,text="Disconnect",width=10,command=self.disconnectFromServer)
+            disconn.pack(padx=5,pady=5)
+
         self.dBox.bind("<Escape>", self.cancel)
         buttonBox.pack()
 
@@ -175,7 +201,8 @@ class Example(Frame):
 
         # This blocks until the dialog box is closed
         self.dBox.wait_window(self.dBox)
-        self.connectToServer()
+        if not self.connectToServer():
+        	return
         self.getQuestions()
 
     def connectToServer(self):
@@ -184,10 +211,21 @@ class Example(Frame):
         ClientGlobals.gStudentEmail = self.email
 
         # prepare socket to connect to server
-        lSocket = ClientRoutines.configureSocket()
+        result = ClientRoutines.configureSocket()
+
+        if not result[0]:
+            tkMessageBox.showwarning("Error",result[1])
+            return False
+
+        lSocket = result[1]
 
         # store exam questions file from server on local machine
-        lQuestionsFile = ClientRoutines.receiveExamQuestionsFile(lSocket)
+        result = ClientRoutines.receiveExamQuestionsFile(lSocket)
+        if not result[0]:
+            tkMessageBox.showwarning("Error",result[1])
+            return False
+
+        return True
 
     def validate(self):
         try:

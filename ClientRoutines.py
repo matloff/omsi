@@ -21,7 +21,7 @@ import ProcessMonitor
 def callFunctionOnServer(functionName):
 
     #create and configure the socket
-    lSocket = configureSocket()
+    lSocket = configureSocket()[1]
 
     # execute the function
     lSocket.send(functionName)
@@ -56,15 +56,15 @@ def configureSocket():
         ClientGlobals.gHost = socket.gethostbyname(ClientGlobals.gHost)
         # initiate server connection to global
         pSocket.connect((ClientGlobals.gHost, ClientGlobals.gPort))
-        return pSocket
+        return (True,pSocket)
 
     #connection problem
     except socket.error, (value, message):
         if pSocket:
             # close socket
             pSocket.close()
-        raise RuntimeError("Could not open socket on Client: " + message)
-        return False
+        # raise RuntimeError("Could not open socket on Client: " + message)
+        return (False,message)
 
 # creates file with the questions on the client's machine
 def createExamQuestionsFile():
@@ -82,8 +82,8 @@ def createExamQuestionsFile():
             # This takes away the difficulty of getting the path right
             lFilePath = "ExamQuestions.txt"
             lNewFile = open(lFilePath, 'w')
-            print "Your home directory: %s is not accessible! Please make sure the directory exists" \
-                  "The questions file was successfully created in the directory where this code is located." % ClientGlobals.gStudentHomeDirectory
+            # print "Your home directory: %s is not accessible! Please make sure the directory exists" \
+                  # "The questions file was successfully created in the directory where this code is located." % ClientGlobals.gStudentHomeDirectory
             return lNewFile
         except IOError:
             # something went super wrong. The file cannot be created at all
@@ -197,7 +197,7 @@ def receiveExamQuestionsFile(pClientSocket):
         lExamQuestionsFile.close()
 
         # return File
-        return lExamQuestionsFile
+        return (lSuccess,lExamQuestionsFile)
 
 
 # sends a file from the student to the professor
@@ -219,7 +219,7 @@ def sendFileToServer(pFileName):
         # we know the file is ok and ready to be sent, connect to the server now
 
         # create and configure the socket
-        lSocket = configureSocket()
+        lSocket = configureSocket()[1]
 
         # first tell the server that we are sending a file
         lSocket.send("ClientIsSendingAFile")
