@@ -1,5 +1,7 @@
 # Testing tkinter
-
+import Client
+import ClientGlobals
+import ClientRoutines
 from Tkinter import *
 from threading import Timer
 import tkMessageBox
@@ -13,6 +15,7 @@ class Example(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
         self.parent = master
+        self.QuestionsArr = []
         self.curqNum = -1
         self.widgets()
 
@@ -38,6 +41,8 @@ class Example(Frame):
     # is clicked in the listbox
     def updateQuestionBox(self, qNum=None):
         # pdb.set_trace()
+        if not self.QuestionsArr:
+            return
 
         if self.curqNum == qNum:
             return
@@ -48,6 +53,9 @@ class Example(Frame):
     # in the listbox
     def updateAnswerBox(self, qNum=None):
         # qNum 0 refers to the description
+        if not self.QuestionsArr:
+            return
+
         if qNum == self.curqNum:
             return
 
@@ -171,9 +179,6 @@ class Example(Frame):
         self.getQuestions()
 
     def connectToServer(self):
-        import Client
-        import ClientGlobals
-        import ClientRoutines
         ClientGlobals.gHost = self.host
         ClientGlobals.gPort = self.port
         ClientGlobals.gStudentEmail = self.email
@@ -258,7 +263,6 @@ class Example(Frame):
 
         # btn = Button(self.questionFrame,text="hi",command=self.helloCalself.lback)
         # btn.pack()
-        print "Parent height = {0}".format(self.parent.winfo_height())
         self.lb = Listbox(self.questionFrame, width=20, bg="lavender")
         self.lb.insert(1, "Connect to server to get quesions...")
         self.lb.bind('<<ListboxSelect>>', self.listboxSelected)
