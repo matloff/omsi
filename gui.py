@@ -1,7 +1,5 @@
 # Testing tkinter
-import Client
-import ClientGlobals
-import ClientRoutines
+
 from Tkinter import *
 from threading import Timer
 import tkMessageBox
@@ -173,6 +171,9 @@ class Example(Frame):
         self.getQuestions()
 
     def connectToServer(self):
+        import Client
+        import ClientGlobals
+        import ClientRoutines
         ClientGlobals.gHost = self.host
         ClientGlobals.gPort = self.port
         ClientGlobals.gStudentEmail = self.email

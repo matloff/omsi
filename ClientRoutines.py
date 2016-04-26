@@ -52,6 +52,8 @@ def configureSocket():
     try:
         # create local Internet TCP socket (domain, type)
         pSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #Make sure the hostname is an addr
+        ClientGlobals.gHost = socket.gethostbyname(ClientGlobals.gHost)
         # initiate server connection to global
         pSocket.connect((ClientGlobals.gHost, ClientGlobals.gPort))
         return pSocket
