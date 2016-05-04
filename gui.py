@@ -63,7 +63,7 @@ class Example(Frame):
             return
 
         if self.curqNum > 0:
-            self.answersArr[self.curqNum - 1] = self.txt.get("1.0", END)
+            self.answersArr[self.curqNum - 1] = self.txt.get("1.0", END).encode('utf-8')
 
         self.txt.delete("1.0", END)
         if not qNum == None and qNum > 0:
@@ -119,7 +119,7 @@ class Example(Frame):
 
         #Make sure what is in the array is the most up to date
         if qNum == self.curqNum:
-            self.answersArr[qNum - 1] = self.txt.get("1.0", END)
+            self.answersArr[qNum - 1] = self.txt.get("1.0", END).encode('utf-8')
 
         filename = "omsi_answer{0}.txt".format(qNum)
         with open(filename, 'w') as f:
@@ -133,7 +133,7 @@ class Example(Frame):
             return
 
         if qNum == self.curqNum:
-            self.answersArr[qNum - 1] = self.txt.get("1.0", END)
+            self.answersArr[qNum - 1] = self.txt.get("1.0", END).encode('utf-8')
 
         self.saveAnswer(qNum)
 
