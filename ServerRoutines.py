@@ -20,7 +20,7 @@ def createSocket():
         # TODO: might need to be placed after except block
         return lServerSocket
 
-    except socket.error, (value,message):
+    except socket.error, (value, message):
         if lServerSocket:
             lServerSocket.close()
         print "Could not open socket on Server: " + message
@@ -63,7 +63,9 @@ def clientHandler(pClientSocket, addr):
        print "Action was properly executed"
 
        # transmits TCP message: success
-       pClientSocket.send("s")
+       # pClientSocket.send("s")
+       print lStudentEmail + ' submitted ' + lFileName + ' correctly!'
+       pClientSocket.send(lStudentEmail + ' submitted ' + lFileName)
 
     else:
        # transmits TCP message: fail
