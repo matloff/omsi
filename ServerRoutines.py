@@ -29,11 +29,6 @@ def createSocket():
 # handles client interaction: detects client connection delegates requests to the corresponding routines
 def clientHandler(pClientSocket, addr):
 
-    # increment number of current clients
-    ServerGlobals.gNumCurrentClientsLock.acquire()
-    ServerGlobals.gNumCurrentClients += 1
-    ServerGlobals.gNumCurrentClientsLock.release()
-
     # accept initial request
     data = pClientSocket.recv(1024)
 
@@ -75,11 +70,6 @@ def clientHandler(pClientSocket, addr):
        pClientSocket.send("f")
 
     pClientSocket.close()
-
-    # decrease number of current connections
-    ServerGlobals.gNumCurrentClientsLock.acquire()
-    ServerGlobals.gNumCurrentClients -= 1
-    ServerGlobals.gNumCurrentClientsLock.release()
 
     return
 
