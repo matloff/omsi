@@ -19,12 +19,6 @@ gPort = 5000
 gServerExamDirectory = "ProfessorHomeDirectory"
 gExamQuestionsFilePath = ""
 
-# variable to track number of currently connected clients
-gNumCurrentClients = 0
-
-# lock to guard gNumCurrentClients
-gNumCurrentClientsLock = thread.allocate_lock()
-
 # variable to track number of total client connections
 gNumTotalClients = 0
 
