@@ -49,6 +49,17 @@ def clientHandler(pClientSocket, addr):
 
         lIsExecuted = receiveFile(pClientSocket, lFileName, lStudentEmail)
 
+        if lIsExecuted == "s":
+            # transmits TCP message: success
+
+            print lStudentEmail + ' submitted ' + lFileName + ' correctly!'
+            pClientSocket.send(lStudentEmail + ' submitted ' + lFileName)
+
+        else:
+           # transmits TCP message: fail
+           print lStudentEmail + ' did not successfully submit ' + lFileName
+           pClientSocket.send("f")
+
     # client is requesting the questions file
     elif data == "ClientWantsQuestions":
         # this function handles error messages + edge cases
@@ -58,18 +69,6 @@ def clientHandler(pClientSocket, addr):
     # TODO: refactor this or just get rid of it!
     else:
         lIsExecuted = interpretClientString(data)
-
-    if lIsExecuted == "s":
-       print "Action was properly executed"
-
-       # transmits TCP message: success
-       # pClientSocket.send("s")
-       print lStudentEmail + ' submitted ' + lFileName + ' correctly!'
-       pClientSocket.send(lStudentEmail + ' submitted ' + lFileName)
-
-    else:
-       # transmits TCP message: fail
-       pClientSocket.send("f")
 
     pClientSocket.close()
 
