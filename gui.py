@@ -1,4 +1,5 @@
 # Testing tkinter
+import Client
 import ClientGlobals
 import ClientRoutines
 from Tkinter import *

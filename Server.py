@@ -37,6 +37,11 @@ def main():
         lClientsocket, lAddr = lServerSocket.accept()
         print "Connection detected at:", lAddr
 
+        # increase number of current connections
+        ServerGlobals.gNumCurrentClientsLock.acquire()
+        ServerGlobals.gNumCurrentClients += 1
+        ServerGlobals.gNumCurrentClientsLock.release()
+
         # increase number of total connections
         ServerGlobals.gNumTotalClientsLock.acquire()
         ServerGlobals.gNumTotalClients += 1
