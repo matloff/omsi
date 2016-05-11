@@ -1,6 +1,3 @@
-__author__ = 'rylan'
-
-
 import sys
 
 try:
@@ -10,7 +7,7 @@ except ImportError:
     sys.exit()
 
 # default filename is Checksum.py.  Remove later
-def checksum(filename = 'Checksum.py'):
+def checksum(filename):
 
     # save file contents
     stream = open(filename, 'r').read()

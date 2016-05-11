@@ -6,34 +6,8 @@ import os
 
 import ClientGlobals
 
-
-# module that provides an interface for all server related requests
-# sets up connection with the running server on localhost and port 20500
+# module that provides an interface for all client-requests to server
 # all methods are static and should be called statically
-
-
-# executes a function on the server
-# input function name to be executed
-# return value True or False depending on success on server
-def callFunctionOnServer(functionName):
-
-    #create and configure the socket
-    lSocket = configureSocket()[1]
-
-    # execute the function
-    lSocket.send(functionName)
-
-    # see what the server has to say and return it
-    lServerResponse = getResponseFromServer(lSocket)
-
-    if lServerResponse == "s" or lServerResponse == "f":
-        return lServerResponse
-    else:
-        # the server is trying to send a file
-        if lServerResponse == "file":
-            receiveExamQuestionsFile(lSocket)
-        else:
-            return "f"
 
 
 # initialization of socket, no connection is established yet
@@ -41,29 +15,35 @@ def configureSocket():
     try:
         # create local Internet TCP socket (domain, type)
         pSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         #Make sure the hostname is an addr
         ClientGlobals.gHost = socket.gethostbyname(ClientGlobals.gHost)
+
         # initiate server connection to global
         pSocket.connect((ClientGlobals.gHost, ClientGlobals.gPort))
-        return (True,pSocket)
 
-    #connection problem
+        return True, pSocket
+
+    # connection problem
     except socket.error, (value, message):
+        #if socket was created, close socket
         if pSocket:
-            # close socket
             pSocket.close()
+
         # raise RuntimeError("Could not open socket on Client: " + message)
-        return (False,message)
+        return False, message
+
 
 # creates file with the questions on the client's machine
 def createExamQuestionsFile():
     # create new or truncate old file - hence the w flag
 
-    # first try creating the file in the desired directory
+    # try creating the file in the desired directory
     try:
         lFilePath = os.path.join(ClientGlobals.gStudentHomeDirectory, "ExamQuestions.txt")
         lNewFile = open(lFilePath, 'w')
         return lNewFile
+
     except IOError:
         # something went wrong. The path the student entered was most likely wrong
         try:
@@ -76,7 +56,7 @@ def createExamQuestionsFile():
             return lNewFile
         except IOError:
             # something went super wrong. The file cannot be created at all
-            print "Error: Exam questions file could not be created on Client's machine\n"
+            print "Error: Exam questions file could not be created on Client's machine."
             return False
 
 
@@ -142,14 +122,15 @@ def receiveExamQuestionsFile(pClientSocket):
     # create local file to write exam questions to
     lExamQuestionsFile = createExamQuestionsFile()
 
-    # if file was not created, notify the server
+    # if file was not created, notify the user
     if not lExamQuestionsFile:
         print "We could not create a local file for the questions. /n " \
               "Please try again. Make sure your directory exists and is set properly"
         return
 
-    # create boolean to track
+    # create boolean to track success
     lSuccess = False
+
     try:
         # if file was successfully created, notify server to begin sending exam questions
         pClientSocket.send("ClientWantsQuestions")
@@ -176,7 +157,7 @@ def receiveExamQuestionsFile(pClientSocket):
         lExamQuestionsFile.close()
 
         # return File
-        return (lSuccess,lExamQuestionsFile)
+        return lSuccess, lExamQuestionsFile
 
 
 # sends a file from the student to the professor

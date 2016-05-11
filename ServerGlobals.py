@@ -16,8 +16,8 @@ gFunctionDictionary = {
 gHost = socket.gethostbyname(socket.gethostname())
 gPort = 5000
 
-gServerExamDirectory = "ProfessorHomeDirectory"
-gExamQuestionsFilePath = ""
+gServerExamDirectory = 'ProfessorHomeDirectory'
+gExamQuestionsFilePath = ''
 
 # variable to track number of total client connections
 gNumTotalClients = 0

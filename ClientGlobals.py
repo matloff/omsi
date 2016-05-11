@@ -1,10 +1,8 @@
-import socket
+# user-inputed values in GUI
+gHost = ''
 
-gHost = 'to be set in gui'
-# reversedDns = socket.gethostbyaddr(gHost)
-# if reversedDns:
-#   gHost = reversedDns[0]
+# arbitrary default value
 gPort = 5000
 
-gStudentEmail = "fdemoullin@ucdavis.edu"
-gStudentHomeDirectory = "StudentHomeDirectory"
+gStudentEmail = ''
+gStudentHomeDirectory = ''
