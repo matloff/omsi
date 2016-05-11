@@ -4,10 +4,7 @@ import socket
 import time
 import os
 
-import Checksum
 import ClientGlobals
-import NetworkMonitor
-import ProcessMonitor
 
 
 # module that provides an interface for all server related requests
@@ -37,14 +34,6 @@ def callFunctionOnServer(functionName):
             receiveExamQuestionsFile(lSocket)
         else:
             return "f"
-
-
-def computeChecksum(filename):
-
-    # values students need to copy down for reference
-    h = Checksum.checksum(filename)
-
-    print 'Please hand copy the following value and turn it into the professor: ' + h
 
 
 # initialization of socket, no connection is established yet
@@ -128,16 +117,6 @@ def monitorProcesses(pSamplingFrequency, pExamDuration):
 
         time.sleep(pSamplingFrequency)
 
-def monitorNetworkTraffic(pExamDuration):
-
-    # calculate end time
-    lEndTime = datetime.datetime.now() + datetime.timedelta(minutes=pExamDuration)
-
-    # capture packets, save to file
-    lOutputFile = NetworkMonitor.collectPackets(lEndTime)
-
-    # submit file to server
-
 
 # this opens a file with read permissions on the file
 # ATTENTION: an open file is returned! Call file.close() on the returned object
@@ -175,7 +154,7 @@ def receiveExamQuestionsFile(pClientSocket):
         # if file was successfully created, notify server to begin sending exam questions
         pClientSocket.send("ClientWantsQuestions")
 
-        print "Reading Questions file from server\n"
+        print "Reading exam questions from server."
 
         # write data from server to file
         while True:
@@ -184,14 +163,14 @@ def receiveExamQuestionsFile(pClientSocket):
             if ready[0] and lChunkOfFile != '':
                 lExamQuestionsFile.write(lChunkOfFile)
             else:
-                print "Finished reading Questions file from server"
+                print "Finished reading exam questions from server."
                 lSuccess = True
                 break
 
     finally:
         # if exam questions were not successfully downloaded, print error
         if not lSuccess:
-            print "Error: File transfer was not successful"
+            print "Error: Exam questions were not successfully downloaded."
 
         # close file, regardless of success
         lExamQuestionsFile.close()
