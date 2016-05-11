@@ -1,22 +1,21 @@
-import datetime
+
 import select
 import socket
-import time
 import os
 
 import ClientGlobals
 
 # module that provides an interface for all client-requests to server
-# all methods are static and should be called statically
 
 
 # initialization of socket, no connection is established yet
 def configureSocket():
+
     try:
-        # create local Internet TCP socket (domain, type)
+        # create TCP socket (domain, type)
         pSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        #Make sure the hostname is an addr
+        # make sure the hostname is an address
         ClientGlobals.gHost = socket.gethostbyname(ClientGlobals.gHost)
 
         # initiate server connection to global
@@ -26,7 +25,7 @@ def configureSocket():
 
     # connection problem
     except socket.error, (value, message):
-        #if socket was created, close socket
+        # if socket was created, close socket
         if pSocket:
             pSocket.close()
 
@@ -36,28 +35,15 @@ def configureSocket():
 
 # creates file with the questions on the client's machine
 def createExamQuestionsFile():
-    # create new or truncate old file - hence the w flag
 
-    # try creating the file in the desired directory
     try:
-        lFilePath = os.path.join(ClientGlobals.gStudentHomeDirectory, "ExamQuestions.txt")
+        lFilePath = 'ExamQuestions.txt'
         lNewFile = open(lFilePath, 'w')
         return lNewFile
 
+    # something went wrong
     except IOError:
-        # something went wrong. The path the student entered was most likely wrong
-        try:
-            # try to open a file in THIS directory instead
-            # This takes away the difficulty of getting the path right
-            lFilePath = "ExamQuestions.txt"
-            lNewFile = open(lFilePath, 'w')
-            # print "Your home directory: %s is not accessible! Please make sure the directory exists" \
-                  # "The questions file was successfully created in the directory where this code is located." % ClientGlobals.gStudentHomeDirectory
-            return lNewFile
-        except IOError:
-            # something went super wrong. The file cannot be created at all
-            print "Error: Exam questions file could not be created on Client's machine."
-            return False
+        return False
 
 
 # close the connection
@@ -73,31 +59,10 @@ def getResponseFromServer(pSocket):
             print lServerResponse
             return False
     else:
-        return "file"
+        return 'file'
 
 
-def monitorProcesses(pSamplingFrequency, pExamDuration):
-
-    # calculate end time
-    lEndTime = datetime.datetime.now() + datetime.timedelta(minutes=pExamDuration)
-
-    # collect process information from student's machine
-    while datetime.datetime.now() < lEndTime:
-
-        # open file to store process information
-        lOutputFile = open('processes-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.txt', 'w')
-
-        # write process information to file
-        ProcessMonitor.collectProcessesInformation(lOutputFile)
-
-        # close file
-        lOutputFile.close()
-
-        # submit file to server
-
-        time.sleep(pSamplingFrequency)
-
-
+# TODO: Update this routine
 # this opens a file with read permissions on the file
 # ATTENTION: an open file is returned! Call file.close() on the returned object
 def openFileOnClient(pFileName):
@@ -124,18 +89,17 @@ def receiveExamQuestionsFile(pClientSocket):
 
     # if file was not created, notify the user
     if not lExamQuestionsFile:
-        print "We could not create a local file for the questions. /n " \
-              "Please try again. Make sure your directory exists and is set properly"
+        print 'Error: Exam questions file could not be created on client\'s machine.'
         return
 
     # create boolean to track success
     lSuccess = False
 
+    # if file was successfully created, notify server to begin sending exam questions
     try:
-        # if file was successfully created, notify server to begin sending exam questions
-        pClientSocket.send("ClientWantsQuestions")
-
         print "Reading exam questions from server."
+
+        pClientSocket.send("ClientWantsQuestions")
 
         # write data from server to file
         while True:
@@ -160,8 +124,7 @@ def receiveExamQuestionsFile(pClientSocket):
         return lSuccess, lExamQuestionsFile
 
 
-# sends a file from the student to the professor
-# submission of file
+# sends a file from the client to the server
 def sendFileToServer(pFileName):
 
     # open the file -> this handles exceptions effectively
@@ -174,14 +137,13 @@ def sendFileToServer(pFileName):
     except:
         lCanIReadFromFile = False
 
-    if (lCanIReadFromFile):
-
-        # we know the file is ok and ready to be sent, connect to the server now
+    # if file is ready to be sent, connect to the server
+    if lCanIReadFromFile:
 
         # create and configure the socket
         lSocket = configureSocket()[1]
 
-        # first tell the server that we are sending a file
+        # tell the server that we are sending a file
         lSocket.send("ClientIsSendingAFile")
 
         # block this before sending the filename, otherwise both the command and the file name will be appended on the server
@@ -199,12 +161,12 @@ def sendFileToServer(pFileName):
         # all information has been sent, get the go sign from the server
         lResponse = lSocket.recv(1024)
 
-        # check if something went wrong server side
+        # if something went wrong server side, abort
         if lResponse != "ReadyToAcceptClientFile":
             print "The server aborted prior to transmission of file, check server logs for more details"
             return
 
-        # we are all set: send the file
+        # send the file
         lOpenFile = openFileOnClient(pFileName)
         lFileChunk = lOpenFile.read(1024)
         while (lFileChunk):
@@ -212,7 +174,6 @@ def sendFileToServer(pFileName):
             lSocket.send(lFileChunk)
             lFileChunk = lOpenFile.read(1024)
 
-        # any chance that the file cant be sent?
         lOpenFile.close()
 
     # print msg if file cannot be opened

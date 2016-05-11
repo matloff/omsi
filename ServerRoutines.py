@@ -52,7 +52,7 @@ def clientHandler(pClientSocket, addr):
         if lIsExecuted == "s":
             # transmits TCP message: success
 
-            print lStudentEmail + ' submitted ' + lFileName + ' correctly! SHA-256 checksum: '
+            print lStudentEmail + ' submitted ' + lFileName + ' correctly.'
             pClientSocket.send(lStudentEmail + ' submitted ' + lFileName)
 
         else:
