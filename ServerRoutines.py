@@ -52,13 +52,13 @@ def clientHandler(pClientSocket, addr):
         if lIsExecuted == "s":
             # transmits TCP message: success
 
-            print lStudentEmail + ' submitted ' + lFileName + ' correctly.'
-            pClientSocket.send(lStudentEmail + ' submitted ' + lFileName)
+            print lStudentEmail + ' successfully submitted ' + lFileName + ' correctly.'
+            pClientSocket.send(lStudentEmail + ' successfully submitted ' + lFileName)
 
         else:
            # transmits TCP message: fail
            print lStudentEmail + ' did not successfully submit ' + lFileName
-           pClientSocket.send("f")
+           pClientSocket.send(lStudentEmail + ' did not successfully submit ' + lFileName)
 
     # client is requesting the questions file
     elif data == "ClientWantsQuestions":

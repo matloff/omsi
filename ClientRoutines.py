@@ -51,6 +51,7 @@ def createExamQuestionsFile():
 def getResponseFromServer(pSocket):
     # block until server response received
     lServerResponse = pSocket.recv(1024)
+    print "Server Response: " + lServerResponse
     if lServerResponse != "file":
         pSocket.close()
         if lServerResponse == "s":
@@ -108,14 +109,16 @@ def receiveExamQuestionsFile(pClientSocket):
             if ready[0] and lChunkOfFile != '':
                 lExamQuestionsFile.write(lChunkOfFile)
             else:
-                print "Finished reading exam questions from server."
+                print "Reading exam questions from server..."
                 lSuccess = True
                 break
 
     finally:
         # if exam questions were not successfully downloaded, print error
-        if not lSuccess:
-            print "Error: Exam questions were not successfully downloaded."
+        if lSuccess:
+            print "Exam questions successfully read from server."
+        else:
+            print "Error: Exam questions were not successfully read from server."
 
         # close file, regardless of success
         lExamQuestionsFile.close()
@@ -176,15 +179,18 @@ def sendFileToServer(pFileName):
 
         lOpenFile.close()
 
+        lServerResponse = lSocket.recv(1024)
+
+        print lServerResponse
+
+        lSocket.close()
+
+        return lServerResponse
+
     # print msg if file cannot be opened
     else:
         # Error message for a bad student submission file
-        print "File was not submitted! Please retry and make sure you are submitting a valid file."
-        return
-
-    # TODO: look into this!
-    # what does this do? what are we even returning here!
-    return getResponseFromServer(lSocket)
+        return "File could not be submitted to the server! Please retry and make sure you are submitting a valid file."
 
 # simple setter
 # pHost = IP address provided by prof

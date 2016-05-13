@@ -138,7 +138,9 @@ class Example(Frame):
 
         filename = "omsi_answer{0}.txt".format(qNum)
 
-        ClientRoutines.sendFileToServer(filename)
+        lServerResponse = ClientRoutines.sendFileToServer(filename)
+
+        tkMessageBox.showinfo("Submission Results", str(lServerResponse))
 
     def submitAllAnswers(self):
         for i in range(1, len(self.answersArr) + 1):
