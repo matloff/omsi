@@ -109,7 +109,6 @@ def receiveExamQuestionsFile(pClientSocket):
             if ready[0] and lChunkOfFile != '':
                 lExamQuestionsFile.write(lChunkOfFile)
             else:
-                print "Reading exam questions from server..."
                 lSuccess = True
                 break
 

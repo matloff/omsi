@@ -223,7 +223,7 @@ class Example(Frame):
         # store exam questions file from server on local machine
         result = ClientRoutines.receiveExamQuestionsFile(lSocket)
         if not result[0]:
-            tkMessageBox.showwarning("Error",result[1])
+            tkMessageBox.showinfo("Error", result[1])
             return False
 
         return True
