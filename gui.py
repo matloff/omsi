@@ -8,6 +8,7 @@ import tkFileDialog
 import tkSimpleDialog
 import pdb
 import os
+import stat
 import OMSIQuestion
 
 
@@ -123,6 +124,8 @@ class Example(Frame):
 
         filename = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype())
         with open(filename, 'w') as f:
+            st = os.stat(filename)
+            os.chmod(filename,st.st_mode | stat.S_IXUSR)
             f.write(self.QuestionsArr[qNum].getAnswer())
 
     def submitAnswer(self, qNum=None):
