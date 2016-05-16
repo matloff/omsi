@@ -8,6 +8,7 @@ import tkFileDialog
 import tkSimpleDialog
 import pdb
 import os
+import OMSIQuestion
 
 
 class Example(Frame):
@@ -49,7 +50,7 @@ class Example(Frame):
         if self.curqNum == qNum:
             return
         self.question.delete("1.0", END)
-        self.question.insert(END, self.QuestionsArr[qNum])
+        self.question.insert(END, self.QuestionsArr[qNum].getQuestion())
 
     # Updates the answer box when the question is clicked
     # in the listbox
@@ -62,11 +63,11 @@ class Example(Frame):
             return
 
         if self.curqNum > 0:
-            self.answersArr[self.curqNum - 1] = self.txt.get("1.0", END).encode('utf-8')
+            self.QuestionsArr[self.curqNum].setAnswer(self.txt.get("1.0", END).encode('utf-8'))
 
         self.txt.delete("1.0", END)
         if not qNum == None and qNum > 0:
-            self.txt.insert(END, self.answersArr[qNum - 1])
+            self.txt.insert(END, self.QuestionsArr[qNum].getAnswer())
         self.curqNum = qNum
 
     def listboxSelected(self, evt):
@@ -106,7 +107,7 @@ class Example(Frame):
             self.saveAnswer(self.curqNum)
 
     def saveAllAnswers(self):
-        for i in range(1, len(self.answersArr) + 1):
+        for i in range(1, len(self.QuestionsArr)):
             self.saveAnswer(i)
 
     def saveAnswer(self, qNum=None):
@@ -118,11 +119,11 @@ class Example(Frame):
 
         #Make sure what is in the array is the most up to date
         if qNum == self.curqNum:
-            self.answersArr[qNum - 1] = self.txt.get("1.0", END).encode('utf-8')
+            self.QuestionsArr[qNum].setAnswer( self.txt.get("1.0", END).encode('utf-8'))
 
-        filename = "omsi_answer{0}.txt".format(qNum)
+        filename = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype())
         with open(filename, 'w') as f:
-            f.write(self.answersArr[qNum - 1])
+            f.write(self.QuestionsArr[qNum].getAnswer())
 
     def submitAnswer(self, qNum=None):
         if not qNum:
@@ -132,18 +133,19 @@ class Example(Frame):
             return
 
         if qNum == self.curqNum:
-            self.answersArr[qNum - 1] = self.txt.get("1.0", END).encode('utf-8')
+            # self.answersArr[qNum - 1] = self.txt.get("1.0", END).encode('utf-8')
+            self.QuestionsArr[qNum].setAnswer(self.txt.get("1.0",END).encode('utf-8'))
 
         self.saveAnswer(qNum)
 
-        filename = "omsi_answer{0}.txt".format(qNum)
+        filename = "omsi_answer{0}{1}".format(qNum,self.QuestionsArr[qNum].getFiletype())
 
         lServerResponse = ClientRoutines.sendFileToServer(filename)
 
         tkMessageBox.showinfo("Submission Results", str(lServerResponse))
 
     def submitAllAnswers(self):
-        for i in range(1, len(self.answersArr) + 1):
+        for i in range(1, self.QuestionsArr):
             self.submitAnswer(i)
 
     # Makes a dialog window pop up asking for host port and email
@@ -247,17 +249,17 @@ class Example(Frame):
         self.QuestionsArr = utility.ParseQuestions("ExamQuestions.txt")
         self.lb.delete(0, END)
         self.lb.insert(END, "Description")
-        self.answersArr = []
         for i in range(1, len(self.QuestionsArr)):
             self.lb.insert(END, "Question {0}".format(i))
-            if (os.path.isfile("omsi_answer{0}.txt".format(i))):
-                with open("omsi_answer{0}.txt".format(i)) as f:
+            filename = "omsi_answer{0}{1}".format(i,self.QuestionsArr[i].getFiletype())
+            if (os.path.isfile(filename)):
+                with open(filename) as f:
                     st = ""
                     for line in f.readlines():
                         st += line
-                    self.answersArr.append(st)
+                    self.QuestionsArr[i].setAnswer(st)
             else:
-                self.answersArr.append("Put your answer for question {0} here.".format(i))
+                self.QuestionsArr[i].setAnswer("Put your answer for question {0} here.".format(i))
 
         self.autoSave()
 
@@ -313,19 +315,21 @@ class Example(Frame):
         self.textFrame = Frame(self.parent, bg="azure")
         pWindow = PanedWindow(self.textFrame, orient=VERTICAL, bg="LightBlue1")
 
+
         self.textFrame.grid(row=0, column=1, sticky="nswe")
-        self.textFrame.grid_rowconfigure(0, weight=1)
-        self.textFrame.grid_rowconfigure(1, weight=6)
-        self.textFrame.grid_columnconfigure(0, weight=1)
+        # self.textFrame.grid_rowconfigure(0, weight=2)
+        # self.textFrame.grid_rowconfigure(1, weight=2)
+        # self.textFrame.grid_columnconfigure(0, weight=1)
 
         # Question text box
-        self.question = Text(pWindow, bg="pale turquoise", font=("Purisa", 20))
-        pWindow.add(self.question)
+        self.question = Text(pWindow, bg="pale turquoise", font=("sans-serif", 20))
+        pWindow.add(self.question,sticky = "nwe")
+        self.question.config(state=DISABLED)
         # self.question.grid(row=0,sticky="nswe",padx=5,pady =5)
 
         # Answer text box
-        self.txt = Text(pWindow, bg="LightBlue2", font=("Purisa", 16))
-        pWindow.add(self.txt);
+        self.txt = Text(pWindow, bg="LightBlue2", font=("sans-serif", 16))
+        pWindow.add(self.txt,sticky = "swe")
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
         pWindow.pack(fill=BOTH, expand=1, pady=5)
 
