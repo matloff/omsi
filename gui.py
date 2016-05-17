@@ -10,6 +10,9 @@ import pdb
 import os
 import stat
 import OMSIQuestion
+import sys, subprocess
+import filecmp
+import time
 
 
 class Example(Frame):
@@ -125,8 +128,52 @@ class Example(Frame):
         filename = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype())
         with open(filename, 'w') as f:
             st = os.stat(filename)
-            os.chmod(filename,st.st_mode | stat.S_IXUSR)
+            os.chmod(filename,st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
             f.write(self.QuestionsArr[qNum].getAnswer())
+
+    def compileProgram(self, qNum = None):
+        compiler = ""
+        #if not qNum:
+            #qNum = self.curqNum
+
+        
+        fType = self.QuestionsArr[qNum].getFiletype()  #file type
+        fName = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
+
+        if fType is ".c":
+            compiler = "gcc"
+        elif fType is ".cpp":
+            compiler = "g++"
+
+        execName = "omsi_answer" + str(qNum)  #name of the executable
+
+        if not os.path.isfile(fName):   #check if file exists
+            msg = "File not found!"
+            tkMessageBox.showinfo("Error", msg)
+            return False 
+
+        msg = ""  #records messeges
+        infile = None  #for proc
+        outfile = None #for proc
+
+        #generating executable...
+        startTime = time.time()  #start time
+        proc = subprocess.Popen([compiler, "-o", execName, fName], stdin = infile, stdout = outfile, stderr = subprocess.PIPE, universal_newlines = True)
+        
+        while True:  #process is NOT complete yet...kill
+            if time.time() - startTime >= 2 and proc.poll() is None:  #wait for process to finish 2 seconds for now
+                proc.kill()     #kill process if it is still running
+                msg = "\nExecutable could NOT be genarated: Compile - Time Out.\n"
+                break
+        
+        if retCode is not None and retCode != 0:
+            msg = "Executable could NOT be genarated.\n" + proc.communicate()[1] + "\n"
+        else:
+            msg = "\nExecutable generated.\n"
+        
+        tkMessageBox.showinfo("Compiler", msg)
+        return True
+
 
     def submitAnswer(self, qNum=None):
         if not qNum:
@@ -281,6 +328,7 @@ class Example(Frame):
         filemenu.add_command(label="Submit", command=self.submitAnswer)
         filemenu.add_command(label="Submit All", command=self.submitAllAnswers)
         # filemenu.add_command(label="Close", command=self.donothing)
+        filemenu.add_command(label="Compile", command=self.compileProgram)
 
         filemenu.add_separator()
 
