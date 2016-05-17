@@ -22,5 +22,5 @@ class OMSIQuestion:
 		self.answer = ans
 
 	def getFlags(self):
-		return self.flags
+		return self.flags.split(" ")
 

@@ -131,18 +131,25 @@ class Example(Frame):
             os.chmod(filename,st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
             f.write(self.QuestionsArr[qNum].getAnswer())
 
+#function compile Program
+#compiles the program file with given flags
+#Shows result as a pop-up box
     def compileProgram(self, qNum = None):
         compiler = ""
-        #if not qNum:
-            #qNum = self.curqNum
-
+        msg = ""  #records messeges
         
+        if not qNum:
+            qNum = self.curqNum
+
         fType = self.QuestionsArr[qNum].getFiletype()  #file type
         fName = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
+        flags = self.QuestionsArr[qNum].getFlags() #get flags
+        flags = ["-"+x for x in flags] #adding "-" before flags
 
-        if fType is ".c":
+        #selecting compiler
+        if fType == ".c":
             compiler = "gcc"
-        elif fType is ".cpp":
+        elif fType == ".cpp":
             compiler = "g++"
 
         execName = "omsi_answer" + str(qNum)  #name of the executable
@@ -152,24 +159,30 @@ class Example(Frame):
             tkMessageBox.showinfo("Error", msg)
             return False 
 
-        msg = ""  #records messeges
+        
         infile = None  #for proc
         outfile = None #for proc
+        errfile = open("errfile", 'w')  #for proc
 
+        print [compiler] + flags + ["-o", execName, fName]
         #generating executable...
         startTime = time.time()  #start time
-        proc = subprocess.Popen([compiler, "-o", execName, fName], stdin = infile, stdout = outfile, stderr = subprocess.PIPE, universal_newlines = True)
-        
-        while True:  #process is NOT complete yet...kill
-            if time.time() - startTime >= 2 and proc.poll() is None:  #wait for process to finish 2 seconds for now
+        proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = outfile, stderr = errfile, universal_newlines = True)
+        errfile.close()
+        while proc.poll() is None:  
+            if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
                 proc.kill()     #kill process if it is still running
                 msg = "\nExecutable could NOT be genarated: Compile - Time Out.\n"
                 break
-        
+         
+        retCode = proc.poll()
         if retCode is not None and retCode != 0:
-            msg = "Executable could NOT be genarated.\n" + proc.communicate()[1] + "\n"
+            errfile = open ("errfile", "r")
+            msg = "Executable could NOT be genarated.\n" + "\n".join(errfile.readlines()[:3]) + "\n" #Show only 3 lines, error msg. might be too long
+            errfile.close() #close error file
+            os.remove("errfile") #errfile deleted...may be kept as a log if required
         else:
-            msg = "\nExecutable generated.\n"
+            msg = "\nExecutable generated successfully.\n"
         
         tkMessageBox.showinfo("Compiler", msg)
         return True
