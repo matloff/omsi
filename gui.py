@@ -53,8 +53,12 @@ class Example(Frame):
 
         if self.curqNum == qNum:
             return
+        self.question.config(state=NORMAL)
+
         self.question.delete("1.0", END)
         self.question.insert(END, self.QuestionsArr[qNum].getQuestion())
+        self.question.config(state=DISABLED)
+
 
     # Updates the answer box when the question is clicked
     # in the listbox
@@ -144,7 +148,7 @@ class Example(Frame):
         fType = self.QuestionsArr[qNum].getFiletype()  #file type
         fName = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
         flags = self.QuestionsArr[qNum].getFlags() #get flags
-        flags = ["-"+x for x in flags] #adding "-" before flags
+        # flags = ["-"+x for x in flags] #adding "-" before flags
 
         #selecting compiler
         if fType == ".c":
@@ -167,7 +171,7 @@ class Example(Frame):
         print [compiler] + flags + ["-o", execName, fName]
         #generating executable...
         startTime = time.time()  #start time
-        proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = outfile, stderr = errfile, universal_newlines = True)
+        proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = subprocess.PIPE, stderr = errfile, universal_newlines = True)
         errfile.close()
         while proc.poll() is None:  
             if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
@@ -182,6 +186,8 @@ class Example(Frame):
             errfile.close() #close error file
             os.remove("errfile") #errfile deleted...may be kept as a log if required
         else:
+            import pdb
+            pdb.set_trace()
             msg = "\nExecutable generated successfully.\n"
         
         tkMessageBox.showinfo("Compiler", msg)
