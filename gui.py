@@ -150,48 +150,121 @@ class Example(Frame):
         flags = self.QuestionsArr[qNum].getFlags() #get flags
         # flags = ["-"+x for x in flags] #adding "-" before flags
 
+        compileProg = self.QuestionsArr[qNum].getCompileProgram()
+
+        if compileProg == 'y':
         #selecting compiler
-        if fType == ".c":
-            compiler = "gcc"
-        elif fType == ".cpp":
-            compiler = "g++"
+            if fType == ".c":
+                compiler = "gcc"
+            elif fType == ".cpp":
+                compiler = "g++"
+            else:
+                compiler = self.QuestionsArr[qNum].getCompiler()
 
-        execName = "omsi_answer" + str(qNum)  #name of the executable
+            execName = "omsi_answer" + str(qNum)  #name of the executable
 
-        if not os.path.isfile(fName):   #check if file exists
-            msg = "File not found!"
-            tkMessageBox.showinfo("Error", msg)
-            return False 
+            if not os.path.isfile(fName):   #check if file exists
+                msg = "File not found!"
+                tkMessageBox.showinfo("Error", msg)
+                return False 
 
-        
-        infile = None  #for proc
-        outfile = None #for proc
-        errfile = open("errfile", 'w')  #for proc
+            
+            infile = None  #for proc
+            outfile = None #for proc
+            errfile = open("errfile", 'w')  #for proc
 
-        print [compiler] + flags + ["-o", execName, fName]
-        #generating executable...
-        startTime = time.time()  #start time
-        proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = subprocess.PIPE, stderr = errfile, universal_newlines = True)
-        errfile.close()
-        while proc.poll() is None:  
-            if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
-                proc.kill()     #kill process if it is still running
-                msg = "\nExecutable could NOT be genarated: Compile - Time Out.\n"
-                break
-         
-        retCode = proc.poll()
-        if retCode is not None and retCode != 0:
-            errfile = open ("errfile", "r")
-            msg = "Executable could NOT be genarated.\n" + "\n".join(errfile.readlines()[:3]) + "\n" #Show only 3 lines, error msg. might be too long
-            errfile.close() #close error file
-            os.remove("errfile") #errfile deleted...may be kept as a log if required
+            print [compiler] + flags + ["-o", execName, fName]
+            #generating executable...
+            startTime = time.time()  #start time
+            proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = subprocess.PIPE, stderr = errfile, universal_newlines = True)
+            errfile.close()
+            while proc.poll() is None:  
+                if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
+                    proc.kill()     #kill process if it is still running
+                    msg = "\nExecutable could NOT be genarated: Compile - Time Out.\n"
+                    break
+             
+            retCode = proc.poll()
+            if retCode is not None and retCode != 0:
+                errfile = open ("errfile", "r")
+                msg = "Executable could NOT be genarated.\n" + "\n".join(errfile.readlines()[:3]) + "\n" #Show only 3 lines, error msg. might be too long
+                errfile.close() #close error file
+                os.remove("errfile") #errfile deleted...may be kept as a log if required
+            else:
+                import pdb
+                #pdb.set_trace()
+                msg = "\nExecutable generated successfully.\n"
+               
         else:
-            import pdb
-            pdb.set_trace()
-            msg = "\nExecutable generated successfully.\n"
+            msg = "\nNot Authorised!\n"
         
         tkMessageBox.showinfo("Compiler", msg)
         return True
+        
+    def runProgram(self, qNum = None):       
+        runCmd = ""
+        msg = ""  #records messeges
+        
+        if not qNum:
+            qNum = self.curqNum
+
+        runProg = self.QuestionsArr[qNum].getRunProgram()
+
+        if runProg == 'y':
+        #check if this program can be "run"
+            fType = self.QuestionsArr[qNum].getFiletype()  #file type
+            fName = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
+            compileProg = self.QuestionsArr[qNum].getCompileProgram()
+            
+            if compileProg == 'y':
+            #check if executable exists (if required)
+                execName = "omsi_answer" + str(qNum)  #name of the executable    
+                if not os.path.isfile(execName):   #check if file exists
+                    msg = "Executable not found!\nPlease make sure you have compiled the program."
+                    tkMessageBox.showinfo("Run", msg)
+                    return False
+            else:
+            #check if file exists
+                if not os.path.isfile(fName):   #check if file exists
+                    msg = "File not found! Please make sure you have saved the file."
+                    tkMessageBox.showinfo("Run", msg)
+                    return False 
+
+            infile = None  #for proc
+            outfile = open("o_" + str(qNum), 'w') #for proc
+            errfile = open("errfile", 'w')  #for proc
+
+            runCmd = self.QuestionsArr[qNum].getRunCmd() #get the runCmd - in instructor questions.txt
+            print runCmd
+            startTime = time.time()  #start time
+            proc = subprocess.Popen(runCmd, stdin = infile, stdout = outfile, stderr = errfile, universal_newlines = True)
+            errfile.close()
+            while proc.poll() is None:  
+                if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
+                    proc.kill()     #kill process if it is still running
+                    msg = "\nRun Unsuccessfull. Time Out.\n"
+                    break
+            outfile.close() 
+            retCode = proc.poll()
+            if retCode is not None and retCode != 0:
+                errfile = open ("errfile", "r")
+                msg = "Run Unsuccessfull.\n" + "\n".join(errfile.readlines()[:3]) + "\n" #Show only 3 lines, error msg. might be too long
+                errfile.close() #close error file
+                os.remove("errfile") #errfile deleted...may be kept as a log if required
+            else:
+            #output was created...display
+                outfile = open("o_" + str(qNum), 'r')
+                msg = "\nRun successfull.\nOutput:\n" + "\n".join(outfile.readlines()[:3]) + "\n"
+                outfile.close()
+
+        else:
+        #this question does not require run
+            msg = "\nNot Authorised!\n"
+        
+        tkMessageBox.showinfo("Run", msg)
+        return True
+
+
 
 
     def submitAnswer(self, qNum=None):
@@ -348,6 +421,7 @@ class Example(Frame):
         filemenu.add_command(label="Submit All", command=self.submitAllAnswers)
         # filemenu.add_command(label="Close", command=self.donothing)
         filemenu.add_command(label="Compile", command=self.compileProgram)
+        filemenu.add_command(label="Run", command=self.runProgram)
 
         filemenu.add_separator()
 
