@@ -90,7 +90,7 @@ late penalties if deemed necessary. All results are then stored in an output fil
     adding the QUESTION keyword. i.e 'QUESTION -ext .py'
     
   <i>Specifying compile and run options</i>
-    The compile and run functionalities are by default disabled. If any question requires compile and run then the -com and -run flags may be specified in a simillar manner as the -ext file while adding the QUESTION keyword, e.g. 'QUESTION -com gcc'
+    The compile and run functionalities are by default disabled. If any question requires compile and run then the -com and -run flags may be specified in a simillar manner as the -ext file while adding the QUESTION keyword, e.g. 'QUESTION -com gcc -flags "-Wall -g" -run .\a.out', 'QUESTION -com python -run "python omsi_answer1.py" '
     
     
 <b>Summary of each file on this site (in alphabetical order)</b>
