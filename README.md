@@ -82,6 +82,7 @@ late penalties if deemed necessary. All results are then stored in an output fil
 
 
 <b>Providing the exam questions</b>
+
   The exam questions should be placed in a file called Questions.txt in the ProfessorsHomeDirectory. The file should contain a description and any questions for the exam. If there are notes the instructor would like to write to himself in the file they should be placed at the beginning. When parsing the file the parser will go through line by line and search for keywords DESCRIPTION or QUESTION. Once a keyword is found each line after it is appended together until it reaches another keyword or the end of the file. So content that is not intended to be a part of a question or description should not be below a keyword. Questions are numbered in the order they are discovered.
   
   <i>Specifying different file types</i>
