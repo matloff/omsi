@@ -13,19 +13,11 @@ Here would be a description of the test. This is REQUIRED. Here the Prof would p
 not
 cheat.
 
-<<<<<<< HEAD
-QUESTION -ext .cpp -flags "-Wall -g"
-
-This should be question 1
-
-QUESTION -ext .cpp -flags "-w -g"
-=======
-QUESTION -ext .cpp -flags -Wall -g -com g++ -run ./omsi_answer1
+QUESTION -ext .cpp -flags  "-Wall -g" -com g++ -run ./omsi_answer1
 
 This should be question 1
 
 QUESTION -ext .py -run “python omsi_answer2.py”
->>>>>>> 1b44ec0de2022b05898dc8e703c3085c2854e374
 
 this should be question 2
 

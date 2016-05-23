@@ -167,35 +167,6 @@ class Example(Frame):
                 msg = "File not found!"
                 tkMessageBox.showinfo("Error", msg)
                 return False 
-
-<<<<<<< HEAD
-        
-        infile = None  #for proc
-        outfile = None #for proc
-        errfile = open("errfile", 'w')  #for proc
-
-        print [compiler] + flags + ["-o", execName, fName]
-        #generating executable...
-        startTime = time.time()  #start time
-        print "Compiling with {0} {1} -o {2} {3}".format(compiler, ' '.join(flags), execName,fName)
-        proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = subprocess.PIPE, stderr = errfile, universal_newlines = True)
-        errfile.close()
-        while proc.poll() is None:  
-            if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
-                proc.kill()     #kill process if it is still running
-                msg = "\nExecutable could NOT be genarated: Compile - Time Out.\n"
-                break
-         
-        retCode = proc.poll()
-        if retCode is not None and retCode != 0:
-            errfile = open ("errfile", "r")
-            msg = "Executable could NOT be genarated.\n" + "\n".join(errfile.readlines()[:3]) + "\n" #Show only 3 lines, error msg. might be too long
-            errfile.close() #close error file
-            os.remove("errfile") #errfile deleted...may be kept as a log if required
-        else:
-            msg = "\nExecutable generated successfully.\n"
-=======
-            
             infile = None  #for proc
             outfile = None #for proc
             errfile = open("errfile", 'w')  #for proc
@@ -203,6 +174,8 @@ class Example(Frame):
             print [compiler] + flags + ["-o", execName, fName]
             #generating executable...
             startTime = time.time()  #start time
+            print "Compiling with {0} {1} -o {2} {3}".format(compiler, ' '.join(flags), execName,fName)
+
             proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = subprocess.PIPE, stderr = errfile, universal_newlines = True)
             errfile.close()
             while proc.poll() is None:  
@@ -224,7 +197,6 @@ class Example(Frame):
                
         else:
             msg = "\nNot Authorised!\n"
->>>>>>> 1b44ec0de2022b05898dc8e703c3085c2854e374
         
         tkMessageBox.showinfo("Compiler", msg)
         return True
