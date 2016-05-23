@@ -171,6 +171,7 @@ class Example(Frame):
         print [compiler] + flags + ["-o", execName, fName]
         #generating executable...
         startTime = time.time()  #start time
+        print "Compiling with {0} {1} -o {2} {3}".format(compiler, ' '.join(flags), execName,fName)
         proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = subprocess.PIPE, stderr = errfile, universal_newlines = True)
         errfile.close()
         while proc.poll() is None:  
@@ -186,8 +187,6 @@ class Example(Frame):
             errfile.close() #close error file
             os.remove("errfile") #errfile deleted...may be kept as a log if required
         else:
-            import pdb
-            pdb.set_trace()
             msg = "\nExecutable generated successfully.\n"
         
         tkMessageBox.showinfo("Compiler", msg)

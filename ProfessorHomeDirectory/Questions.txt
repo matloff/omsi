@@ -13,11 +13,11 @@ Here would be a description of the test. This is REQUIRED. Here the Prof would p
 not
 cheat.
 
-QUESTION
+QUESTION -ext .cpp -flags "-Wall -g"
 
 This should be question 1
 
-QUESTION
+QUESTION -ext .cpp -flags "-w -g"
 
 this should be question 2
 
