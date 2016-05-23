@@ -13,7 +13,7 @@ Here would be a description of the test. This is REQUIRED. Here the Prof would p
 not
 cheat.
 
-QUESTION -ext .cpp -flags Wall g
+QUESTION -ext .cpp -flags "-Wall -g"
 
 This should be question 1
 
