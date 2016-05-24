@@ -261,7 +261,11 @@ class Example(Frame):
         #this question does not require run
             msg = "\nNot Authorised!\n"
         
-        tkMessageBox.showinfo("Run", msg)
+        # tkMessageBox.showinfo("Run", msg)
+        fileWin = Toplevel(self.parent)
+        text = Text(fileWin)
+        text.insert(END,msg)
+        text.pack()
         return True
 
 
@@ -476,6 +480,7 @@ class Example(Frame):
         pWindow.add(self.txt,sticky = "swe")
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
         pWindow.pack(fill=BOTH, expand=1, pady=5)
+        # self.getQuestions()
 
 
 def main():
