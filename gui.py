@@ -254,7 +254,7 @@ class Example(Frame):
             else:
             #output was created...display
                 outfile = open("o_" + str(qNum), 'r')
-                msg = "\nRun successfull.\nOutput:\n" + "\n".join(outfile.readlines()[:3]) + "\n"
+                msg = "\nRun successfull.\nOutput:\n" + "\n".join(outfile.readlines()) + "\n"
                 outfile.close()
 
         else:
