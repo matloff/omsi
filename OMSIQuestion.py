@@ -37,5 +37,5 @@ class OMSIQuestion:
 		return self.runProgram
 
 	def getRunCmd(self):
-		return self.runCmd.split(" ")
+		return self.runCmd.split(" ")#added split
 

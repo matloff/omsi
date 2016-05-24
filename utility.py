@@ -28,7 +28,7 @@ def ParseQuestions(filename):
 				filetype = '.txt'
 				flags = ""
 				words = shlex.split(line)
-				compileProgram = "n"
+				compileProgram = "n" 
 				compiler = ""
 				runProgram = "n"
 				runCmd = ""
