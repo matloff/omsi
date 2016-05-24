@@ -17,7 +17,7 @@ QUESTION -ext .cpp -flags  "-Wall -g" -com g++ -run ./omsi_answer1
 
 This should be question 1
 
-QUESTION -ext .py -run “python omsi_answer2.py”
+QUESTION -ext .py -run "python omsi_answer2.py"
 
 this should be question 2
 
