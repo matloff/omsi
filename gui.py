@@ -164,20 +164,20 @@ class Example(Frame):
             execName = "omsi_answer" + str(qNum)  #name of the executable
 
             if not os.path.isfile(fName):   #check if file exists
-                msg = "File not found!"
+                msg = "File not found. Please make sure you have saved the file."
                 tkMessageBox.showinfo("Error", msg)
                 return False 
             infile = None  #for proc
-            outfile = None #for proc
+            outfile = open("com_" + str(qNum), 'w') #for proc
             errfile = open("errfile", 'w')  #for proc
 
-            print [compiler] + flags + ["-o", execName, fName]
             #generating executable...
             startTime = time.time()  #start time
             print "Compiling with {0} {1} -o {2} {3}".format(compiler, ' '.join(flags), execName,fName)
 
-            proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = subprocess.PIPE, stderr = errfile, universal_newlines = True)
+            proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = outfile, stderr = errfile, universal_newlines = True)
             errfile.close()
+            outfile.close()
             while proc.poll() is None:  
                 if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
                     proc.kill()     #kill process if it is still running
@@ -187,23 +187,32 @@ class Example(Frame):
             retCode = proc.poll()
             if retCode is not None and retCode != 0:
                 errfile = open ("errfile", "r")
-                msg = "Executable could NOT be genarated.\n" + "\n".join(errfile.readlines()[:3]) + "\n" #Show only 3 lines, error msg. might be too long
+                msg = "Executable could NOT be genarated.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
                 errfile.close() #close error file
-                os.remove("errfile") #errfile deleted...may be kept as a log if required
             else:
                 import pdb
                 #pdb.set_trace()
-                msg = "\nExecutable generated successfully.\n"
-               
+                outfile = open("com_" + str(qNum), 'r')
+                msg = "\nExecutable generated successfully.\n" + "\n".join(outfile.readlines()) + "\n"
+                outfile.close()
+            os.remove("errfile") #errfile deleted...may be kept as a log if required
+            os.remove("com_" + str(qNum))
         else:
-            msg = "\nNot Authorised!\n"
+            msg = "\nNot authorised!\n"
+            tkMessageBox.showinfo("Compiler", msg)
+            return False
         
-        tkMessageBox.showinfo("Compiler", msg)
+        # display msg in pop-up box
+        fileWin = Toplevel(self.parent)
+        text = Text(fileWin)
+        text.insert(END,msg)
+        text.pack()
+
         return True
         
     def runProgram(self, qNum = None):       
         runCmd = ""
-        msg = ""  #records messeges
+        msg = ""  #records messages
         
         if not qNum:
             qNum = self.curqNum
@@ -242,30 +251,33 @@ class Example(Frame):
             while proc.poll() is None:  
                 if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
                     proc.kill()     #kill process if it is still running
-                    msg = "\nRun Unsuccessfull. Time Out.\n"
+                    msg = "\nRun unsuccessful. Time Out.\n"
                     break
             outfile.close() 
             retCode = proc.poll()
             if retCode is not None and retCode != 0:
                 errfile = open ("errfile", "r")
-                msg = "Run Unsuccessfull.\n" + "\n".join(errfile.readlines()[:3]) + "\n" #Show only 3 lines, error msg. might be too long
+                msg = "Run unsuccessful.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
                 errfile.close() #close error file
-                os.remove("errfile") #errfile deleted...may be kept as a log if required
             else:
             #output was created...display
                 outfile = open("o_" + str(qNum), 'r')
-                msg = "\nRun successfull.\nOutput:\n" + "\n".join(outfile.readlines()) + "\n"
+                msg = "\nRun successful.\nOutput:\n" + "\n".join(outfile.readlines()) + "\n"
                 outfile.close()
-
+            os.remove("errfile") #errfile deleted...may be kept as a log if required
+            os.remove("o_" + str(qNum)) #outputfile deleted...may be kept as a record if required
         else:
         #this question does not require run
-            msg = "\nNot Authorised!\n"
-        
-        # tkMessageBox.showinfo("Run", msg)
+            msg = "\nNot authorised!\n"
+            tkMessageBox.showinfo("Run", msg)
+            return False
+
+        # display msg in pop-up box
         fileWin = Toplevel(self.parent)
         text = Text(fileWin)
         text.insert(END,msg)
         text.pack()
+
         return True
 
 
