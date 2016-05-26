@@ -303,7 +303,7 @@ class Example(Frame):
         tkMessageBox.showinfo("Submission Results", str(lServerResponse))
 
     def submitAllAnswers(self):
-        for i in range(1, self.QuestionsArr):
+        for i in range(1, len(self.QuestionsArr)):
             self.submitAnswer(i)
 
     # Makes a dialog window pop up asking for host port and email
@@ -482,17 +482,17 @@ class Example(Frame):
         # self.textFrame.grid_columnconfigure(0, weight=1)
 
         # Question text box
-        self.question = Text(pWindow, bg="pale turquoise", font=("sans-serif", 20))
+        self.question = Text(pWindow, bg="pale turquoise", font=("sans-serif", 20),wrap=WORD)
         pWindow.add(self.question,sticky = "nwe")
         self.question.config(state=DISABLED)
         # self.question.grid(row=0,sticky="nswe",padx=5,pady =5)
 
         # Answer text box
-        self.txt = Text(pWindow, bg="LightBlue2", font=("sans-serif", 16))
+        self.txt = Text(pWindow, bg="LightBlue2", font=("sans-serif", 16),wrap=WORD)
         pWindow.add(self.txt,sticky = "swe")
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
         pWindow.pack(fill=BOTH, expand=1, pady=5)
-        # self.getQuestions()
+        self.getQuestions()
 
 
 def main():

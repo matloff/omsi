@@ -142,6 +142,10 @@ def sendFileToServer(pFileName):
     # if file is ready to be sent, connect to the server
     if lCanIReadFromFile:
 
+        if not configureSocket()[0]:
+            print configureSocket()[1]
+            return configureSocket()[1]
+
         # create and configure the socket
         lSocket = configureSocket()[1]
 
