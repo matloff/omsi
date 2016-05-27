@@ -492,7 +492,7 @@ class Example(Frame):
         pWindow.add(self.txt,sticky = "swe")
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
         pWindow.pack(fill=BOTH, expand=1, pady=5)
-        self.getQuestions()
+        # self.getQuestions()
 
 
 def main():
