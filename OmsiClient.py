@@ -99,7 +99,7 @@ class OmsiClient:
     # download exam questions from professor's machine
     def getExamQuestionsFile(self, pClientSocket):
 
-        
+        filename = "ExamQuestions.txt"
         # create local file to write exam questions to
         lExamQuestionsFile = self.createExamQuestionsFile(filename)
 
