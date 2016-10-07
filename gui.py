@@ -25,6 +25,7 @@ class Example(Frame):
         self.host = None
         self.port = None
         self.email = None
+        self.OmsiClient = None
 
     def donothing(self):
         filewin = Toplevel(self.parent)
@@ -267,7 +268,7 @@ class Example(Frame):
             os.remove("errfile") #errfile deleted...may be kept as a log if required
             os.remove("o_" + str(qNum)) #outputfile deleted...may be kept as a record if required
         else:
-        #this question does not require run
+        #this question does not requfire run
             msg = "\nNot authorised!\n"
             tkMessageBox.showinfo("Run", msg)
             return False
@@ -362,17 +363,18 @@ class Example(Frame):
 
         # This blocks until the dialog box is closed
         self.dBox.wait_window(self.dBox)
-        if not self.connectToServer():
-        	return
-        self.getQuestions()
 
-    def connectToServer(self):
-        ClientGlobals.gHost = self.host
-        ClientGlobals.gPort = self.port
-        ClientGlobals.gStudentEmail = self.email
+        try:
+            self.OmsiClient = new Client(self.host, self.port, self.email)
+        except ValueError as e:
+            tkMessageBox.showwarning("Error", e)
 
+        self.getQuestionsFromServer()
+        self.loadQuestionsFromFile()
+
+    def getQuestionsFromServer(self):
         # prepare socket to connect to server
-        result = ClientRoutines.configureSocket()
+         = self.OmsiClient.configureSocket()
 
         if not result[0]:
             tkMessageBox.showwarning("Error",result[1])
@@ -402,7 +404,7 @@ class Example(Frame):
             )
             return 0
 
-    def getQuestions(self):
+    def loadQuestionsFromFile(self):
         import utility
         self.QuestionsArr = utility.ParseQuestions("ExamQuestions.txt")
         self.lb.delete(0, END)
@@ -492,7 +494,7 @@ class Example(Frame):
         pWindow.add(self.txt,sticky = "swe")
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
         pWindow.pack(fill=BOTH, expand=1, pady=5)
-        # self.getQuestions()
+        self.loadQuestionsFromFile()
 
 
 def main():
