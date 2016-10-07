@@ -57,6 +57,9 @@ class OmsiServer:
 
         # accept initial request
         data = pClientSocket.recv(1024)
+        if len(data) == 0:
+            pClientSocket.close()
+            return
 
         #
         lIsExecuted = ""
@@ -94,7 +97,7 @@ class OmsiServer:
         # client is executing a function
         # TODO: refactor this or just get rid of it!
         else:
-            lIsExecuted = interpretClientString(data)
+            lIsExecuted = self.interpretClientString(data)
 
         pClientSocket.close()
 
@@ -117,7 +120,7 @@ class OmsiServer:
 
 
     # transform input string into function object and make the call to the corresponding function in the back-end
-    def interpretClientString(pClientString):
+    def interpretClientString(self, pClientString):
 
         lSplitUpFunction = pClientString.split("(")
         lFunctionName = lSplitUpFunction[0]

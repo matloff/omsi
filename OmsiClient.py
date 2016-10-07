@@ -79,9 +79,9 @@ class OmsiClient:
     # TODO: Update this routine
     # this opens a file with read permissions on the file
     # ATTENTION: an open file is returned! Call file.close() on the returned object
-    def openFileOnClient(pFileName):
+    def openFileOnClient(self, pFileName):
         try:
-          lFilePath = os.path.join(ClientGlobals.gStudentHomeDirectory, pFileName)
+          lFilePath = os.path.join(os.getcwd(), pFileName)
           lOpenFile = open(lFilePath, "r")
           return lOpenFile
         except IOError:
@@ -99,9 +99,9 @@ class OmsiClient:
     # download exam questions from professor's machine
     def getExamQuestionsFile(self, pClientSocket):
 
-        filename = "ExamQuestions.txt"
+        filename = self.createExamQuestionsFile()
         # create local file to write exam questions to
-        lExamQuestionsFile = self.createExamQuestionsFile(filename)
+        lExamQuestionsFile = self.openFileOnClient(filename)
 
         # if file was not created, notify the user
         if not lExamQuestionsFile:
