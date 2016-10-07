@@ -13,6 +13,7 @@ import OMSIQuestion
 import sys, subprocess
 import filecmp
 import time
+import OmsiClient 
 
 
 class Example(Frame):
@@ -365,28 +366,22 @@ class Example(Frame):
         self.dBox.wait_window(self.dBox)
 
         try:
-            self.OmsiClient = new Client(self.host, self.port, self.email)
+            self.OmsiClient = OmsiClient.OmsiClient(self.host, self.port, self.email)
         except ValueError as e:
             tkMessageBox.showwarning("Error", e)
+            return
 
         self.getQuestionsFromServer()
         self.loadQuestionsFromFile()
 
     def getQuestionsFromServer(self):
         # prepare socket to connect to server
-         = self.OmsiClient.configureSocket()
+        try:
+            socket = self.OmsiClient.configureSocket()
+            self.OmsiClient.getExamQuestionsFile(socket)
 
-        if not result[0]:
-            tkMessageBox.showwarning("Error",result[1])
-            return False
-
-        lSocket = result[1]
-
-        # store exam questions file from server on local machine
-        result = ClientRoutines.receiveExamQuestionsFile(lSocket)
-        if not result[0]:
-            tkMessageBox.showinfo("Error", result[1])
-            return False
+        except ValueError as e:
+            tkMessageBox.showwarning("Error", e)
 
         return True
 
@@ -509,3 +504,10 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# Had trouble downloading tkinter fixed by doing 
+# brew install homebrew/dupes/tcl-tk
+# brew uninstall python
+# brew install python --with-brewed-tk
+# 
+#

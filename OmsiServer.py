@@ -22,10 +22,10 @@ class OmsiServer:
     def awaitConnections(self):
         #blocks and waits for connections
         clientSocket, clientAddr = self.socket.accept()
-        if clientAddr in clientMap:
-            clientMap[clientAddr] += 1
+        if clientAddr in self.clientMap:
+            self.clientMap[clientAddr] += 1
         else:
-            clientMap[clientAddr] = 1
+            self.clientMap[clientAddr] = 1
             self.totalClients += 1
             print "New Connection Detected at {0}.\nTotal Connections: {1}".format(clientAddr, self.totalClients)
 
