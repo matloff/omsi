@@ -54,53 +54,62 @@ class OmsiServer:
 
     # handles client interaction: detects client connection delegates requests to the corresponding routines
     def requestHandler(self, pClientSocket, addr):
-
+        print "Waiting to receive data"
         # accept initial request
         data = pClientSocket.recv(1024)
-        if len(data) == 0:
-            pClientSocket.close()
-            return
+        
+        while len(data) != 0:
+            print "received data {0}".format(data)
+            lIsExecuted = ""
 
-        #
-        lIsExecuted = ""
+            if data[:4] == 'OMSI':
+                code = int(data[4:8])
+                if code == 1:
+                    self.parseSubmitFileRequest(pClientSocket, data)
 
-        # client is sending a file
-        if data == "ClientIsSendingAFile":
+            # client is sending a file
+            elif data == "ClientIsSendingAFile":
 
-            # tell the client that we are ready to accept the file name
-            pClientSocket.send("WhatIsTheFileName?")
-            # now actually read the file name
-            lFileName = pClientSocket.recv(1024)
+                # tell the client that we are ready to accept the file name
+                pClientSocket.send("WhatIsTheFileName?")
+                # now actually read the file name
+                lFileName = pClientSocket.recv(1024)
 
-            # tell the client that we are ready to accept the student email
-            pClientSocket.send("WhatIsTheStudentName?")
-            lStudentEmail = pClientSocket.recv(2048)
+                # tell the client that we are ready to accept the student email
+                pClientSocket.send("WhatIsTheStudentName?")
+                lStudentEmail = pClientSocket.recv(2048)
 
-            lIsExecuted = receiveFile(pClientSocket, lFileName, lStudentEmail)
+                lIsExecuted = self.receiveFile(pClientSocket, lFileName, lStudentEmail)
 
-            if lIsExecuted == "s":
-                # transmits TCP message: success
+                if lIsExecuted == "s":
+                    # transmits TCP message: success
 
-                print lStudentEmail + ' successfully submitted ' + lFileName + ' correctly.'
-                pClientSocket.send(lStudentEmail + ' successfully submitted ' + lFileName)
+                    print lStudentEmail + ' successfully submitted ' + lFileName + ' correctly.'
+                    pClientSocket.send(lStudentEmail + ' successfully submitted ' + lFileName)
 
+                else:
+                   # transmits TCP message: fail
+                   print lStudentEmail + ' did not successfully submit ' + lFileName
+                   pClientSocket.send(lStudentEmail + ' did not successfully submit ' + lFileName)
+
+            # client is requesting the questions file
+            elif data == "ClientWantsQuestions":
+                # this function handles error messages + edge cases
+                self.sendQuestionsToClient(pClientSocket)
+
+            # client is executing a function
+            # TODO: refactor this or just get rid of it!
             else:
-               # transmits TCP message: fail
-               print lStudentEmail + ' did not successfully submit ' + lFileName
-               pClientSocket.send(lStudentEmail + ' did not successfully submit ' + lFileName)
+                lIsExecuted = self.interpretClientString(data)
+            print "Server waiting to recv data"
+            data = pClientSocket.recv(1024)
+            print "Server recvd data {0}".format(data)
 
-        # client is requesting the questions file
-        elif data == "ClientWantsQuestions":
-            # this function handles error messages + edge cases
-            sendQuestionsToClient(pClientSocket)
+        # pClientSocket.shutdown(socket.SHUT_WR)
 
-        # client is executing a function
-        # TODO: refactor this or just get rid of it!
-        else:
-            lIsExecuted = self.interpretClientString(data)
-
-        pClientSocket.close()
-
+        # pClientSocket.close()
+        self.totalClients -= 1
+        print "Closing socket at {0}".format(addr)
         return
 
 
@@ -146,14 +155,14 @@ class OmsiServer:
                 return lErrorMessage
 
     # opens new file in a directory on the server
-    def openNewFileServerSide(pNameOfNewFile, pStudentEmail):
+    def openNewFileServerSide(self, pNameOfNewFile, pStudentEmail):
          # create new or trunctate old file - hence the w flag
         try:
             # home directory has to exist, we just assert this
-            assert os.path.exists(ServerGlobals.gServerExamDirectory)
+            assert os.path.exists(self.examDirectory)
 
             # append student email to Server home directory
-            lDirectoryPath = os.path.join(ServerGlobals.gServerExamDirectory, pStudentEmail)
+            lDirectoryPath = os.path.join(self.examDirectory, pStudentEmail)
 
             # check if directory exists, if not we create it
             if os.path.exists(lDirectoryPath) == False:
@@ -170,11 +179,54 @@ class OmsiServer:
             print "File could not be created on the Server"
             return False
 
+    def parseSubmitFileRequest(self, pClientSocket, data):
+        email = ''
+        filename = ''
+        #The filename starts at index 8 of the data message
+        i = 8
+        j = 8
+        length = len(data)
+
+        # parse out filename
+        while j < length:
+            if data[j] == '\0':
+                filename = data[i:j]
+                break
+            j += 1
+        i = j + 1
+        j = i
+
+        # parse out email
+        while j < length:
+            if data[j] == '\0':
+                email = data[i:j]
+                break
+            j += 1
+        i = j + 1
+
+        newFile = self.openNewFileServerSide(filename, email)
+
+        newFile.write(data[i:])
+
+        print "Got file {0} from {1}".format(filename, email)
+        if len(data) < 1024:
+            pClientSocket.send("success")
+            return
+
+        while True:
+            data = pClientSocket.recv(1024)
+            newFile.write(data)
+            if len(data) < 1024:
+                pClientSocket.send("success")
+                return
+
+
+
     # routine for receiving a file from a student
-    def receiveFile(pClientSocket, pFileName, pStudentEmail):
+    def receiveFile(self, pClientSocket, pFileName, pStudentEmail):
 
         # open new file on the server
-        lNewFile = openNewFileServerSide(pFileName, pStudentEmail)
+        lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
 
         # initialize success indicator to false
         lSuccess = "f"
@@ -206,11 +258,11 @@ class OmsiServer:
             return lSuccess
 
     # routine for sending the questions file to a student
-    def sendQuestionsToClient(pClientSocket):
+    def sendQuestionsToClient(self, pClientSocket):
 
         #send the Questions File to the client
         try:
-            lOpenedQuestions = open(ServerGlobals.gExamQuestionsFilePath, 'r')
+            lOpenedQuestions = open(self.examQuestionsPath, 'r')
             lFileChunk = lOpenedQuestions.read(1024)
             lExceptionOccurred = False
         except IOError:
@@ -221,7 +273,10 @@ class OmsiServer:
         # send the file
         while (lFileChunk):
             pClientSocket.send(lFileChunk)
+            print "Sending file chunk {0}".format(lFileChunk)
             lFileChunk = lOpenedQuestions.read(1024)
+        # print "Sending eof chunk {0}".format(lFileChunk)
+        # pClientSocket.send(lFileChunk)
 
         # display success message for debugging purposes only
         # TODO: comment this out for prod. It clogs up the command prompt unnecessarily

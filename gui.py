@@ -98,10 +98,13 @@ class Example(Frame):
             self.hostEntry.focus_set()
             return
 
-        self.dBox.withdraw()
-        self.dBox.update_idletasks()
-
-        self.cancel()
+        try:
+            self.OmsiClient = OmsiClient.OmsiClient(self.host, self.port, self.email)
+            self.dBox.withdraw()
+            self.dBox.update_idletasks()
+            self.cancel()
+        except ValueError as e:
+            tkMessageBox.showwarning("Error", e)
 
     def cancel(self, event=None):
         self.parent.focus_set()
@@ -300,9 +303,12 @@ class Example(Frame):
 
         filename = "omsi_answer{0}{1}".format(qNum,self.QuestionsArr[qNum].getFiletype())
 
-        lServerResponse = ClientRoutines.sendFileToServer(filename)
-
-        tkMessageBox.showinfo("Submission Results", str(lServerResponse))
+        try:
+            lServerResponse = self.OmsiClient.sendFileToServer(filename)
+            tkMessageBox.showinfo("Submission Results", str(lServerResponse))
+        except ValueError as e:
+            tkMessageBox.showwarning("Error!", e)
+            return
 
     def submitAllAnswers(self):
         for i in range(1, len(self.QuestionsArr)):
@@ -320,10 +326,14 @@ class Example(Frame):
 
 
         connected = "Not connected"
-        if self.host:
+        if self.OmsiClient:
             connected = "Connected"
+
+        if self.host:
             self.hostEntry.insert(0,self.host)
+        if self.port:
             self.portEntry.insert(0,self.port)
+        if self.email:
             self.emailEntry.insert(0,self.email)
 
         Label(body,text=connected).grid(row=0)
@@ -341,7 +351,7 @@ class Example(Frame):
         body.pack()
 
         buttonBox = Frame(self.dBox)
-        if not self.host:
+        if not self.OmsiClient:
             ok = Button(buttonBox, text="Enter", width=10, command=self.enteredServerInfo, default=ACTIVE)
             ok.pack(side=LEFT, padx=5, pady=5)
             cancel = Button(buttonBox, text="Cancel", width=10, command=self.cancel)
@@ -365,10 +375,13 @@ class Example(Frame):
         # This blocks until the dialog box is closed
         self.dBox.wait_window(self.dBox)
 
-        try:
-            self.OmsiClient = OmsiClient.OmsiClient(self.host, self.port, self.email)
-        except ValueError as e:
-            tkMessageBox.showwarning("Error", e)
+        # try:
+        #     self.OmsiClient = OmsiClient.OmsiClient(self.host, self.port, self.email)
+        # except ValueError as e:
+        #     tkMessageBox.showwarning("Error", e)
+        #     return
+
+        if not self.OmsiClient:
             return
 
         self.getQuestionsFromServer()
@@ -379,6 +392,8 @@ class Example(Frame):
         try:
             socket = self.OmsiClient.configureSocket()
             self.OmsiClient.getExamQuestionsFile(socket)
+            print "Closing socket"
+            socket.close()
 
         except ValueError as e:
             tkMessageBox.showwarning("Error", e)
@@ -489,7 +504,7 @@ class Example(Frame):
         pWindow.add(self.txt,sticky = "swe")
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
         pWindow.pack(fill=BOTH, expand=1, pady=5)
-        self.loadQuestionsFromFile()
+        # self.loadQuestionsFromFile()
 
 
 def main():

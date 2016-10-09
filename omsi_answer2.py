@@ -1,13 +1,1 @@
-i = 0
-while i <= 100:
-	print i
-	i += 1
-
-
-
-
-
-
-
-
-
+Put your answer for question 2 here.
