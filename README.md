@@ -7,13 +7,16 @@ be it essay, programming, math or multiple choice question.
 
 <b>How to use this project package?</b>
 
+<b><i>Starting the server</i></b>
+
 Getting up and running is simple. Just download the files. In the directory where your files are located created a directory called ProfessorHomeDirectory. The exam questions should be placed in the ProfessorHomeDirectory. The format of how to specify questions is detailed below. 
 
 Now just run OmsiServer.py [portNumber] [exam name] e.g python OmsiServer.py 5000 'Fall 2014 Midterm 1'
 
 The address needed for students to connect to the server will then be printed to the terminal in the format host:port. e.g. pc16.cs.ucdavis.edu:5000. This info will need to be distributed to the students at the start of the exam. 
 
-<i>Connecting to the Server</i>
+<b><i>Connecting to the Server</i></b>
+
 All students must download the files as well. Once they have the files all they need to do is run OmsiGui.py. They can connect to the server and get the exam questions by clicking File->Connect and providing their student email and the host and port provided by the professor.
 
 <b>NOTE:</b> There should be two separate on the right of the gui. One for the question and one to write the answer. The boxes are resizable and the question box may default to take up the whole right side of the screen on some systems. If this is the case grab the bottom of the box to resize.
