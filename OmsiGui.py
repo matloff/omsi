@@ -9,7 +9,7 @@ import tkSimpleDialog
 import pdb
 import os
 import stat
-import OMSIQuestion
+import OmsiQuestion
 import sys, subprocess
 import filecmp
 import time
@@ -415,8 +415,8 @@ class Example(Frame):
             return 0
 
     def loadQuestionsFromFile(self):
-        import utility
-        self.QuestionsArr = utility.ParseQuestions("ExamQuestions.txt")
+        import OmsiUtility
+        self.QuestionsArr = OmsiUtility.ParseQuestions("ExamQuestions.txt")
         self.lb.delete(0, END)
         self.lb.insert(END, "Description")
         for i in range(1, len(self.QuestionsArr)):

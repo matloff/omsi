@@ -1,5 +1,5 @@
 #Utility tools for the application
-from OMSIQuestion import *
+from OmsiQuestion import *
 import pdb
 import shlex
 
@@ -19,7 +19,7 @@ def ParseQuestions(filename):
 				while line and 'DESCRIPTION' not in line and 'QUESTION' not in line:
 					question += line
 					line = f.readline()
-				q = OMSIQuestion(question,0)
+				q = OmsiQuestion(question,0)
 				questions.append(q)
 				question = ""
 			elif 'QUESTION' in line:
@@ -71,7 +71,7 @@ def ParseQuestions(filename):
 				while line and 'DESCRIPTION' not in line and 'QUESTION' not in line:
 					question += line
 					line = f.readline()
-				q = OMSIQuestion(question,len(questions),filetype,flags, compileProgram, compiler, runProgram, runCmd) 
+				q = OmsiQuestion(question,len(questions),filetype,flags, compileProgram, compiler, runProgram, runCmd) 
 				questions.append(q)
 				question = ""
 			else:
