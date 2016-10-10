@@ -36,12 +36,11 @@ late penalties if deemed necessary. All results are then stored in an output fil
   
   <b><i>Specifying different file types</i></b>
   
-    By default all answers are saved as a .txt file. If a different filetype is desired then the -ext flag may be specified when 
-    adding the QUESTION keyword. i.e 'QUESTION -ext .py'
+By default all answers are saved as a .txt file. If a different filetype is desired then the -ext flag may be specified when adding the QUESTION keyword. i.e 'QUESTION -ext .py'
     
   <b><i>Specifying compile and run options</i></b>
   
-    The compile and run functionalities are by default disabled. If any question requires compile and run then the -com and -run flags may be specified in a simillar manner as the -ext file while adding the QUESTION keyword, e.g. 'QUESTION -com gcc -flags "-Wall -g" -run .\a.out', 'QUESTION -com python -run "python omsi_answer1.py" '
+The compile and run functionalities are by default disabled. If any question requires compile and run then the -com and -run flags may be specified in a simillar manner as the -ext file while adding the QUESTION keyword, e.g. 'QUESTION -com gcc -flags "-Wall -g" -run .\a.out', 'QUESTION -com python -run "python omsi_answer1.py" '
     
     
 <b>Summary of each file on this site (in alphabetical order)</b>
