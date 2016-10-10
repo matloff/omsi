@@ -34,11 +34,13 @@ late penalties if deemed necessary. All results are then stored in an output fil
 
   The exam questions should be placed in a file called Questions.txt in the ProfessorsHomeDirectory. The file should contain a description and any questions for the exam. If there are notes the instructor would like to write to himself in the file they should be placed at the beginning. When parsing the file the parser will go through line by line and search for keywords DESCRIPTION or QUESTION. Once a keyword is found each line after it is appended together until it reaches another keyword or the end of the file. So content that is not intended to be a part of a question or description should not be below a keyword. Questions are numbered in the order they are discovered.
   
-  <i>Specifying different file types</i>
+  <b><i>Specifying different file types</i></b>
+  
     By default all answers are saved as a .txt file. If a different filetype is desired then the -ext flag may be specified when 
     adding the QUESTION keyword. i.e 'QUESTION -ext .py'
     
-  <i>Specifying compile and run options</i>
+  <b><i>Specifying compile and run options</i></b>
+  
     The compile and run functionalities are by default disabled. If any question requires compile and run then the -com and -run flags may be specified in a simillar manner as the -ext file while adding the QUESTION keyword, e.g. 'QUESTION -com gcc -flags "-Wall -g" -run .\a.out', 'QUESTION -com python -run "python omsi_answer1.py" '
     
     
