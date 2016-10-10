@@ -7,70 +7,16 @@ be it essay, programming, math or multiple choice question.
 
 <b>How to use this project package?</b>
 
-<i>Step 1a: Coding a script</i>
+Getting up and running is simple. Just download the files. In the directory where your files are located created a directory called ProfessorHomeDirectory. The exam questions should be placed in the ProfessorHomeDirectory. The format of how to specify questions is detailed below. 
 
-To use this project package to code a script that is supposed to be triggered by a certain command from the client, use Server.py.
-Server.py is the main method on the professor's machine. It will be running for the entire duration of the exam. Server.py accpets request
-from clients, allowing students to dump files and start the grading system.
+Now just run OmsiServer.py [portNumber] [exam name] e.g python OmsiServer.py 5000 'Fall 2014 Midterm 1'
 
-<i>(Or) Step 1b: Coding a class/module</i>
+The address needed for students to connect to the server will then be printed to the terminal in the format host:port. e.g. pc16.cs.ucdavis.edu:5000. This info will need to be distributed to the students at the start of the exam. 
 
-To use this project package to code a class/module that is suppsed to be run upon a client request, write code in yout class and link it
-to Server.py via an import. Add
-import MyClassName
-to the top of Server.py, do not put your functions or any code into Server.py.
+<i>Connecting to the Server</i>
+All students must download the files as well. Once they have the files all they need to do is run OmsiGui.py. They can connect to the server and get the exam questions by clicking File->Connect and providing their student email and the host and port provided by the professor.
 
-<i>Calling your function from client's machine</i>
-
-Add the function to the function dictionary in Server.py (function dictionary is a list of all function objects that is mapped to be a
-string representative for the function, usually the function name). Find the variable
-gFunctionDictionary = { ... a bunch of functions ...}
-and add your function to the table above as follow:
-"nameOfMyFunctionUNIQUE": MyClassWhichIImported.nameOfMyFunction
-Note that yout function should not accept any parameters, as the actual function will be called without passing in any parameters.
-Please also note that it is important that the first string "NameOfMyFunctionUNIQUE" is indeed unique. It is ideal to keep the function
-name as close to the actual name of the function as possible, but still different from the other functions in the table.
-
-<i>Step 2: Running Server.py</i>
-
-Run Server.py to set up a server to listen to the Clients. Do not run any client script before running Server.py. After checking that both
-the import and the functions are added to the function table, call your function
-Client.callFunctionOnServer("nameOfMyFunctionUNIQUE")
-
-<i>Step 3: Confirguing Client.py</i>
-
-Write code in your class and module, do not modify Client unless you clearly now what you are doing. Import ServerInteractor in the class/
-module that requires the server interaction like the following:
-import Client
-As of right now, you have two functions available: Client.setUpServer(pPort, pHost) and Client.callFunctionOnServer(functionName). Call
-Client.setUpServer(pPort, pHost) by passing in the port and IP address provided by the professor to pPort and pHost respectively. If you
-are just doing a test run, simply call the function by Client.setUpServer(0, 0).
-
-<i>Step 4: Linking Server.py to Client.py</i>
-
-Make sure the function you are trying to execute exists on the server side and is ready to be called by the client. If everything is
-properly set up, call
-Client.callFunctionOnServer("myFunctionName")
-The return value of the function is either True or False, depending on whether the execution of the function on the server is successful
-or not.
-If unfortunately the return value is False, please which whether the server is set up properly. If it is, the issue might be more
-complicated, which you are free to contact Francios to fix the problem.
-
-<i>Step 5: Running Client.py</i>
-
-Execute the Client script, but do not execute Client, for it is not supposed to be executed by itself.
-
-<b>What does the program do when executing Server.py and Client.py?</b>
-
-After everything is properly connected, students will connect to their server on their machines start by typing in their email addresses.
-When sussecssful, the server will calculate and display the number of current connections and total connections to the professor, so that
-it is detectable how many students are taking the exam, and is detectable when students face connection problem. Server.py then creates
-directories for each individual student under the professor's home directory,if the student individual directory does not exist. Server.py
-then uses the directory to store students' answer file. The program will then send the test questions to the students. Once the students
-receive their test questions, the internal clock will start to count down the time remaining for the students to do the test. Once the time
-is up, the program will automatically save the students' answer. During the time from students' first connection to the server till the end
-of the test, their activities on their laptops are being monitored by an external program PyShark, the data is stored in the file specially
-created for inidivual students along with their test answers.
+<b>NOTE:</b> There should be two separate on the right of the gui. One for the question and one to write the answer. The boxes are resizable and the question box may default to take up the whole right side of the screen on some systems. If this is the case grab the bottom of the box to resize.
 
 <b>What happen after the test end? How does to autograding work?</b>
 
