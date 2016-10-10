@@ -21,6 +21,12 @@ All students must download the files as well. Once they have the files all they 
 
 <b>NOTE:</b> There should be two separate on the right of the gui. One for the question and one to write the answer. The boxes are resizable and the question box may default to take up the whole right side of the screen on some systems. If this is the case grab the bottom of the box to resize.
 
+<b><i>Submitting answers</i></b>
+
+Students can submit one answer by navigating to the question they want to submit and clicking File->Submit. They can also submit all with File->Submit All. A dialog box specifying if submission was successful will then be displayed. 
+
+A directory will be created for the student, using the email provided by the student, under ProfessorHomeDirectory. In the directory there will be an answer file for each question. e.g. omsi_answer1.txt omsi_answer2.java
+
 <b>What happen after the test end? How does to autograding work?</b>
 
 The autograding program is semi-autograded. It goes through the students' file answers.txt in their individual directory with the name of
