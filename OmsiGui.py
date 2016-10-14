@@ -285,9 +285,6 @@ class Example(Frame):
 
         return True
 
-
-
-
     def submitAnswer(self, qNum=None):
         if not qNum:
             qNum = self.curqNum
@@ -375,12 +372,8 @@ class Example(Frame):
         # This blocks until the dialog box is closed
         self.dBox.wait_window(self.dBox)
 
-        # try:
-        #     self.OmsiClient = OmsiClient.OmsiClient(self.host, self.port, self.email)
-        # except ValueError as e:
-        #     tkMessageBox.showwarning("Error", e)
-        #     return
-
+        # If there was an error creating a client don't try
+        # to get the questions.
         if not self.OmsiClient:
             return
 

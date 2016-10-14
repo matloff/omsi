@@ -5,7 +5,6 @@ import sys
 import thread
 import threading
 
-import ServerGlobals
 
 class OmsiServer:
     def __init__(self, gHost, gPort, examName):
@@ -54,12 +53,10 @@ class OmsiServer:
 
     # handles client interaction: detects client connection delegates requests to the corresponding routines
     def requestHandler(self, pClientSocket, addr):
-        print "Waiting to receive data"
         # accept initial request
         data = pClientSocket.recv(1024)
         
         while len(data) != 0:
-            print "received data {0}".format(data)
             lIsExecuted = ""
 
             if data[:4] == 'OMSI':
