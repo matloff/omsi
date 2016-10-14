@@ -1,78 +1,113 @@
 
+
 <h2>What is OMSI?</h2>
 
-OMSI, short for Online Measurement of Student Insight, is a Python project made for conducting and grading examinations in a manner that is
-both secure and conducive to high-quality measurement of student insight. It is suitable for small or large class quizz, test or exam:
-be it essay, programming, math or multiple choice question.
+OMSI, short for Online Measurement of Student Insight, is a Python
+project for conducting and grading examinations in a manner that is both
+secure and conducive to high-quality measurement of student insight. It
+is suitable for small or large class exams, be they based on
+essays, writing code, math analysis or multiple choice question.
 
-<b>How to use this project package?</b>
+Students come to the classroom at the regular class time, just as with a
+traditional pencil-and-paper exam.  However, they use their laptops to
+take the exam, using OMSI.  The latter downloads the exam questions, and
+enables the students to upload their answers.
 
-<i>Step 1a: Coding a script</i>
+OMSI has two components:
 
-To use this project package to code a script that is supposed to be triggered by a certain command from the client, use Server.py.
-Server.py is the main method on the professor's machine. It will be running for the entire duration of the exam. Server.py accpets request
-from clients, allowing students to dump files and start the grading system.
+<UL>
 
-<i>(Or) Step 1b: Coding a class/module</i>
+<li> <i>Exam administration.</i>  This manages the actual process of the
+students taking the exam.
+</li> </p>
 
-To use this project package to code a class/module that is suppsed to be run upon a client request, write code in yout class and link it
-to Server.py via an import. Add
-import MyClassName
-to the top of Server.py, do not put your functions or any code into Server.py.
+<li> <i>Exam grading.</i> OMSI does NOT take the place of instructor
+judgment in assigning points to individual exam problems, and total
+grade for the exam.  But it does make things much easier, by automating
+much of the drudgery. For instance, OMSI automatically records grades
+assigned by the instructor, and automatically notifies students of their
+grades via e-mail.
 
-<i>Calling your function from client's machine</i>
+</UL>
 
-Add the function to the function dictionary in Server.py (function dictionary is a list of all function objects that is mapped to be a
-string representative for the function, usually the function name). Find the variable
-gFunctionDictionary = { ... a bunch of functions ...}
-and add your function to the table above as follow:
-"nameOfMyFunctionUNIQUE": MyClassWhichIImported.nameOfMyFunction
-Note that yout function should not accept any parameters, as the actual function will be called without passing in any parameters.
-Please also note that it is important that the first string "NameOfMyFunctionUNIQUE" is indeed unique. It is ideal to keep the function
-name as close to the actual name of the function as possible, but still different from the other functions in the table.
+In addition to making the job of grading much easier, OMSI has a number
+of advantages for students over the traditional pencil-and-paper format:
 
-<i>Step 2: Running Server.py</i>
+<UL>
 
-Run Server.py to set up a server to listen to the Clients. Do not run any client script before running Server.py. After checking that both
-the import and the functions are added to the function table, call your function
-Client.callFunctionOnServer("nameOfMyFunctionUNIQUE")
+<li> With essay questions, students have a chance to edit their answers,
+producing more coherent, readable prose.
+</li> </p>
 
-<i>Step 3: Confirguing Client.py</i>
+<li> With coding questions, students can compile and run their code,
+giving them a chance to make corrections if their code doesn't work.
+</li> </p> 
 
-Write code in your class and module, do not modify Client unless you clearly now what you are doing. Import ServerInteractor in the class/
-module that requires the server interaction like the following:
-import Client
-As of right now, you have two functions available: Client.setUpServer(pPort, pHost) and Client.callFunctionOnServer(functionName). Call
-Client.setUpServer(pPort, pHost) by passing in the port and IP address provided by the professor to pPort and pHost respectively. If you
-are just doing a test run, simply call the function by Client.setUpServer(0, 0).
+</UL>
 
-<i>Step 4: Linking Server.py to Client.py</i>
+In both of these aspects, OMSI gives the student a better chance to
+demonstrate his/her insight into the course material, compared to the
+traditional exam format.
 
-Make sure the function you are trying to execute exists on the server side and is ready to be called by the client. If everything is
-properly set up, call
-Client.callFunctionOnServer("myFunctionName")
-The return value of the function is either True or False, depending on whether the execution of the function on the server is successful
-or not.
-If unfortunately the return value is False, please which whether the server is set up properly. If it is, the issue might be more
-complicated, which you are free to contact Francios to fix the problem.
+<b>How to use this project package:</b>
 
-<i>Step 5: Running Client.py</i>
+<b><i>Installing the package (instructor and students)</i></b>
 
-Execute the Client script, but do not execute Client, for it is not supposed to be executed by itself.
+Getting up and running is simple. Just download the <b>.zip</b> file.
+Unzipping it will produce a directory <b>omsi-master</b>, where all
+relevant files residen.
 
-<b>What does the program do when executing Server.py and Client.py?</b>
+<b><i>Preparing the exam questions (instructor)</i></b>
 
-After everything is properly connected, students will connect to their server on their machines start by typing in their email addresses.
-When sussecssful, the server will calculate and display the number of current connections and total connections to the professor, so that
-it is detectable how many students are taking the exam, and is detectable when students face connection problem. Server.py then creates
-directories for each individual student under the professor's home directory,if the student individual directory does not exist. Server.py
-then uses the directory to store students' answer file. The program will then send the test questions to the students. Once the students
-receive their test questions, the internal clock will start to count down the time remaining for the students to do the test. Once the time
-is up, the program will automatically save the students' answer. During the time from students' first connection to the server till the end
-of the test, their activities on their laptops are being monitored by an external program PyShark, the data is stored in the file specially
-created for inidivual students along with their test answers.
+Within the directory <b>omsi-master</b>, there will be a directory
+<b>ProfessorHomeDirectory</b>. You place your exam questions in that
+directory (sample files are included there).  The format for specifying
+the questions is detailed below. 
 
-<b>What happen after the test end? How does to autograding work?</b>
+<b><i>Starting the server (instructor)</i></b>
+
+At the start of the exam period (not before), start the server from a
+shell/command line window by issuing the command
+
+<b>python OmsiServer.py [portNumber] [quoted exam name] </b>
+
+from within the <b>omsi-master</b> directory, e.g.
+
+<b>python OmsiServer.py 5000 'Fall 2014 Midterm 1'</b>
+
+The port number must be above 1024.
+
+The address needed for students to connect to the server will then be
+printed to the terminal in the format <b>host:port</b> e.g.
+<b>pc16.cs.ucdavis.edu:5000</b>. This info will need to be distributed
+to the students at the start of the exam. 
+
+<b><i>Connecting to the server (students)</i></b>
+
+All students must download the package as well. Once they have the files
+all they need to do is run <b>OmsiGui.py</b>. They can connect to the server
+and get the exam questions by clicking <b>File->Connect</b> and providing their
+student email address and the host and port provided by the instructor.
+
+<b>NOTE:</b> There should be two separate on the right of the GUI, one
+for the question and one to write the answer. The boxes are resizable
+and the question box may default to occupying the entire right side of the
+screen on some systems. If this is the case grab the bottom of the box
+to resize.
+
+<b><i>Submitting answers (students)</i></b>
+
+Students can submit the answer to a particular question by navigating to
+the question and clicking <b>File->Submit</b>. They can also submit all
+answers with <b>File->Submit All</b>. A dialog box specifying whether
+submission was successful will then be displayed. 
+
+On the server side, a directory will be created for each student, using
+the email address provided by the student, under <b>ProfessorHomeDirectory</b>.
+In the directory there will be an answer file for each question. e.g.
+<b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
+
+<b><i>What happens after the exam? How to autograding work?</i></b>
 
 The autograding program is semi-autograded. It goes through the students' file answers.txt in their individual directory with the name of
 their emailname (e.g. jsmith@ucdavis.edu -> jsmith) to parse students' answer and a master answer file with the name Answerx, where x is
@@ -85,12 +120,13 @@ late penalties if deemed necessary. All results are then stored in an output fil
 
   The exam questions should be placed in a file called Questions.txt in the ProfessorsHomeDirectory. The file should contain a description and any questions for the exam. If there are notes the instructor would like to write to himself in the file they should be placed at the beginning. When parsing the file the parser will go through line by line and search for keywords DESCRIPTION or QUESTION. Once a keyword is found each line after it is appended together until it reaches another keyword or the end of the file. So content that is not intended to be a part of a question or description should not be below a keyword. Questions are numbered in the order they are discovered.
   
-  <i>Specifying different file types</i>
-    By default all answers are saved as a .txt file. If a different filetype is desired then the -ext flag may be specified when 
-    adding the QUESTION keyword. i.e 'QUESTION -ext .py'
+  <b><i>Specifying different file types</i></b>
+  
+By default all answers are saved as a .txt file. If a different filetype is desired then the -ext flag may be specified when adding the QUESTION keyword. i.e 'QUESTION -ext .py'
     
-  <i>Specifying compile and run options</i>
-    The compile and run functionalities are by default disabled. If any question requires compile and run then the -com and -run flags may be specified in a simillar manner as the -ext file while adding the QUESTION keyword, e.g. 'QUESTION -com gcc -flags "-Wall -g" -run .\a.out', 'QUESTION -com python -run "python omsi_answer1.py" '
+  <b><i>Specifying compile and run options</i></b>
+  
+The compile and run functionalities are by default disabled. If any question requires compile and run then the -com and -run flags may be specified in a simillar manner as the -ext file while adding the QUESTION keyword, e.g. 'QUESTION -com gcc -flags "-Wall -g" -run .\a.out', 'QUESTION -com python -run "python omsi_answer1.py" '
     
     
 <b>Summary of each file on this site (in alphabetical order)</b>
