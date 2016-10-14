@@ -1,33 +1,113 @@
 
+
 <h2>What is OMSI?</h2>
 
-OMSI, short for Online Measurement of Student Insight, is a Python project made for conducting and grading examinations in a manner that is
-both secure and conducive to high-quality measurement of student insight. It is suitable for small or large class quizz, test or exam:
-be it essay, programming, math or multiple choice question.
+OMSI, short for Online Measurement of Student Insight, is a Python
+project for conducting and grading examinations in a manner that is both
+secure and conducive to high-quality measurement of student insight. It
+is suitable for small or large class exams, be they based on
+essays, writing code, math analysis or multiple choice question.
 
-<b>How to use this project package?</b>
+Students come to the classroom at the regular class time, just as with a
+traditional pencil-and-paper exam.  However, they use their laptops to
+take the exam, using OMSI.  The latter downloads the exam questions, and
+enables the students to upload their answers.
 
-<b><i>Starting the server</i></b>
+OMSI has two components:
 
-Getting up and running is simple. Just download the files. In the directory where your files are located created a directory called ProfessorHomeDirectory. The exam questions should be placed in the ProfessorHomeDirectory. The format of how to specify questions is detailed below. 
+<UL>
 
-Now just run OmsiServer.py [portNumber] [exam name] e.g python OmsiServer.py 5000 'Fall 2014 Midterm 1'
+<li> <i>Exam administration.</i>  This manages the actual process of the
+students taking the exam.
+</li> </p>
 
-The address needed for students to connect to the server will then be printed to the terminal in the format host:port. e.g. pc16.cs.ucdavis.edu:5000. This info will need to be distributed to the students at the start of the exam. 
+<li> <i>Exam grading.</i> OMSI does NOT take the place of instructor
+judgment in assigning points to individual exam problems, and total
+grade for the exam.  But it does make things much easier, by automating
+much of the drudgery. For instance, OMSI automatically records grades
+assigned by the instructor, and automatically notifies students of their
+grades via e-mail.
 
-<b><i>Connecting to the Server</i></b>
+</UL>
 
-All students must download the files as well. Once they have the files all they need to do is run OmsiGui.py. They can connect to the server and get the exam questions by clicking File->Connect and providing their student email and the host and port provided by the professor.
+In addition to making the job of grading much easier, OMSI has a number
+of advantages for students over the traditional pencil-and-paper format:
 
-<b>NOTE:</b> There should be two separate on the right of the gui. One for the question and one to write the answer. The boxes are resizable and the question box may default to take up the whole right side of the screen on some systems. If this is the case grab the bottom of the box to resize.
+<UL>
 
-<b><i>Submitting answers</i></b>
+<li> With essay questions, students have a chance to edit their answers,
+producing more coherent, readable prose.
+</li> </p>
 
-Students can submit one answer by navigating to the question they want to submit and clicking File->Submit. They can also submit all with File->Submit All. A dialog box specifying if submission was successful will then be displayed. 
+<li> With coding questions, students can compile and run their code,
+giving them a chance to make corrections if their code doesn't work.
+</li> </p> 
 
-A directory will be created for the student, using the email provided by the student, under ProfessorHomeDirectory. In the directory there will be an answer file for each question. e.g. omsi_answer1.txt omsi_answer2.java
+</UL>
 
-<b>What happen after the test end? How does to autograding work?</b>
+In both of these aspects, OMSI gives the student a better chance to
+demonstrate his/her insight into the course material, compared to the
+traditional exam format.
+
+<b>How to use this project package:</b>
+
+<b><i>Installing the package (instructor and students)</i></b>
+
+Getting up and running is simple. Just download the <b>.zip</b> file.
+Unzipping it will produce a directory <b>omsi-master</b>, where all
+relevant files residen.
+
+<b><i>Preparing the exam questions (instructor)</i></b>
+
+Within the directory <b>omsi-master</b>, there will be a directory
+<b>ProfessorHomeDirectory</b>. You place your exam questions in that
+directory (sample files are included there).  The format for specifying
+the questions is detailed below. 
+
+<b><i>Starting the server (instructor)</i></b>
+
+At the start of the exam period (not before), start the server from a
+shell/command line window by issuing the command
+
+<b>python OmsiServer.py [portNumber] [quoted exam name] </b>
+
+from within the <b>omsi-master</b> directory, e.g.
+
+<b>python OmsiServer.py 5000 'Fall 2014 Midterm 1'</b>
+
+The port number must be above 1024.
+
+The address needed for students to connect to the server will then be
+printed to the terminal in the format <b>host:port</b> e.g.
+<b>pc16.cs.ucdavis.edu:5000</b>. This info will need to be distributed
+to the students at the start of the exam. 
+
+<b><i>Connecting to the server (students)</i></b>
+
+All students must download the package as well. Once they have the files
+all they need to do is run <b>OmsiGui.py</b>. They can connect to the server
+and get the exam questions by clicking <b>File->Connect</b> and providing their
+student email address and the host and port provided by the instructor.
+
+<b>NOTE:</b> There should be two separate on the right of the GUI, one
+for the question and one to write the answer. The boxes are resizable
+and the question box may default to occupying the entire right side of the
+screen on some systems. If this is the case grab the bottom of the box
+to resize.
+
+<b><i>Submitting answers (students)</i></b>
+
+Students can submit the answer to a particular question by navigating to
+the question and clicking <b>File->Submit</b>. They can also submit all
+answers with <b>File->Submit All</b>. A dialog box specifying whether
+submission was successful will then be displayed. 
+
+On the server side, a directory will be created for each student, using
+the email address provided by the student, under <b>ProfessorHomeDirectory</b>.
+In the directory there will be an answer file for each question. e.g.
+<b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
+
+<b><i>What happens after the exam? How to autograding work?</i></b>
 
 The autograding program is semi-autograded. It goes through the students' file answers.txt in their individual directory with the name of
 their emailname (e.g. jsmith@ucdavis.edu -> jsmith) to parse students' answer and a master answer file with the name Answerx, where x is
