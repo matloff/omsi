@@ -1,12 +1,8 @@
-# Testing tkinter
-import ClientGlobals
-import ClientRoutines
 from Tkinter import *
 from threading import Timer
 import tkMessageBox
 import tkFileDialog
 import tkSimpleDialog
-import pdb
 import os
 import stat
 import OmsiQuestion
@@ -15,8 +11,8 @@ import filecmp
 import time
 import OmsiClient 
 
-
-class Example(Frame):
+# This is the GUI portion of the OMSI application.
+class OmsiGui(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
         self.parent = master
@@ -33,6 +29,8 @@ class Example(Frame):
         button = Button(filewin, text="Do nothing button")
         button.pack()
 
+    # The action for when the open button is clicked in the file
+    # menu. Not currently used. Probably should delete.
     def onOpen(self):
         ftypes = [('Python files', '*.py'), ('All files', '*')]
         dlg = tkFileDialog.Open(self, filetypes=ftypes)
@@ -49,7 +47,6 @@ class Example(Frame):
     # Updates the question box with the question when a question
     # is clicked in the listbox
     def updateQuestionBox(self, qNum=None):
-        # pdb.set_trace()
         if not self.QuestionsArr:
             return
 
@@ -80,6 +77,7 @@ class Example(Frame):
             self.txt.insert(END, self.QuestionsArr[qNum].getAnswer())
         self.curqNum = qNum
 
+    # One of the items in the question list was clicked
     def listboxSelected(self, evt):
         w = evt.widget
         index = int(w.curselection()[0])
@@ -87,17 +85,22 @@ class Example(Frame):
         self.updateQuestionBox(index)
         self.updateAnswerBox(index)
 
+    # The disconnect button was clicked.
     def disconnectFromServer(self):
         self.host = None
         self.port = None
         self.email = None
         self.cancel()
 
+    # The user entered the server info and clicked connect.
     def enteredServerInfo(self):
+        # Make sure all the info is valid.
         if not self.validate():
             self.hostEntry.focus_set()
             return
 
+        # Create a connection and close the connection info box if 
+        # successful.
         try:
             self.OmsiClient = OmsiClient.OmsiClient(self.host, self.port, self.email)
             self.dBox.withdraw()
@@ -106,10 +109,12 @@ class Example(Frame):
         except ValueError as e:
             tkMessageBox.showwarning("Error", e)
 
+    # The user canceled the connect to server box.
     def cancel(self, event=None):
         self.parent.focus_set()
         self.dBox.destroy()
 
+    # This is run to auto save the current answer.
     def autoSave(self):
         t = Timer(120, self.autoSave)
         # Guy on stack overflow said this helps with
@@ -151,7 +156,7 @@ class Example(Frame):
             qNum = self.curqNum
 
         fType = self.QuestionsArr[qNum].getFiletype()  #file type
-        fName = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
+        fName = "omsi_answer{0}.{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
         flags = self.QuestionsArr[qNum].getFlags() #get flags
         # flags = ["-"+x for x in flags] #adding "-" before flags
 
@@ -166,7 +171,7 @@ class Example(Frame):
             else:
                 compiler = self.QuestionsArr[qNum].getCompiler()
 
-            execName = "omsi_answer" + str(qNum)  #name of the executable
+            execName = "omsi_answer{0}".format(qNum) #name of the executable
 
             if not os.path.isfile(fName):   #check if file exists
                 msg = "File not found. Please make sure you have saved the file."
@@ -195,8 +200,6 @@ class Example(Frame):
                 msg = "Executable could NOT be genarated.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
                 errfile.close() #close error file
             else:
-                import pdb
-                #pdb.set_trace()
                 outfile = open("com_" + str(qNum), 'r')
                 msg = "\nExecutable generated successfully.\n" + "\n".join(outfile.readlines()) + "\n"
                 outfile.close()
@@ -380,6 +383,7 @@ class Example(Frame):
         self.getQuestionsFromServer()
         self.loadQuestionsFromFile()
 
+    # Connects to the servers to get the questions.
     def getQuestionsFromServer(self):
         # prepare socket to connect to server
         try:
@@ -393,6 +397,7 @@ class Example(Frame):
 
         return True
 
+    # Ensures the info entered in the for the server is valid.
     def validate(self):
         try:
             self.host = self.hostEntry.get()
@@ -407,6 +412,7 @@ class Example(Frame):
             )
             return 0
 
+    # Parses the question file to separate questions.
     def loadQuestionsFromFile(self):
         import OmsiUtility
         self.QuestionsArr = OmsiUtility.ParseQuestions("ExamQuestions.txt")
@@ -427,7 +433,7 @@ class Example(Frame):
         self.autoSave()
 
     def widgets(self):
-        self.parent.title("GUI Testing")
+        self.parent.title("Online Measurement of Student Insight")
         self.parent.grid_columnconfigure(0, weight=1)
         self.parent.grid_columnconfigure(1, weight=6)
         self.parent.grid_rowconfigure(0, weight=1)
@@ -467,14 +473,11 @@ class Example(Frame):
         self.questionFrame = Frame(self.parent, bg="ghost white")
         self.questionFrame.grid(row=0, column=0, sticky="nswe")
 
-        # btn = Button(self.questionFrame,text="hi",command=self.helloCalself.lback)
-        # btn.pack()
         self.lb = Listbox(self.questionFrame, width=20, bg="lavender")
         self.lb.insert(1, "Connect to server to get quesions...")
         self.lb.bind('<<ListboxSelect>>', self.listboxSelected)
 
         self.lb.pack(fill=BOTH, expand=1, padx=5, pady=5)
-        # pdb.set_trace()
 
         # Frame for the question and answer text boxes
         self.textFrame = Frame(self.parent, bg="azure")
@@ -505,7 +508,7 @@ def main():
     top.geometry("{0}x{1}".format(top.winfo_screenwidth(), top.winfo_screenheight()))
     top.update()
     # top.minsize(top.winfo_width(),top.winfo_height())
-    app = Example(top)
+    app = OmsiGui(top)
 
     top.mainloop()
 
