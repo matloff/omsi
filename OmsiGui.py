@@ -474,7 +474,7 @@ class OmsiGui(Frame):
         self.questionFrame.grid(row=0, column=0, sticky="nswe")
 
         self.lb = Listbox(self.questionFrame, width=20, bg="lavender")
-        self.lb.insert(1, "Connect to server to get quesions...")
+        self.lb.insert(1, "Click on File to connect to server.")
         self.lb.bind('<<ListboxSelect>>', self.listboxSelected)
 
         self.lb.pack(fill=BOTH, expand=1, padx=5, pady=5)
