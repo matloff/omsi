@@ -290,7 +290,7 @@ class OmsiServer:
         lExamQuestionsFilePath = False
 
         while not lExamQuestionsFilePath:
-            print """Please enter a home directory for the exam. This will be the directory that all students\' files will be stored in.\nBefore pressing enter, please check that the exam questions are in the directory and named \'Questions.txt\'."""
+            ### print """Please enter a home directory for the exam. This will be the directory that all students\' files will be stored in.\nBefore pressing enter, please check that the exam questions are in the directory and named \'Questions.txt\'."""
 
             # Hard coding for testing purposes.
             self.examDirectory = "ProfessorHomeDirectory"
