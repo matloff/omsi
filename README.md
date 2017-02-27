@@ -49,22 +49,84 @@ In both of these aspects, OMSI gives the student a better chance to
 demonstrate his/her insight into the course material, compared to the
 traditional exam format.
 
-<b>How to use this project package:</b>
+<h2>
+How to Use This Package
+</h2>
 
 <UL>
 
-<li> <a href=#install"">Installation</a> 
+<li> <a href=#install"">Installation (Instructors and Students)</a> 
+</li> </p>
+
+<li> <a href=#students">Directions for Students</a> 
+</li> </p>
+
+<li> <a href=#students">Directions for Instructors</a> 
+</li> </p>
 
 </UL>
 
-
-<a name="install">
-<b><i>Installing the package (instructor and students)</i></b>
-</a>
+<h3>
+<a name="install">Installing the package (instructors and students)</a>
+</h3>
 
 Getting up and running is simple. Just download the <b>.zip</b> file.
 Unzipping it will produce a directory <b>omsi-master</b>, where all
-relevant files residen.
+relevant files reside.
+
+<h3>
+<a name="students">Directions for Students</a>
+</h3>
+
+<b><i>Connecting to the server:</i></b>
+
+Download the package, though you will only use the file
+<b>OmsiGui.py</b>.  Run
+
+<pre>
+python OmsiGui.py
+</pre>
+
+from a terminal window.
+
+Then connect to the server and get the exam questions by selecting 
+<b>File | Connect</b>. 
+
+Provide your student email address and the host and port provided by the
+instructor.
+
+<b>NOTE:</b> There should be two separate windows on the right of the GUI, one
+for the question and one to write the answer. The boxes are resizable
+and the question box may default to occupying the entire right side of the
+screen on some systems. If this is the case grab the bottom of the box
+to resize.
+
+<b><i>Saving answers:</i></b>
+
+Click the question number on the left of the OMSI screen, and
+select <b>File | Save</b>.`
+
+<b><i>Running code:</i></b>
+
+Save the code first, then select <b>File | Run</b>.`A new window will
+pop up, displaying the results.
+
+<b><i>Submitting answers:</i></b>
+
+Submit the answer to a particular question by clicking on the question
+number on the left side of the OMSI screen, and selecting <b>File |
+Submit</b>. You can also submit all answers with <b>File | Submit
+All</b>. A dialog box specifying whether submission was successful will
+then be displayed. 
+
+<h3>
+<a name="students">Directions for Instructors</a>
+</h3>
+
+On the server side, a directory will be created for each student, using
+the email address provided by the student, under <b>ProfessorHomeDirectory</b>.
+In the directory there will be an answer file for each question. e.g.
+<b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
 
 <b><i>Preparing the exam questions (instructor)</i></b>
 
@@ -90,31 +152,6 @@ The address needed for students to connect to the server will then be
 printed to the terminal in the format <b>host:port</b> e.g.
 <b>pc16.cs.ucdavis.edu:5000</b>. This info will need to be distributed
 to the students at the start of the exam. 
-
-<b><i>Connecting to the server (students)</i></b>
-
-All students must download the package as well. Once they have the files
-all they need to do is run <b>OmsiGui.py</b>. They can connect to the server
-and get the exam questions by clicking <b>File->Connect</b> and providing their
-student email address and the host and port provided by the instructor.
-
-<b>NOTE:</b> There should be two separate on the right of the GUI, one
-for the question and one to write the answer. The boxes are resizable
-and the question box may default to occupying the entire right side of the
-screen on some systems. If this is the case grab the bottom of the box
-to resize.
-
-<b><i>Submitting answers (students)</i></b>
-
-Students can submit the answer to a particular question by navigating to
-the question and clicking <b>File->Submit</b>. They can also submit all
-answers with <b>File->Submit All</b>. A dialog box specifying whether
-submission was successful will then be displayed. 
-
-On the server side, a directory will be created for each student, using
-the email address provided by the student, under <b>ProfessorHomeDirectory</b>.
-In the directory there will be an answer file for each question. e.g.
-<b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
 
 <b><i>What happens after the exam? How to autograding work?</i></b>
 
