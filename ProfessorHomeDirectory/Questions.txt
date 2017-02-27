@@ -1,26 +1,21 @@
 
+
 NEW
 
-Questions on the server
-
-The prof writes these before the exams start
-
-This file needs to be transferred to the Client upon first connection of the client.
-
-YadyYada
 DESCRIPTION
-Here would be a description of the test. This is REQUIRED. Here the Prof would put some stuff like they put on the front page of an exam. Like saying students have an hour and better
-not
-cheat.
 
-QUESTION -ext .cpp -flags  "-Wall -g" -com g++ -run ./omsi_answer1
+Samples; 2 questions asking for Python code, 1 reqjuiring an essay.
 
-This should be question 1
+QUESTION -ext .py -run "python omsi_answer1.py"
+
+Write a function sq(x) that return x^2, and print sq(3).
 
 QUESTION -ext .py -run "python omsi_answer2.py"
 
-this should be question 2
+Write a function half() that will return x/2, and 
+freestanding code will print half(3).
 
 QUESTION 
 
-this should be question 3
+What does 'D' stand for in "UCD"?
+
