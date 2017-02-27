@@ -51,7 +51,16 @@ traditional exam format.
 
 <b>How to use this project package:</b>
 
+<UL>
+
+<li> <a href=#install"">Installation</a> 
+
+</UL>
+
+
+<a name="install">
 <b><i>Installing the package (instructor and students)</i></b>
+</a>
 
 Getting up and running is simple. Just download the <b>.zip</b> file.
 Unzipping it will produce a directory <b>omsi-master</b>, where all
