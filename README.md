@@ -61,22 +61,22 @@ How to Use This Package
 <li> <a href=#students">Directions for Students</a> 
 </li> </p>
 
-<li> <a href=#students">Directions for Instructors</a> 
+<li> <a href=#instructors">Directions for Instructors</a> 
 </li> </p>
 
 </UL>
 
-<h3>
+<h2>
 <a name="install">Installing the package (instructors and students)</a>
-</h3>
+</h2>
 
 Getting up and running is simple. Just download the <b>.zip</b> file.
 Unzipping it will produce a directory <b>omsi-master</b>, where all
 relevant files reside.
 
-<h3>
+<h2>
 <a name="students">Directions for Students</a>
-</h3>
+</h2>
 
 <b><i>Connecting to the server:</i></b>
 
@@ -91,9 +91,11 @@ from a terminal window.
 
 Then connect to the server and get the exam questions by selecting 
 <b>File | Connect</b>. 
-
-Provide your student email address and the host and port provided by the
+State your student email address and the host and port provided by the
 instructor.
+
+After you connect to the server, the exam questions will be downloaded
+to your machine.
 
 <b>NOTE:</b> There should be two separate windows on the right of the GUI, one
 for the question and one to write the answer. The boxes are resizable
@@ -119,23 +121,27 @@ Submit</b>. You can also submit all answers with <b>File | Submit
 All</b>. A dialog box specifying whether submission was successful will
 then be displayed. 
 
+<h2>
+<a name="instructors">Directions for Instructors</a>
+</h2>
+
 <h3>
-<a name="students">Directions for Instructors</a>
+ProfessorHomeDirectory
 </h3>
-
-On the server side, a directory will be created for each student, using
-the email address provided by the student, under <b>ProfessorHomeDirectory</b>.
-In the directory there will be an answer file for each question. e.g.
-<b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
-
-<b><i>Preparing the exam questions (instructor)</i></b>
 
 Within the directory <b>omsi-master</b>, there will be a directory
 <b>ProfessorHomeDirectory</b>. You place your exam questions in that
 directory (sample files are included there).  The format for specifying
 the questions is detailed below. 
 
-<b><i>Starting the server (instructor)</i></b>
+Within this directory, a subdirectory will be created for each student,
+using the email address provided by the student.  In a student's sub
+directory there will be an answer file for each question. e.g.
+<b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
+
+<h3>
+Starting the server
+</h3>
 
 At the start of the exam period (not before), start the server from a
 shell/command line window by issuing the command
@@ -148,34 +154,39 @@ from within the <b>omsi-master</b> directory, e.g.
 
 The port number must be above 1024.
 
-The address needed for students to connect to the server will then be
-printed to the terminal in the format <b>host:port</b> e.g.
-<b>pc16.cs.ucdavis.edu:5000</b>. This info will need to be distributed
+The server Internet address and port number will need to be distributed
 to the students at the start of the exam. 
 
-<b><i>What happens after the exam? How to autograding work?</i></b>
+<h3>Providing the exam questions</h3>
 
-The autograding program is semi-autograded. It goes through the students' file answers.txt in their individual directory with the name of
-their emailname (e.g. jsmith@ucdavis.edu -> jsmith) to parse students' answer and a master answer file with the name Answerx, where x is
-the test ID. It then displays both sets of answers to the professor. If there are any formatting errors, the program will alert the
-professor. The professor needs to manually fix the files and decides how many points to award and applies any
-late penalties if deemed necessary. All results are then stored in an output file.
+The exam questions should be placed in a file called Questions.txt in
+the ProfessorsHomeDirectory. The file should contain a description and
+any questions for the exam. If there are notes the instructor would like
+to write to himself in the file they should be placed at the beginning.
+When parsing the file the parser will go through line by line and search
+for keywords DESCRIPTION or QUESTION. Once a keyword is found each line
+after it is appended together until it reaches another keyword or the
+end of the file. So content that is not intended to be a part of a
+question or description should not be below a keyword. Questions are
+numbered in the order they are discovered.
 
-
-<h2>Providing the exam questions</h2>
-
-  The exam questions should be placed in a file called Questions.txt in the ProfessorsHomeDirectory. The file should contain a description and any questions for the exam. If there are notes the instructor would like to write to himself in the file they should be placed at the beginning. When parsing the file the parser will go through line by line and search for keywords DESCRIPTION or QUESTION. Once a keyword is found each line after it is appended together until it reaches another keyword or the end of the file. So content that is not intended to be a part of a question or description should not be below a keyword. Questions are numbered in the order they are discovered.
-  
   <b><i>Specifying different file types</i></b>
   
-By default all answers are saved as a .txt file. If a different filetype is desired then the -ext flag may be specified when adding the QUESTION keyword. i.e 'QUESTION -ext .py'
+By default all answers are saved as a .txt file. If a different filetype
+is desired then the -ext flag may be specified when adding the QUESTION
+keyword. i.e 'QUESTION -ext .py'
     
   <b><i>Specifying compile and run options</i></b>
   
-The compile and run functionalities are by default disabled. If any question requires compile and run then the -com and -run flags may be specified in a simillar manner as the -ext file while adding the QUESTION keyword, e.g. 'QUESTION -com gcc -flags "-Wall -g" -run .\a.out', 'QUESTION -com python -run "python omsi_answer1.py" '
-    
-    
-<b>Summary of each file on this site (in alphabetical order)</b>
+The compile and run functionalities are by default disabled. If any
+question requires compile and run then the -com and -run flags may be
+specified in a simillar manner as the -ext file while adding the
+QUESTION keyword, e.g. 'QUESTION -com gcc -flags "-Wall -g" -run
+.\a.out', 'QUESTION -com python -run "python omsi_answer1.py" '
+
+<h2>
+Summary of each file on this site (in alphabetical order)
+</h2> 
 
 AutoGrade.py
 A program to grade the students' answer electronically and automatically (translated from Prof. N. Matloff's AutoGrade.R, included in this site).
