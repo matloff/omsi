@@ -4,10 +4,17 @@
 # IMPORTANT DIRECTIONS:
 
 # This script will be invoked in a directory (referred to as the "top"
-# directory here) that has one subdirectory for each student, which is
-# the form created by OMSI.  The script will descend into each one,
-# grading the student there.  The directory name is the student's full
-# e-mail address.
+# directory here).  It is assume that there is a different such
+# directory for each exam.  The top directory has one subdirectory for
+# each student, which is the form created by OMSI.  That subdirectory
+# will contain the student's answers to the exam problems, with file
+# names of the form omsi_answersk.suffix  Here k is the exam problem
+# number, and suffix is determined by the instructor in
+# ProfessorHomeDirectory/Questions.txt
+
+# The script will descend into each one, grading the student there.  The
+# directory name is the student's full e-mail address, input by the
+# student to OMSI during the exam.
 
 # The instructor places a file Answersn, for Quiz n, in the top
 # directory, with format, for Question i
@@ -19,11 +26,13 @@
 # Here problem_type is either T (text), N (numerical evaluation) or C
 # (code compile/run)
 
-# the command line will be to, e.g. compile/run or evaluate an
-# arithmetic expression; default is to read and display plain ASCII text
+# Example:
+#    %3 N
+#    def sq(x): return x*x
+#    print sq(3)
+#    $ python omsi_answers3.py
 
-# The files in a student's directory are named omni_answerx.txt, x =
-# 1,2,3...
+# Without a command line, the default is to read and display plain ASCII text
 
 # Start by calling grader() in the top directory.  The script will
 # descend into each student subdirectory, and then display the student's
