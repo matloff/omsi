@@ -55,7 +55,7 @@
 
 # GLOBALS
 #
-#    testid:  exam number; currently not used
+#    testid:  exam number
 #    nproblems:  number of problems
 #    pttots:  numbers of points for the problems
 #    cmnds:  what to run for each problem
@@ -133,7 +133,7 @@ grader <- function() {
    output <<- vector(mode="character")
    # loop across all student directories
    ### browser()
-   for (emailaddr in list.dirs()) {  
+   for (emailaddr in list.dirs(full.names=FALSE)) {  
       if (emailaddr == '.') next
       cat("\n\n","  now grading",emailaddr,"\n")
       setwd(emailaddr)
