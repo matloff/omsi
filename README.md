@@ -126,11 +126,11 @@ then be displayed.
 </h2>
 
 <h3>
-ProfessorHomeDirectory
+InstructorDirectory
 </h3>
 
 Within the directory <b>omsi-master</b>, there will be a directory
-<b>ProfessorHomeDirectory</b>. You place your exam questions in that
+<b>InstructorDirectory</b>. You place your exam questions in that
 directory (sample files are included there).  The format for specifying
 the questions is detailed below. 
 
@@ -160,7 +160,7 @@ to the students at the start of the exam.
 <h3>Providing the exam questions</h3>
 
 The exam questions should be placed in a file called Questions.txt in
-the ProfessorsHomeDirectory. The file should contain a description and
+the <strong>InstructorDirectory</strong>. The file should contain a description and
 any questions for the exam. If there are notes the instructor would like
 to write to himself in the file they should be placed at the beginning.
 When parsing the file the parser will go through line by line and search
