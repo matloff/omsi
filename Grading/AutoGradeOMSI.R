@@ -113,7 +113,7 @@ gradestudentans <- function(i) {
    # display user text
    lines <- readLines(sfl)
    for (l in lines) {
-      if (l != '') print(l)
+      if (l != '') cat(l,'\n')
    }
    fullpts <- pttots[i]
    resp <- readline(paste("pts out of ",fullpts, "? [empty means full pts] "))
