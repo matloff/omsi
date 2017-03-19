@@ -8,7 +8,7 @@
 #    which has a subdirectory for each student, named after the
 #    student's e-mail address
 
-#    place the ExamInfo file in the top directory; see INFO FILE BELOW
+#    place the PtsCmds file in the top directory; see INFO FILE BELOW
 
 #    start R in the top directory, and run this script
 
@@ -61,7 +61,6 @@
 #    cmnds:  what to run for each problem
 #    studentfilenames:  names of the student answer files; set by OMSI
 #       at the time of the exam
-#    studentlines:  contents of the student answers file
 #    output:  quiz results minus letter grades (latter are not yet determined) 
 
 # splits s account to '', returning the nonempty fields in a character
@@ -114,7 +113,7 @@ gradestudentans <- function(i) {
    # display user text
    lines <- readLines(sfl)
    for (l in lines) {
-      print(l)
+      if (l != '') print(l)
    }
    fullpts <- pttots[i]
    resp <- readline(paste("pts out of ",fullpts, "? [empty means full pts] "))
