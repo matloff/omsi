@@ -134,7 +134,7 @@ grader <- function() {
    # loop across all student directories
    ### browser()
    for (emailaddr in list.dirs(full.names=FALSE)) {  
-      if (emailaddr == '.') next
+      if (emailaddr == '') next
       cat("\n\n","  now grading",emailaddr,"\n")
       setwd(emailaddr)
       # start to build the output line for this student; it will consist
