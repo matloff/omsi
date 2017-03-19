@@ -105,6 +105,10 @@ waitenter <- function() {
 # grade the i-th problem 
 gradestudentans <- function(i) {
    sfl <- studentfilenames[i]
+   if (!sfl %in% list.files()) {
+      cat(sfl,'not present\n')
+      return(0)
+   }
    # try cmd, wait for instructor to hit Enter
    if (!is.na(cmnds[i])) {
       system(cmnds[i])
@@ -139,6 +143,7 @@ grader <- function() {
       total <- 0
       # start grading the problems
       for (i in 1:nproblems) {
+         cat('Problem',i,'\n')
          score <- gradestudentans(i)
          outputline <- 
             paste(outputline," ", score,"/",pttots[i],sep="")
