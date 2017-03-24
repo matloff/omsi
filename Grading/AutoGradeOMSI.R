@@ -60,6 +60,21 @@
 # evaluate f(3), to be accomplished by making a copy of 1.R to nm1.R and
 # appending a line with f(3), then running through Rscript.
 
+# Example:
+
+#    % Prob3.R 30
+#    $ cp Prob3.R nm.R; cat ../NMProb3.R >> nm.R; Rscript nm.R
+    
+#    n <- 1000
+#    x <- rexp(n)
+#    png('nm.png')
+#    plotestcdf(x,5)
+#    dev.off()
+#    browseURL('nm.png')
+
+# Here we want to do plotting.  Some manipulation is needed to get the
+# plot to come up.
+
 # GLOBALS
 #
 #    testid:  exam number
