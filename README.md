@@ -31,11 +31,11 @@ Norm Matloff
 </li> </p> 
 
 <li> 
-<a href="#benstudent">Benefits to students</a> 
+<a href="#benstudent">Benefits for students</a> 
 </li> </p> 
 
 <li> 
-<a href="#benteacher">Benefits to instructors</a> 
+<a href="#benteacher">Benefits for instructors</a> 
 </li> </p> 
 
 <li> 
@@ -46,9 +46,7 @@ Norm Matloff
 
 
 <h2>
-<a name="what">
-What is OMSI?
- </a> 
+<a name="what"> What is OMSI?</a> 
 </h2>
 
 OMSI, short for Online Measurement of Student Insight, is a software
@@ -62,9 +60,12 @@ traditional pencil-and-paper exam.  However, they use their laptops to
 take the exam, using OMSI.  The latter downloads the exam questions, and
 enables the students to upload their answers.
 
+As detailed below, this arrangement has significant benefits for both
+students and instructors.  The system is easy to install and use.
+
 <h2>
 <a name="benteacher"> 
-Benefits to instructors
+Benefits for instructors
 </a> 
 </h2>
 
@@ -88,7 +89,7 @@ grades via e-mail.
 
 <h2>
 <a name="benstudent"> 
-Benefits to students
+Benefits for students
 </a> 
 </h2>
 
@@ -114,7 +115,7 @@ traditional exam format.
 
 <h2>
 <a name="howuse"> 
-How to Use This Package
+How to use this package
 </a> 
 </h2>
 
@@ -122,10 +123,10 @@ Contents:
 
 <UL>
 
-<li> <a href=#term"">Terminology)</a> 
+<li> <a href=#term">Terminology</a> 
 </li> </p>
 
-<li> <a href=#install"">Installation (instructors and students)</a> 
+<li> <a href=#install">Installation (instructors and students)</a> 
 </li> </p>
 
 <li> <a href=#students">Directions for students</a> 
@@ -216,7 +217,7 @@ All</b>. A dialog box specifying whether submission was successful will
 then be displayed. 
 
 <h2>
-<a name="instructors">Directions for Instructors</a>
+<a name="instructors">Directions for instructors</a>
 </h2>
 
 <h3>
@@ -254,15 +255,15 @@ to the students at the start of the exam.
 <h3>Providing the exam questions</h3>
 
 The exam questions should be placed in a file called Questions.txt in
-the <strong>InstructorDirectory</strong>. The file should contain a description and
-any questions for the exam. If there are notes the instructor would like
-to write to himself in the file they should be placed at the beginning.
-When parsing the file the parser will go through line by line and search
-for keywords DESCRIPTION or QUESTION. Once a keyword is found each line
-after it is appended together until it reaches another keyword or the
-end of the file. So content that is not intended to be a part of a
-question or description should not be below a keyword. Questions are
-numbered in the order they are discovered.
+the <strong>InstructorDirectory</strong>. The file should contain a
+description and any questions for the exam. If there are notes the
+instructor would like to write to himself in the file they should be
+placed at the beginning.  When parsing the file the parser will go
+through line by line and search for keywords DESCRIPTION or QUESTION.
+Once a keyword is found each line after it is appended together until it
+reaches another keyword or the end of the file. So content that is not
+intended to be a part of a question or description should not be below a
+keyword. Questions are numbered in the order they are discovered.
 
   <b><i>Specifying different file types</i></b>
   
