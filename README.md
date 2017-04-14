@@ -63,6 +63,11 @@ enables the students to upload their answers.
 As detailed below, this arrangement has significant benefits for both
 students and instructors.  The system is easy to install and use.
 
+Here is a screenshot of an example screen from the student's point of
+view:
+
+![alt text](Screenshot.png)
+
 <h2>
 <a name="benteacher"> 
 Benefits for instructors
