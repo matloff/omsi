@@ -1,17 +1,14 @@
 
 NEW
 
-Questions on the server
+Here the instructor can write notes to him/herself, say on how he/she
+intends to grade some of the questions.
 
-The prof writes these before the exams start
-
-This file needs to be transferred to the Client upon first connection of the client.
-
-YadyYada
 DESCRIPTION
-Here would be a description of the test. This is REQUIRED. Here the Prof would put some stuff like they put on the front page of an exam. Like saying students have an hour and better
-not
-cheat.
+
+Here would be a description of the test. This is REQUIRED. Here the
+instructor would put some stuff like they put on the front page of an
+exam. Like saying students have an hour and better not cheat.
 
 QUESTION -ext .cpp -flags  "-Wall -g" -com g++ -run ./omsi_answer1
 

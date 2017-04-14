@@ -123,16 +123,16 @@ Contents:
 
 <UL>
 
-<li> <a href=#term">Terminology</a> 
+<li> <a href="#term">Terminology</a> 
 </li> </p>
 
-<li> <a href=#install">Installation (instructors and students)</a> 
+<li> <a href="#install">Installation (instructors and students)</a> 
 </li> </p>
 
-<li> <a href=#students">Directions for students</a> 
+<li> <a href="#students">Directions for students</a> 
 </li> </p>
 
-<li> <a href=#instructors">Directions for instructors</a> 
+<li> <a href="#instructors">Directions for instructors</a> 
 </li> </p>
 
 </UL>
@@ -145,7 +145,7 @@ The term *directory* from Linux is synonymous with *folder* for Mac and
 Windows.
 
 The term *terminal window* from Mac and Linux is synonymous with *Comand
-Prompt* for  Windows (**cmd**.
+Prompt* for  Windows (**cmd**).
 
 <h3>
 <a name="install">Installing the package (instructors and students)</a>
@@ -230,9 +230,9 @@ directory (sample files are included there).  The format for specifying
 the questions is detailed below. 
 
 Within this directory, a subdirectory will be created for each student,
-using the email address provided by the student.  In a student's sub
-directory there will be an answer file for each question. e.g.
-<b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
+using the e-mail address provided by the student.  In a student's 
+subdirectory there will be an answer file for each question. e.g. 
+ <b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
 
 <h3>
 Starting the server
@@ -254,16 +254,18 @@ to the students at the start of the exam.
 
 <h3>Providing the exam questions</h3>
 
-The exam questions should be placed in a file called Questions.txt in
+The exam questions should be placed in a file called **Questions.txt** in
 the <strong>InstructorDirectory</strong>. The file should contain a
 description and any questions for the exam. If there are notes the
-instructor would like to write to himself in the file they should be
-placed at the beginning.  When parsing the file the parser will go
-through line by line and search for keywords DESCRIPTION or QUESTION.
-Once a keyword is found each line after it is appended together until it
-reaches another keyword or the end of the file. So content that is not
-intended to be a part of a question or description should not be below a
-keyword. Questions are numbered in the order they are discovered.
+instructor would like to write to him/herself in the file they should be
+placed at the beginning.  
+
+When parsing the file, OMSI will go through line by line and search for
+keywords DESCRIPTION or QUESTION.  Once a keyword is found each line
+after it is appended together until it reaches another keyword or the
+end of the file. So content that is not intended to be a part of a
+question or description should not be below a keyword. Questions are
+numbered in the order they are discovered.
 
   <b><i>Specifying different file types</i></b>
   
@@ -290,14 +292,14 @@ Checksum.py
 A program to convert content of students' answer to hexadecimal for grading.
 
 Client.py
-Main function Client side. This function connect to the server, it allows students to cache username and email for easy submission of files to the server.
+Main function Client side. This function connect to the server, it allows students to cache username and e-mail for easy submission of files to the server.
 
 ClientGlobals.py
 Global variables client side.
 
 ClientRoutines.py
 A set of routines relevant to the client. The routines include file transfer from Client to Server, file transfer from Server to Client,
-a "log in"/authentication system requiring students to input their email addresses for authentication.
+a "log in"/authentication system requiring students to input their e-mail addresses for authentication.
 
 ExampleScriptClientSide.py
 A sample script on how to use Client interface.
