@@ -1,19 +1,75 @@
 
+# OMSI: Online Measurement of Student Insight
 
-<h2>What is OMSI?</h2>
+## Developed by:
 
-OMSI, short for Online Measurement of Student Insight, is a Python
-project for conducting and grading examinations in a manner that is both
+<blockquote>
+
+Kiran Bhadury,
+Vishal Chakraborty,
+Francois Demoullin,
+Thong Le,
+Norm Matloff,
+Monte Musa,
+Rylan Schaeffer,
+Tiffany Yuen
+
+</blockquote>
+
+## Maintained by:
+
+<a href="http://heather.cs.ucdavis.edu/matloff.html">
+Norm Matloff 
+ </a> 
+
+## Table of contents:
+
+<UL>
+
+<li> 
+<a href="#what">What is OMSI?</a> 
+</li> </p> 
+
+<li> 
+<a href="#benstudent">Benefits to students</a> 
+</li> </p> 
+
+<li> 
+<a href="#benteacher">Benefits to instructors</a> 
+</li> </p> 
+
+<li> 
+<a href="#howuse">How to use this package</a> 
+</li> </p> 
+
+</UL>
+
+
+<h2>
+<a name="what">
+What is OMSI?
+ </a> 
+</h2>
+
+OMSI, short for Online Measurement of Student Insight, is a software
+tool for conducting and grading examinations in a manner that is both
 secure and conducive to high-quality measurement of student insight. It
 is suitable for small or large class exams, be they based on
-essays, writing code, math analysis or multiple choice question.
+essays, writing code, math analysis or multiple choice questions.
 
 Students come to the classroom at the regular class time, just as with a
 traditional pencil-and-paper exam.  However, they use their laptops to
 take the exam, using OMSI.  The latter downloads the exam questions, and
 enables the students to upload their answers.
 
-OMSI has two components:
+<h2>
+<a name="benteacher"> 
+Benefits to instructors
+</a> 
+</h2>
+
+OMSI facilitates exam administration and grading.  It 
+has two components:
 
 <UL>
 
@@ -29,6 +85,12 @@ assigned by the instructor, and automatically notifies students of their
 grades via e-mail.
 
 </UL>
+
+<h2>
+<a name="benstudent"> 
+Benefits to students
+</a> 
+</h2>
 
 In addition to making the job of grading much easier, OMSI has a number
 of advantages for students over the traditional pencil-and-paper format:
@@ -49,38 +111,69 @@ In both of these aspects, OMSI gives the student a better chance to
 demonstrate his/her insight into the course material, compared to the
 traditional exam format.
 
+
 <h2>
+<a name="howuse"> 
 How to Use This Package
+</a> 
 </h2>
+
+Contents:
 
 <UL>
 
-<li> <a href=#install"">Installation (Instructors and Students)</a> 
+<li> <a href=#term"">Terminology)</a> 
 </li> </p>
 
-<li> <a href=#students">Directions for Students</a> 
+<li> <a href=#install"">Installation (instructors and students)</a> 
 </li> </p>
 
-<li> <a href=#instructors">Directions for Instructors</a> 
+<li> <a href=#students">Directions for students</a> 
+</li> </p>
+
+<li> <a href=#instructors">Directions for instructors</a> 
 </li> </p>
 
 </UL>
 
-<h2>
-<a name="install">Installing the package (instructors and students)</a>
-</h2>
+<h3>
+<a name="term">Terminology</a>
+</h3>
 
-Getting up and running is simple. Just download the <b>.zip</b> file.
-Unzipping it will produce a directory <b>omsi-master</b>, where all
+The term *directory* from Linux is synonymous with *folder* for Mac and
+Windows.
+
+The term *terminal window* from Mac and Linux is synonymous with *Comand
+Prompt* for  Windows (**cmd**.
+
+<h3>
+<a name="install">Installing the package (instructors and students)</a>
+</h3>
+
+You will need Python installed on your machine. For Mac and Linux
+systems, it should already be there, but it is easily downloadable for
+Windows.
+
+You must have Python in your executable search path.  To check this,
+open a terminal window and type
+
+```
+Python
+```
+
+into a terminal window.  Python should start.
+
+To install OMSI, download the <b>.zip</b> file.
+Unzipping it will produce a directory/folder <b>omsi-master</b>, where all
 relevant files reside.
 
-<h2>
-<a name="students">Directions for Students</a>
-</h2>
+<h3>
+<a name="students">Directions for students</a>
+</h3>
 
 <b><i>Connecting to the server:</i></b>
 
-Download the package, though you will only use the file
+Download and install the package as above, though you will only use the file
 <b>OmsiGui.py</b>.  Run
 
 <pre>
@@ -91,17 +184,18 @@ from a terminal window.
 
 Then connect to the server and get the exam questions by selecting 
 <b>File | Connect</b>. 
-State your student email address and the host and port provided by the
+State your student e-mail address and the host and port provided by the
 instructor.
 
 After you connect to the server, the exam questions will be downloaded
 to your machine.
 
-<b>NOTE:</b> There should be two separate windows on the right of the GUI, one
-for the question and one to write the answer. The boxes are resizable
-and the question box may default to occupying the entire right side of the
-screen on some systems. If this is the case grab the bottom of the box
-to resize.
+<b>NOTE:</b> There should be two separate windows on the right of the
+GUI, one on top for the question prompt and one below to write the
+answer. The boxes are resizable and the question box may default to
+occupying the entire right side of the screen on some systems. If this
+is the case grab and drag the bottom of the box to resize the bottom
+window.
 
 <b><i>Saving answers:</i></b>
 
