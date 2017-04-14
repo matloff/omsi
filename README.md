@@ -66,7 +66,7 @@ students and instructors.  The system is easy to install and use.
 Here is a screenshot of an example screen from the student's point of
 view:
 
-![alt text](Screenshot.png)
+![alt text](Screenshot.png)  
 
 <h2>
 <a name="benteacher"> 
@@ -256,6 +256,12 @@ The port number must be above 1024.
 
 The server Internet address and port number will need to be distributed
 to the students at the start of the exam. 
+
+<h3>
+Closing the server
+</h3>
+
+At present, this is simply done via ctrl-C.
 
 <h3>Providing the exam questions</h3>
 
