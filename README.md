@@ -1,5 +1,5 @@
 
-# OMSI: Online Measurement of Student Insight
+# OMSI: Online Measurement of Student Insight 
 
 ## Developed by:
 
@@ -256,12 +256,19 @@ to the students at the start of the exam.
 
 The exam questions should be placed in a file called **Questions.txt** in
 the <strong>InstructorDirectory</strong>. The file should contain a
-description and any questions for the exam. If there are notes the
+description and the questions for the exam. If there are notes the
 instructor would like to write to him/herself in the file they should be
 placed at the beginning.  
 
 When parsing the file, OMSI will go through line by line and search for
-keywords DESCRIPTION or QUESTION.  Once a keyword is found each line
+keywords NEW, DESCRIPTION or QUESTION.  The latter delineates the start
+of a question for the exam, so that for a 3-problem exam there would be
+3 QUESTION lines in the file  **Questions.txt**.
+
+The lines following a keyword all are associated with that keyword,
+until another keyword is encountered. 
+
+Once a keyword is found each line
 after it is appended together until it reaches another keyword or the
 end of the file. So content that is not intended to be a part of a
 question or description should not be below a keyword. Questions are

@@ -293,7 +293,7 @@ class OmsiServer:
             ### print """Please enter a home directory for the exam. This will be the directory that all students\' files will be stored in.\nBefore pressing enter, please check that the exam questions are in the directory and named \'Questions.txt\'."""
 
             # Hard coding for testing purposes.
-            self.examDirectory = "ProfessorHomeDirectory"
+            self.examDirectory = "InstructorHomeDirectory"
 
             # confirm that exam questions file containing test questions
             lExamQuestionsFilePath = self.verifyExamQuestionsFile(self.examDirectory)
