@@ -42,6 +42,10 @@ Norm Matloff
 <a href="#howuse">How to use this package</a> 
 </li> </p> 
 
+<li> 
+<a href="#grading">Software tools for grading</a> 
+</li> </p> 
+
 </UL>
 
 
@@ -164,7 +168,7 @@ You must have Python in your executable search path.  To check this,
 open a terminal window and type
 
 ```
-Python
+python
 ```
 
 into a terminal window.  Python should start.
@@ -179,8 +183,7 @@ relevant files reside.
 
 <b><i>Connecting to the server:</i></b>
 
-Download and install the package as above, though you will only use the file
-<b>OmsiGui.py</b>.  Run
+Download and install the package as above, and then run
 
 <pre>
 python OmsiGui.py
@@ -221,14 +224,14 @@ Submit</b>. You can also submit all answers with <b>File | Submit
 All</b>. A dialog box specifying whether submission was successful will
 then be displayed. 
 
-
 <b><i>Tips:</i></b>
 
 Again, remember that saving an answer does NOT submit it.  You must do
 that separately.
 
 Python and R won't be running in interactive mode here, so you must
-write explicit ##print## operations.
+write explicit ##print## operations.  Graphical displays will not work,
+for the same reason.
 
 <h2>
 <a name="instructors">Directions for instructors</a>
@@ -274,7 +277,7 @@ At present, this is simply done via ctrl-C.
 
 <h3>Providing the exam questions</h3>
 
-The exam questions should be placed in a file called **Questions.txt** in
+The exam questions must be placed in a file called **Questions.txt** in
 the <strong>InstructorDirectory</strong>. The file should contain a
 description and the questions for the exam. If there are notes the
 instructor would like to write to him/herself in the file they should be
@@ -283,73 +286,84 @@ placed at the beginning.
 When parsing the file, OMSI will go through line by line and search for
 keywords NEW, DESCRIPTION or QUESTION.  The roles are as follows:
 
+  * NEW:  Optional. The following lines contain private notes for the 
+    instructor.  
+  * DESCRIPTION:  Required. The following lines contain instructions 
+    to students, which would normally go on the front page of a 
+    printed exam.  The students will be able to view it by clicking 
+    Description in the menu.  
+  * QUESTION:  Have one of these for each exam problem.  For problems involving
+    code, directions for compiling or running the code go on this same
+    line.  The following lines contain the question, to be viewed by the
+    students.
 
-The latter delineates the start
-of a question for the exam, so that for a 3-problem exam there would be
-3 QUESTION lines in the file  **Questions.txt**.
+Example *Questions.txt* file:
 
-The lines following a keyword all are associated with that keyword,
-until another keyword is encountered. 
+```
+DESCRIPTION
 
-Once a keyword is found each line
-after it is appended together until it reaches another keyword or the
-end of the file. So content that is not intended to be a part of a
-question or description should not be below a keyword. Questions are
-numbered in the order they are discovered.
+Students: Remember that Python and R won't be running in interactive
+mode here, since you must call 'print' explicitly.
 
-  <b><i>Specifying different file types</i></b>
-  
-By default all answers are saved as a .txt file. If a different filetype
-is desired then the -ext flag may be specified when adding the QUESTION
-keyword. i.e 'QUESTION -ext .py'
-    
+QUESTION -ext .py -run "python omsi_answer1.py"
+
+Write a function half() that will return x/2, and 
+freestanding code will print half(3).
+
+QUESTION 
+
+What does 'D' stand for in "UCD"?
+```
+
+Two exam questions are defined, one requiring Python code and one
+requiring an essay.  When a student writes and saves the answers, they
+will be saved in files **omsi_answer1.py** and **omsi_answer2.txt**.
+The suffix in that first file name arises from the specification **-ext
+.py** in the QUESTION line; otherwise the default suffix is **.txt**,
+
   <b><i>Specifying compile and run options</i></b>
   
 The compile and run functionalities are by default disabled. If any
-question requires compile and run then the -com and -run flags may be
-specified in a simillar manner as the -ext file while adding the
-QUESTION keyword, e.g. 'QUESTION -com gcc -flags "-Wall -g" -run
-.\a.out', 'QUESTION -com python -run "python omsi_answer1.py" '
+question requires compile and/or run then the **-com** and **-run** flags may be
+specified in a simillar manner as the **-ext** file while adding the
+QUESTION keyword, e.g. 
+
+```
+QUESTION -com gcc -flags "-Wall -g" -run ./a.out
+```
 
 <h2>
-Summary of each file on this site (in alphabetical order)
-</h2> 
+<a name="grading">Software tools for grading</a> 
+</h2>
 
-AutoGrade.py
-A program to grade the students' answer electronically and automatically (translated from Prof. N. Matloff's AutoGrade.R, included in this site).
+The answers submitted by the students and collected by the server may be
+graded by hand as usual.  However, tools to facilitate electronic
+grading are available in this package.  As noted earlier in this
+document:
 
-Checksum.py
-A program to convert content of students' answer to hexadecimal for grading.
+<blockquote>
 
-Client.py
-Main function Client side. This function connect to the server, it allows students to cache username and e-mail for easy submission of files to the server.
+OMSI does NOT take the place of instructor judgment in assigning points
+to individual exam problems.  But it does make things much easier, by
+automating much of the drudgery. For instance, OMSI automatically
+records grades assigned by the instructor, and automatically notifies
+students of their grades via e-mail.
 
-ClientGlobals.py
-Global variables client side.
+</blockquote>
 
-ClientRoutines.py
-A set of routines relevant to the client. The routines include file transfer from Client to Server, file transfer from Server to Client,
-a "log in"/authentication system requiring students to input their e-mail addresses for authentication.
+The main tool is **Grading/AutoGradeOMSI.R**.  (There is also a file
+**AutoGrade.py** in that directory, but it is under development.)
+Detailed directions are given in the comments at the top of the file,
+but the overview is this:
 
-ExampleScriptClientSide.py
-A sample script on how to use Client interface.
+```
+for each student:
+   for each exam problem:
+      if problem involves coding:
+         compile and/or run code according to the
+            QUESTION line of Questions.txt, displaying result
+      display student answer
+      instructor inputs number of points 
+   record grade for this student (individual problems and total)
+```
 
-ExampleScriptServerSide.py
-A sample script on how grading scripts can be run on Server.
-
-NetworkMonitor.py
-A program to store network traffic of students' machines while students are taking the examination.
-
-ProcessMonitor.py
-A program to store the start time of the examination and process attributes e.g. name, record number, process id.
-
-Server.py
-Main function server side. This routine runs during the entire duration of the exam. This routine allows for
-students to connect to the server and it delegates requests on the Server.
-
-ServerGlobals.py
-Global variables server side.
-
-ServerRoutines.py
-Routines that can be called via Server.py. Routines include file transfer from Server to Client, file transfer from Client to Server, file storage Server side
-as well as routines for setting up the Server and terminating it.
