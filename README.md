@@ -20,7 +20,7 @@ Tiffany Yuen
 
 <blockquote>
 
-Thong Le, Dash Semyonova
+Thong Le, Dasha Semyonova
 
 </blockquote>
 
@@ -117,7 +117,9 @@ Benefits for instructors
 </a> 
 </h2>
 
-__OMSI will make your life easier. :-) __
+<b>
+OMSI will make your life easier. :-) 
+</b>
 
 OMSI facilitates exam administration and grading.  It 
 has two components:
