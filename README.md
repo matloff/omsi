@@ -10,7 +10,7 @@ Vishal Chakraborty,
 Francois Demoullin,
 Thong Le,
 Norm Matloff,
-Monte Musa,
+Monte Misa,
 Rylan Schaeffer,
 Tiffany Yuen
 
@@ -52,6 +52,10 @@ Norm Matloff
 
 <li> 
 <a href="#grading">Software tools for grading</a> 
+</li> </p> 
+
+<li> 
+<a href="#future">Future enhancements</a> 
 </li> </p> 
 
 </UL>
@@ -375,6 +379,54 @@ QUESTION keyword, e.g.
 QUESTION -com gcc -flags "-Wall -g" -run ./a.out
 ```
 
+
+<b><i>Tips:</i></b>
+
+OMSI should greatly improve the examination process for both instructors
+and students.  However, as with any automated system, some care is
+needed to insure that things run smoothly.
+
+It is crucial that the instructor, before the first OMSI-based exam,
+require the students to go through a dry run.  The instructor may wish
+to incentivize this.
+
+"Stuff happens."  What if, say, there is a sudden power failure or the
+local WiFi access point suddenly goes out?  Some students will not go
+through the dry run, even with major incentives/disincentives, and will
+have trouble using OMSI in the first exam.  The following are worth 
+considering:
+
+  * Paper copies of the exam prompt should be distributed at the start
+    of the exam, and students should have the option of turning in their
+    answers on paper.  Some students may not even have laptops.  (See
+    note on tablets below.)
+
+  * Students should be told to click the Submit option "early and
+    often."  (Each submission would overwrite the last.)  This is
+    especially important if there is concern that the local WiFi access
+    point might be flooded with traffic at the end of the exam period,
+    as many students turn in last-minute work.
+
+  * Students should bring a USB key (thumb drive, memory stick).  In an
+    emergency, they can copy their local copies of their **omsi_answer***
+    files to the key, then turn in the key.
+
+And what about cheating and other forms of academic dishonesty?  In my
+experience, the vast majority of students are honest, and they resent
+the cheaters.  What can be done about the latter?
+
+  * The OMSI window is designed to fill the student's entire screen.
+    This prevents a student from communicating with others during the
+    exam.  The students must be given strict instructions not to move,
+    iconify or resize OMSI window during the exam.  This is easily
+    monitored by proctors.
+
+  * As usual, there is the problem of a student looking at his/her
+    neighbor's work, in this case a laptop screen rather than a piece of
+    paper.  A common technique for dealing with this in the paper exam
+    case is to require students to sit in specific seats that are
+    randomly assigned to them.  This can be done with OMSI as well.
+
 <h2>
 <a name="grading">Software tools for grading</a> 
 </h2>
@@ -397,10 +449,11 @@ retaining the stragglers not picked up by the students, and so on.
 
 </blockquote>
 
-The main tool is **Grading/AutoGradeOMSI.R**.  (There is also a file
-**AutoGrade.py** in that directory, but it is under development.)
-Detailed directions are given in the comments at the top of the file,
-but the overview is this:
+The basic idea is that the software will display on the screen, for each
+student and each exam problem, the student's answer.  In the case of
+coding questions, the software will also run the code and display the
+result.  In each case, the instructor then inputs the number of points
+he/she wishes to assign:
 
 ```
 for each student:
@@ -412,4 +465,27 @@ for each student:
       instructor inputs number of points 
    record grade for this student (individual problems and total)
 ```
+
+The main tool is **Grading/AutoGradeOMSI.R**.  This code is in R, as it
+is an adaptation from an earlier system I (NM) had developed; also, its
+statistical and graphic capabilities facilitate analysis of the exam
+grades.  (There is also a file **AutoGrade.py** in that directory, but
+it is under development.)
+
+Detailed directions are given in the comments at the top of the file.
+
+<h2>
+<a name="future">Future enhancements</a> 
+</h2>
+
+Much improvement is possible.  **Contributors of new code are welcome!**
+
+Here are some points of improvement:
+
+  * Code to check a student's e-mail address against a class list upon
+    connection, with passwords being required.  This would also help
+    protect against a student inserting malicious code into an answer,
+    possibly causing problems during the auto-grading process.
+
+  * Tablet-friendly version of OMSI.
 
