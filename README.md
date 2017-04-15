@@ -87,24 +87,24 @@ Benefits for students
 </a> 
 </h2>
 
-OMSI has major advantages for students over the traditional
-pencil-and-paper format:
+__OMSI will often result in your getting a higher grade in an exam than
+you would have in the traditional pencil-and-paper format:__
 
 <UL>
 
-<li> With essay questions, students have a chance to edit their answers,
+<li> With essay questions, you have a chance to edit your answers,
 producing more coherent, readable prose.  No cross-outs, arrows, words
 squeezed in above a line, no points off for unreadable handwriting. :-)
 </li> </p>
 
-<li> With coding questions, students can compile and run their code,
-giving them a chance to make corrections if their code doesn't work.
+<li> With coding questions, you can compile and run your code,
+giving you a chance to make corrections if your code doesn't work.
 </li> </p> 
 
 </UL>
 
-In both of these aspects, OMSI gives the student a better opportunity to
-demonstrate his/her insight into the course material, compared to the
+In both of these aspects, OMSI gives you a better opportunity to
+demonstrate your insight into the course material, compared to the
 traditional exam format.
 
 <h2>
@@ -113,6 +113,8 @@ Benefits for instructors
 </a> 
 </h2>
 
+__OMSI will make your life easier. :-) __
+
 OMSI facilitates exam administration and grading.  It 
 has two components:
 
@@ -120,15 +122,17 @@ has two components:
 
 <li> <i>Exam administration.</i>  This manages the actual process of the
 students taking the exam.  You get electronic copies of the students'
-exams, eliminating the need for collecting and carryout out a large
+exams, eliminating the need for collecting and carrying out out a large
 number of papers, and making work sharing much easier among multiple 
-graders.  Essay answers are much easier to read, and as noted above, 
-more coherent.  
+graders.  As noted in "Benefits for students" above, OMSI enables the
+student to turn in a better product, and this benefits the instructor as
+well:  Better exam performance by students is both more gratifying to
+the instructor and also makes for easier, less frustrating grading.
 </li> </p>
 
 <li> <i>Exam grading.</i> OMSI does NOT take the place of instructor
-judgment in assigning points to individual exam problems, and total
-grade for the exam.  But it does make things much easier, by automating
+judgment in assigning points to exam problems. 
+But it does make things much easier, by automating
 much of the drudgery. For instance, OMSI automatically records grades
 assigned by the instructor, and automatically notifies students of their
 grades via e-mail.  Gone are the days in which the instructor must
@@ -228,8 +232,9 @@ window.
 
 Click the question number on the left of the OMSI screen, and
 select <b>File | Save</b>.` Note that **saving is NOT submitting.**
-Saving your file does NOT upload your answer to the instructor's server.
-See "Submitting your answers" below for that.
+Saving your file does NOT upload your answer to the instructor's server;
+the save operation merely saves to a file on your local machine.
+See "Submitting your answers" below for uploading to the instructor.
 
 <b><i>Running code:</i></b>
 
@@ -337,8 +342,8 @@ Example *Questions.txt* file:
 ```
 DESCRIPTION
 
-Students: Remember that Python and R won't be running in interactive
-mode here, since you must call 'print' explicitly.
+Students: Remember that Python and R won't be running in
+interactive mode here, since you must call 'print' explicitly.
 
 QUESTION -ext .py -run "python omsi_answer1.py"
 
@@ -350,9 +355,12 @@ QUESTION
 What does 'D' stand for in "UCD"?
 ```
 
-Two exam questions are defined, one requiring Python code and one
-requiring an essay.  When a student writes and saves the answers, they
-will be saved in files **omsi_answer1.py** and **omsi_answer2.txt**.
+In this example, two exam questions are defined, one requiring Python
+code and one requiring an essay.  When a student writes and submits the
+answers, they will be saved in files **omsi_answer1.py** and
+**omsi_answer2.txt** in <strong>InstructorDirectory</strong>, in that
+student's subdirectory.  
+
 The suffix in that first file name arises from the specification **-ext
 .py** in the QUESTION line; otherwise the default suffix is **.txt**,
 
