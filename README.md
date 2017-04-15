@@ -1,7 +1,7 @@
 
 # OMSI: Online Measurement of Student Insight 
 
-## Developed by:
+## Original development by:
 
 <blockquote>
 
@@ -13,6 +13,14 @@ Norm Matloff,
 Monte Musa,
 Rylan Schaeffer,
 Tiffany Yuen
+
+</blockquote>
+
+## Later contributors::
+
+<blockquote>
+
+Thong Le, Dash Semyonova
 
 </blockquote>
 
@@ -60,17 +68,44 @@ is suitable for small or large class exams, be they based on
 essays, writing code, math analysis or multiple choice questions.
 
 Students come to the classroom at the regular class time, just as with a
-traditional pencil-and-paper exam.  However, they use their laptops to
-take the exam, using OMSI.  The latter downloads the exam questions, and
-enables the students to upload their answers.
+traditional pencil-and-paper exam.  However, they use their laptop
+computers to take the exam, using OMSI.  The latter downloads the exam
+questions, and enables the students to upload their answers.
 
 As detailed below, this arrangement has significant benefits for both
-students and instructors.  The system is easy to install and use.
+students and instructors.  The system is easy to install and use, and
+can be run on Macs, Windows and Linux.
 
 Here is a screenshot of an example screen from the student's point of
 view:
 
 ![alt text](Screenshot.png)  
+
+<h2>
+<a name="benstudent"> 
+Benefits for students
+</a> 
+</h2>
+
+OMSI has major advantages for students over the traditional
+pencil-and-paper format:
+
+<UL>
+
+<li> With essay questions, students have a chance to edit their answers,
+producing more coherent, readable prose.  No cross-outs, arrows, words
+squeezed in above a line, no points off for unreadable handwriting. :-)
+</li> </p>
+
+<li> With coding questions, students can compile and run their code,
+giving them a chance to make corrections if their code doesn't work.
+</li> </p> 
+
+</UL>
+
+In both of these aspects, OMSI gives the student a better opportunity to
+demonstrate his/her insight into the course material, compared to the
+traditional exam format.
 
 <h2>
 <a name="benteacher"> 
@@ -84,7 +119,11 @@ has two components:
 <UL>
 
 <li> <i>Exam administration.</i>  This manages the actual process of the
-students taking the exam.
+students taking the exam.  You get electronic copies of the students'
+exams, eliminating the need for collecting and carryout out a large
+number of papers, and making work sharing much easier among multiple 
+graders.  Essay answers are much easier to read, and as noted above, 
+more coherent.  
 </li> </p>
 
 <li> <i>Exam grading.</i> OMSI does NOT take the place of instructor
@@ -92,34 +131,12 @@ judgment in assigning points to individual exam problems, and total
 grade for the exam.  But it does make things much easier, by automating
 much of the drudgery. For instance, OMSI automatically records grades
 assigned by the instructor, and automatically notifies students of their
-grades via e-mail.
+grades via e-mail.  Gone are the days in which the instructor must
+alphabetize the papers, enter the grades by hand, carry an armload (or
+boxload) of papers to give back to students in class, retaining the
+stragglers not picked up by the students, and so on.
 
 </UL>
-
-<h2>
-<a name="benstudent"> 
-Benefits for students
-</a> 
-</h2>
-
-In addition to making the job of grading much easier, OMSI has a number
-of advantages for students over the traditional pencil-and-paper format:
-
-<UL>
-
-<li> With essay questions, students have a chance to edit their answers,
-producing more coherent, readable prose.
-</li> </p>
-
-<li> With coding questions, students can compile and run their code,
-giving them a chance to make corrections if their code doesn't work.
-</li> </p> 
-
-</UL>
-
-In both of these aspects, OMSI gives the student a better chance to
-demonstrate his/her insight into the course material, compared to the
-traditional exam format.
 
 
 <h2>
@@ -150,10 +167,10 @@ Contents:
 <a name="term">Terminology</a>
 </h3>
 
-The term *directory* from Linux is synonymous with *folder* for Mac and
+The Linxu term *directory* is synonymous with *folder* for Mac and
 Windows.
 
-The term *terminal window* from Mac and Linux is synonymous with *Comand
+The term *terminal window* from Mac and Linux is synonymous with *Command
 Prompt* for  Windows (**cmd**).
 
 <h3>
@@ -171,7 +188,7 @@ open a terminal window and type
 python
 ```
 
-into a terminal window.  Python should start.
+into a terminal window.  Python should start, displaying the >>> prompt.
 
 To install OMSI, download the <b>.zip</b> file.
 Unzipping it will produce a directory/folder <b>omsi-master</b>, where all
@@ -183,11 +200,12 @@ relevant files reside.
 
 <b><i>Connecting to the server:</i></b>
 
-Download and install the package as above, and then run
+Download and install the package as above. Then change to the
+__omni-master__ directory, and run
 
-<pre>
+```
 python OmsiGui.py
-</pre>
+```
 
 from a terminal window.
 
@@ -209,29 +227,46 @@ window.
 <b><i>Saving answers:</i></b>
 
 Click the question number on the left of the OMSI screen, and
-select <b>File | Save</b>.` **Note that saving is NOT submitting.**
+select <b>File | Save</b>.` Note that **saving is NOT submitting.**
+Saving your file does NOT upload your answer to the instructor's server.
+See "Submitting your answers" below for that.
 
 <b><i>Running code:</i></b>
 
-Save the code first, then select <b>File | Run</b>.`A new window will
+Save the code first, then select <b>File | Run</b>. A new window will
 pop up, displaying the results.
 
 <b><i>Submitting answers:</i></b>
 
 Submit the answer to a particular question by clicking on the question
 number on the left side of the OMSI screen, and selecting <b>File |
-Submit</b>. You can also submit all answers with <b>File | Submit
-All</b>. A dialog box specifying whether submission was successful will
-then be displayed. 
+Submit</b>. This will upload your answer to the instructor.  You can
+also submit all answers with <b>File | Submit All</b>. A dialog box
+specifying whether submission was successful will then be displayed. 
 
 <b><i>Tips:</i></b>
+
+Be sure to try OMSI in an actual session before your first OMSI-based
+exam.  Start up the server, playing the role of the instructor (see
+"Directions for instructors" below), and then start the client, playing
+the role of the student as above.
+
+Make sure your laptop is fully charged before the exam.  
 
 Again, remember that saving an answer does NOT submit it.  You must do
 that separately.
 
+When you begin the exam, your very first action should be to click on
+Description.  The instructor may have directions there that will make a
+night-and-day difference to your grade!  So first take a few seconds to
+read this.
+
 Python and R won't be running in interactive mode here, so you must
 write explicit ##print## operations.  Graphical displays will not work,
 for the same reason.
+
+When you submit an answer, make sure the Success! window then pops up to
+confirm receipt.
 
 <h2>
 <a name="instructors">Directions for instructors</a>
@@ -246,17 +281,17 @@ Within the directory <b>omsi-master</b>, there will be a directory
 directory (sample files are included there).  The format for specifying
 the questions is detailed below. 
 
-Within this directory, a subdirectory will be created for each student,
-using the e-mail address provided by the student.  In a student's 
-subdirectory there will be an answer file for each question. e.g. 
- <b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
+During the exam, a subdirectory of __InstructorDirectory__ will be
+created for each student, using the e-mail address provided by the
+student.  In a student's subdirectory there will be an answer file for
+each question. e.g.  <b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
 
 <h3>
 Starting the server
 </h3>
 
 At the start of the exam period (not before), start the server from a
-shell/command line window by issuing the command
+terminal window by issuing the command
 
 <b>python OmsiServer.py [portNumber] [quoted exam name] </b>
 
@@ -277,18 +312,18 @@ At present, this is simply done via ctrl-C.
 
 <h3>Providing the exam questions</h3>
 
-The exam questions must be placed in a file called **Questions.txt** in
-the <strong>InstructorDirectory</strong>. The file should contain a
-description and the questions for the exam. If there are notes the
-instructor would like to write to him/herself in the file they should be
-placed at the beginning.  
+Before the exam, the exam questions must be placed in a file called
+**Questions.txt** in the <strong>InstructorDirectory</strong>. The file
+should contain a description and the questions for the exam. If there
+are notes the instructor would like to write to him/herself in the file
+they can be placed at the beginning, in the section labeled NEW.  
 
 When parsing the file, OMSI will go through line by line and search for
 keywords NEW, DESCRIPTION or QUESTION.  The roles are as follows:
 
-  * NEW:  Optional. The following lines contain private notes for the 
+  * NEW:  Optional. The lines that follow will  contain private notes for the 
     instructor.  
-  * DESCRIPTION:  Required. The following lines contain instructions 
+  * DESCRIPTION:  Required. The lines that follow will contain instructions 
     to students, which would normally go on the front page of a 
     printed exam.  The students will be able to view it by clicking 
     Description in the menu.  
