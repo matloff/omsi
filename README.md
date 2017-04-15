@@ -482,10 +482,13 @@ Much improvement is possible.  **Contributors of new code are welcome!**
 
 Here are some points of improvement:
 
-  * Code to check a student's e-mail address against a class list upon
-    connection, with passwords being required.  This would also help
-    protect against a student inserting malicious code into an answer,
-    possibly causing problems during the auto-grading process.
-
   * Tablet-friendly version of OMSI.
+
+  * Code to check a student's e-mail address against a class list upon
+    connection, with passwords being required.  
+  
+  * Code to confirm the integrity of the OMSI client code
+    (i.e. verify that the source code hasn't been changed), and to
+    upload each student Run operation to the server, to guard against
+    the student running surreptitious communication code.
 
