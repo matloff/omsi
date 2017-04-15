@@ -390,7 +390,10 @@ OMSI does NOT take the place of instructor judgment in assigning points
 to individual exam problems.  But it does make things much easier, by
 automating much of the drudgery. For instance, OMSI automatically
 records grades assigned by the instructor, and automatically notifies
-students of their grades via e-mail.
+students of their grades via e-mail.  Gone are the days in which the
+instructor must alphabetize the papers, enter the grades by hand, carry
+an armload (or boxload) of papers to give back to students in class,
+retaining the stragglers not picked up by the students, and so on.
 
 </blockquote>
 
