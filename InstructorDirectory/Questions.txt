@@ -2,9 +2,13 @@
 
 NEW
 
+Note to self: Samples; 2 questions asking for Python code, 1 requiring
+an essay.
+
 DESCRIPTION
 
-Samples; 2 questions asking for Python code, 1 reqjuiring an essay.
+Students: Remember that Python and R won't be running in interactive
+mode here, since you must call 'print' explicitly.
 
 QUESTION -ext .py -run "python omsi_answer1.py"
 
@@ -14,6 +18,8 @@ QUESTION -ext .py -run "python omsi_answer2.py"
 
 Write a function half() that will return x/2, and 
 freestanding code will print half(3).
+
+QUESTION -ext .R -run "R < omsi_answer3.R"
 
 QUESTION 
 

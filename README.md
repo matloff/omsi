@@ -206,7 +206,7 @@ window.
 <b><i>Saving answers:</i></b>
 
 Click the question number on the left of the OMSI screen, and
-select <b>File | Save</b>.`
+select <b>File | Save</b>.` **Note that saving is NOT submitting.**
 
 <b><i>Running code:</i></b>
 
@@ -220,6 +220,15 @@ number on the left side of the OMSI screen, and selecting <b>File |
 Submit</b>. You can also submit all answers with <b>File | Submit
 All</b>. A dialog box specifying whether submission was successful will
 then be displayed. 
+
+
+<b><i>Tips:</i></b>
+
+Again, remember that saving an answer does NOT submit it.  You must do
+that separately.
+
+Python and R won't be running in interactive mode here, so you must
+write explicit ##print## operations.
 
 <h2>
 <a name="instructors">Directions for instructors</a>
@@ -272,7 +281,10 @@ instructor would like to write to him/herself in the file they should be
 placed at the beginning.  
 
 When parsing the file, OMSI will go through line by line and search for
-keywords NEW, DESCRIPTION or QUESTION.  The latter delineates the start
+keywords NEW, DESCRIPTION or QUESTION.  The roles are as follows:
+
+
+The latter delineates the start
 of a question for the exam, so that for a 3-problem exam there would be
 3 QUESTION lines in the file  **Questions.txt**.
 
