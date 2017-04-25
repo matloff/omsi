@@ -7,13 +7,12 @@
 <blockquote>
 
 Kiran Bhadury,
-Vishal Chakraborty,
-Francois Demoullin,
-Thong Le,
-Norm Matloff,
+[Vishal Chakraborty](vch@ucdavis.edu),
+[Francois Demoullin](f.demoullin@gmail.com),
+[Norm Matloff](mailto:matloff@cs.ucdavis.edu),
 Monte Misa,
-Rylan Schaeffer,
-Tiffany Yuen
+[Rylan Schaeffer](mailto:ryschaeffer@ucdavis.edu),
+[Tiffany Ching L Yuen](mailto:tyuen@ucdavis.edu)
 
 </blockquote>
 
@@ -21,7 +20,8 @@ Tiffany Yuen
 
 <blockquote>
 
-Thong Le, Dasha Semyonova
+Thong Le, 
+[Darya Semyonova](mailto:dsemyonova@ucdavis.edu)
 
 </blockquote>
 
