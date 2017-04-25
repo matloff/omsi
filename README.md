@@ -10,7 +10,7 @@
 [Vishal Chakraborty](mailto:vch@ucdavis.edu),
 [Francois Demoullin](mailto:f.demoullin@gmail.com),
 [Norm Matloff](mailto:matloff@cs.ucdavis.edu),
-Monte Misa,
+[Monte Misa](mailto:montemisa@gmail.com), 
 [Rylan Schaeffer](mailto:ryschaeffer@ucdavis.edu),
 [Tiffany Ching L Yuen](mailto:tyuen@ucdavis.edu)
 
