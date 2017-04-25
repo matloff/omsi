@@ -6,9 +6,9 @@
 
 <blockquote>
 
-[Kiran Bhadury](kbhadury@ucdavis.edu),
-[Vishal Chakraborty](vch@ucdavis.edu),
-[Francois Demoullin](f.demoullin@gmail.com),
+[Kiran Bhadury](mailto:kbhadury@ucdavis.edu),
+[Vishal Chakraborty](mailto:vch@ucdavis.edu),
+[Francois Demoullin](mailto:f.demoullin@gmail.com),
 [Norm Matloff](mailto:matloff@cs.ucdavis.edu),
 Monte Misa,
 [Rylan Schaeffer](mailto:ryschaeffer@ucdavis.edu),
@@ -20,7 +20,7 @@ Monte Misa,
 
 <blockquote>
 
-Thong Le, 
+[Thong Le](mailto:thmle@ucdavis.edu), 
 [Darya Semyonova](mailto:dsemyonova@ucdavis.edu)
 
 </blockquote>
