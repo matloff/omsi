@@ -6,7 +6,7 @@
 
 <blockquote>
 
-Kiran Bhadury,
+[Kiran Bhadury](kbhadury@ucdavis.edu),
 [Vishal Chakraborty](vch@ucdavis.edu),
 [Francois Demoullin](f.demoullin@gmail.com),
 [Norm Matloff](mailto:matloff@cs.ucdavis.edu),
