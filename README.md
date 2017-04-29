@@ -385,6 +385,11 @@ QUESTION -com gcc -flags "-Wall -g" -run ./a.out
 
 <b><i>Tips:</i></b>
 
+For instructors making use of compilers and interpreters, it is
+suggested that the instructor have the students launch the client from a
+machine on which these are installed, say having them log in remotely
+using **ssh -Y** for a client running on a Unix-family machine.  
+
 OMSI should greatly improve the examination process for both instructors
 and students.  However, as with any automated system, some care is
 needed to insure that things run smoothly.
