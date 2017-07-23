@@ -186,7 +186,7 @@ Contents:
 <a name="term">Terminology</a>
 </h3>
 
-The Linxu term *directory* is synonymous with *folder* for Mac and
+The Linux term *directory* is synonymous with *folder* for Mac and
 Windows.
 
 The term *terminal window* from Mac and Linux is synonymous with *Command
@@ -208,6 +208,7 @@ python
 ```
 
 into a terminal window.  Python should start, displaying the >>> prompt.
+(Exit via ctrl-d.)
 
 To install OMSI, download the <b>.zip</b> file.
 Unzipping it will produce a directory/folder <b>omsi-master</b>, where all
@@ -217,7 +218,7 @@ relevant files reside.
 <a name="students">Directions for students</a>
 </h3>
 
-<b><i>Connecting to the server:</i></b>
+<b><i>Connect to the server, at the start of the exam:</i></b>
 
 Download and install the package as above. Then change to the
 __omni-master__ directory, and run
@@ -266,8 +267,8 @@ specifying whether submission was successful will then be displayed.
 
 <b><i>Tips:</i></b>
 
-Be sure to try OMSI in an actual session before your first OMSI-based
-exam.  Start up the server, playing the role of the instructor (see
+**Be sure to try OMSI in an actual session before your first OMSI-based
+exam.**  Start up the server, playing the role of the instructor (see
 "Directions for instructors" below), and then start the client, playing
 the role of the student as above.
 
@@ -282,7 +283,7 @@ night-and-day difference to your grade!  So first take a few seconds to
 read this.
 
 Python and R won't be running in interactive mode here, so you must
-write explicit ##print## operations.  Graphical displays will not work,
+write explicit **print** operations.  Graphical displays will not work,
 for the same reason.
 
 When you submit an answer, make sure the Success! window then pops up to
@@ -317,7 +318,7 @@ terminal window by issuing the command
 
 from within the <b>omsi-master</b> directory, e.g.
 
-<b>python OmsiServer.py 5000 'Fall 2014 Midterm 1'</b>
+<b>python OmsiServer.py 5000 'Fall 2019 Midterm 1'</b>
 
 The port number must be above 1024.
 
@@ -345,20 +346,19 @@ keywords NEW, DESCRIPTION or QUESTION.  The roles are as follows:
     instructor.  
   * DESCRIPTION:  Required. The lines that follow will contain instructions 
     to students, which would normally go on the front page of a 
-    printed exam.  The students will be able to view it by clicking 
-    Description in the menu.  
+    printed exam, say "You will have 50 minutes for this exam."
+ .  The students will be able to view it by clicking Description in the menu.  
   * QUESTION:  Have one of these for each exam problem.  For problems involving
     code, directions for compiling or running the code go on this same
-    line.  The following lines contain the question, to be viewed by the
-    students.
+    line.  The lines that follow this line contain the question, to 
+    be viewed by the students.
 
-Example *Questions.txt* file:
+Example **Questions.txt** file:
 
 ```
 DESCRIPTION
 
-Students: Remember that Python and R won't be running in
-interactive mode here, since you must call 'print' explicitly.
+You will have 50 minutes for this exam.
 
 QUESTION -ext .py -run "python omsi_answer1.py"
 
@@ -382,9 +382,9 @@ The suffix in that first file name arises from the specification **-ext
   <b><i>Specifying compile and run options</i></b>
   
 The compile and run functionalities are by default disabled. If any
-question requires compile and/or run then the **-com** and **-run** flags may be
-specified in a simillar manner as the **-ext** file while adding the
-QUESTION keyword, e.g. 
+question requires compile and/or run then the **-com** and **-run**
+flags may be specified in a simillar manner as the **-ext** file while
+adding the QUESTION keyword, e.g. 
 
 ```
 QUESTION -com gcc -flags "-Wall -g" -run ./a.out
@@ -407,9 +407,9 @@ require the students to go through a dry run.  The instructor may wish
 to incentivize this.
 
 "Stuff happens."  What if, say, there is a sudden power failure or the
-local WiFi access point suddenly goes out?  Some students will not go
-through the dry run, even with major incentives/disincentives, and will
-have trouble using OMSI in the first exam.  The following are worth 
+local WiFi access point suddenly goes out?  What if some students do not
+go through the dry run, even with major incentives/disincentives, and
+have trouble using OMSI in the first exam?  The following are worth
 considering:
 
   * Paper copies of the exam prompt should be distributed at the start
