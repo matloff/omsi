@@ -70,12 +70,16 @@ OMSI, short for Online Measurement of Student Insight, is a software
 tool for conducting and grading examinations in a manner that is both
 secure and conducive to high-quality measurement of student insight. It
 is suitable for small or large class exams, be they based on
-essays, writing code, math analysis or multiple choice questions.
+**essays, writing code, math analysis or multiple choice questions**.
 
 Students come to the classroom at the regular class time, just as with a
 traditional pencil-and-paper exam.  However, they use their laptop
 computers to take the exam, using OMSI.  The latter downloads the exam
-questions, and enables the students to upload their answers.
+questions, and enables the students to upload their answers.  
+
+Moreover, in the case of questions which require writing code, **OMSI
+enables the students to compile and run their code, thus giving them an
+opportunity to discover and fix errors**.
 
 As detailed below, this arrangement has significant benefits for both
 students and instructors.  The system is easy to install and use, and
@@ -91,6 +95,8 @@ view:
 Benefits for students
 </a> 
 </h2>
+
+Dear students:
 
 __OMSI will often result in your getting a higher grade in an exam than
 you would have in the traditional pencil-and-paper format:__
@@ -118,6 +124,8 @@ Benefits for instructors
 </a> 
 </h2>
 
+Dear instructors:
+
 <b>
 OMSI will make your life easier. :-) 
 </b>
@@ -131,10 +139,10 @@ has two components:
 students taking the exam.  You get electronic copies of the students'
 exams, eliminating the need for collecting and carrying out out a large
 number of papers, and making work sharing much easier among multiple 
-graders.  As noted in "Benefits for students" above, OMSI enables the
+graders.  As noted in "Benefits for students" above, **OMSI enables the
 student to turn in a better product, and this benefits the instructor as
 well:  Better exam performance by students is both more gratifying to
-the instructor and also makes for easier, less frustrating grading.
+the instructor and also makes for easier, less frustrating grading**.
 </li> </p>
 
 <li> <i>Exam grading.</i> OMSI does NOT take the place of instructor
