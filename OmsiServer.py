@@ -37,7 +37,8 @@ class OmsiServer:
             lServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
             # bind address(gHost, gPort) to socket
-            lServerSocket.bind((self.gHost, self.gPort))
+            ### lServerSocket.bind((self.gHost, self.gPort))
+            lServerSocket.bind(('', self.gPort))
 
             # accept "call" from client
             lServerSocket.listen(5) # maximum number of 5 queued connections, should be irrelevant as all connections fork into a new thread
