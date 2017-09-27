@@ -11,6 +11,8 @@ import filecmp
 import time
 import OmsiClient 
 
+import pdb
+
 # This is the GUI portion of the OMSI application.
 class OmsiGui(Frame):
     def __init__(self, master):
@@ -149,6 +151,7 @@ class OmsiGui(Frame):
 #compiles the program file with given flags
 #Shows result as a pop-up box
     def compileProgram(self, qNum = None):
+        ### pdb.set_trace()
         compiler = ""
         msg = ""  #records messeges
         
@@ -156,7 +159,7 @@ class OmsiGui(Frame):
             qNum = self.curqNum
 
         fType = self.QuestionsArr[qNum].getFiletype()  #file type
-        fName = "omsi_answer{0}.{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
+        fName = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
         flags = self.QuestionsArr[qNum].getFlags() #get flags
         # flags = ["-"+x for x in flags] #adding "-" before flags
 
@@ -219,6 +222,7 @@ class OmsiGui(Frame):
         return True
         
     def runProgram(self, qNum = None):       
+        ### pdb.set_trace()
         runCmd = ""
         msg = ""  #records messages
         
