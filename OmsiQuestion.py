@@ -8,6 +8,7 @@ class OmsiQuestion:
         self.compileProgram = compileProgram
         self.runProgram = runProgram
         self.runCmd = runCmd
+        self.compiler = compiler
     
     def getQuestion(self):
         return self.question
