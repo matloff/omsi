@@ -1,0 +1,16 @@
+
+Some Technical Details
+
+
+Files created:
+
+   server:
+
+      student answer files
+
+   client:
+
+       ExamQuestions.txt:  downloaded questions from server
+
+       omsi_answer*:  the student's answers
+
