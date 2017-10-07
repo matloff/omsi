@@ -273,6 +273,7 @@ class OmsiServer:
             pClientSocket.send(lFileChunk)
             print "Sending file chunk {0}".format(lFileChunk)
             lFileChunk = lOpenedQuestions.read(1024)
+        pClientSocket.send(chr(0))
         # print "Sending eof chunk {0}".format(lFileChunk)
         # pClientSocket.send(lFileChunk)
 

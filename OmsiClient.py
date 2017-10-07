@@ -106,13 +106,14 @@ class OmsiClient:
 
         # if file was not created, notify the user
         if not lExamQuestionsFile:
-            print 'Error: Exam questions file could not be created on client\'s machine.'
+            print 'Error: Exam questions file not created on client\'s machine.'
             return
 
         # create boolean to track success
         lSuccess = False
 
-        # if file was successfully created, notify server to begin sending exam questions
+        # if file was successfully created, notify server to 
+        # begin sending exam questions
         try:
             print "Reading exam questions from server."
 
@@ -123,13 +124,12 @@ class OmsiClient:
                 # ready = select.select([pClientSocket], [], [], 2)
                 print "Client Waiting to recv"
                 lChunkOfFile = pClientSocket.recv(1024)
-                print "Client recvd chunk {0}".format(lChunkOfFile)
-
-                if lChunkOfFile != '':
-                    lExamQuestionsFile.write(lChunkOfFile)
-                if len(lChunkOfFile) < 1024:
+                if lChunkOfFile[-1] == chr(0):  # last chunk
                     lSuccess = True
-                    break
+                    lChunkOfFile = lChunkOfFile.rstrip(chr(0))
+                print "Client recvd chunk {0}".format(lChunkOfFile)
+                lExamQuestionsFile.write(lChunkOfFile)
+                if lSuccess: break
 
         finally:
             # if exam questions were not successfully downloaded, print error
