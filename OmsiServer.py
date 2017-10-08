@@ -326,6 +326,10 @@ class OmsiServer:
 def main():
     print "running"
 
+    v = open('VERSION')
+    tmp = v.readline()
+    print tmp
+
     if len(sys.argv) <  3:
         print "Usage: OmsiServer.py port ExamName"
         sys.exit(1)

@@ -384,8 +384,14 @@ class OmsiGui(Frame):
         if not self.OmsiClient:
             return
 
+        self.getVersion()
         self.getQuestionsFromServer()
         self.loadQuestionsFromFile()
+
+    def getVersion(self):
+       v = open('VERSION')
+       tmp = v.readline()
+       print tmp
 
     # Connects to the servers to get the questions.
     def getQuestionsFromServer(self):
