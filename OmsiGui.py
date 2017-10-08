@@ -167,12 +167,12 @@ class OmsiGui(Frame):
 
         if compileProg == 'y':
         #selecting compiler
-            if fType == ".c":
+            '''if fType == ".c": # Removing hard coded compiler for C/C++
                 compiler = "gcc"
             elif fType == ".cpp":
                 compiler = "g++"
-            else:
-                compiler = self.QuestionsArr[qNum].getCompiler()
+            else:'''
+            compiler = self.QuestionsArr[qNum].getCompiler()
 
             execName = "omsi_answer{0}".format(qNum) #name of the executable
 
