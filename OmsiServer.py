@@ -328,7 +328,7 @@ def main():
 
     v = open('VERSION')
     tmp = v.readline()
-    print tmp
+    print 'Version', tmp
 
     if len(sys.argv) <  3:
         print "Usage: OmsiServer.py port ExamName"

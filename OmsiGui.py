@@ -391,7 +391,7 @@ class OmsiGui(Frame):
     def getVersion(self):
        v = open('VERSION')
        tmp = v.readline()
-       print tmp
+       print 'Version', tmp
 
     # Connects to the servers to get the questions.
     def getQuestionsFromServer(self):
