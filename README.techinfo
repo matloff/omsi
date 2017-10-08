@@ -14,3 +14,25 @@ Files created:
 
        omsi_answer*:  the student's answers
 
+client operation:
+
+   OmsiGui.py:
+
+      uses Tk, so main() sets up a Tk instance top(), then does
+
+         app = OmsiGui(top)
+         top.mainloop()
+
+      to set up a class instance and get things going
+
+      widgets were set up in widgets() within that class; clicking one
+      triggers a method within that class, e.g. saveAnswer()
+
+      example of interest:  initial connection to server
+
+         user clicks Connect, triggers getConnectionInfo()
+
+         the latter sets up a dialog box (a dBox), and if successful
+         connect, then prints out version number, calls
+         getQuestionsFromServer() to get the file ExamQuestions (but
+         doesn't parse them)
