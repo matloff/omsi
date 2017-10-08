@@ -388,8 +388,12 @@ flags may be specified in a simillar manner as the **-ext** file while
 adding the QUESTION keyword, e.g. 
 
 ```
-QUESTION -com gcc -flags "-Wall -g" -run ./a.out
+QUESTION -com gcc -flags "-Wall -g" -run ./omsi_answer1
 ```
+
+for Question 1.
+
+Currently command-line arguments are not supported.
 
 
 <b><i>Tips:</i></b>
