@@ -1,5 +1,5 @@
 ProfessorHomeDirectory
 *.pyc
 omsi_answer*
-ExamQuestions.txt
+/ExamQuestions.txt
 .DS_Store
