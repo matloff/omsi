@@ -27,9 +27,12 @@ class OmsiServer:
         else:
             self.clientMap[clientAddr] = 1
             self.totalClients += 1
-            print "New Connection Detected at {0}.\nTotal Connections: {1}".format(clientAddr, self.totalClients)
+            print "New Connection Detected at {0}.\nTotal Connections: {1}". \
+               format(clientAddr, self.totalClients)
 
-        threading.Thread(target=self.requestHandler, args=(clientSocket, clientAddr,)).start()
+        threading.Thread(target=self.requestHandler, 
+           args=(clientSocket, clientAddr,)).start()
+
     # sets up the socket that the students connect to
     def createSocket(self):
         try:
@@ -77,7 +80,8 @@ class OmsiServer:
                 pClientSocket.send("WhatIsTheStudentName?")
                 lStudentEmail = pClientSocket.recv(2048)
 
-                lIsExecuted = self.receiveFile(pClientSocket, lFileName, lStudentEmail)
+                lIsExecuted = 
+                   self.receiveFile(pClientSocket, lFileName, lStudentEmail)
 
                 if lIsExecuted == "s":
                     # transmits TCP message: success

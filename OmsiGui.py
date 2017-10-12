@@ -72,7 +72,8 @@ class OmsiGui(Frame):
             return
 
         if self.curqNum > 0:
-            self.QuestionsArr[self.curqNum].setAnswer(self.txt.get("1.0", END).encode('utf-8'))
+            self.QuestionsArr[self.curqNum]. \
+               setAnswer(self.txt.get("1.0", END).encode('utf-8'))
 
         self.txt.delete("1.0", END)
         if not qNum == None and qNum > 0:
@@ -139,17 +140,19 @@ class OmsiGui(Frame):
 
         #Make sure what is in the array is the most up to date
         if qNum == self.curqNum:
-            self.QuestionsArr[qNum].setAnswer( self.txt.get("1.0", END).encode('utf-8'))
+            self.QuestionsArr[qNum].setAnswer(self.txt.get("1.0", END).
+               encode('utf-8'))
 
-        filename = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype())
+        filename = "omsi_answer{0}{1}". \
+           format(qNum, self.QuestionsArr[qNum].getFiletype())
         with open(filename, 'w') as f:
             st = os.stat(filename)
             os.chmod(filename,st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
             f.write(self.QuestionsArr[qNum].getAnswer())
 
-#function compile Program
-#compiles the program file with given flags
-#Shows result as a pop-up box
+    #function compile Program
+    #compiles the program file with given flags
+    #Shows result as a pop-up box
     def compileProgram(self, qNum = None):
         ### pdb.set_trace()
         compiler = ""
@@ -430,7 +433,8 @@ class OmsiGui(Frame):
         self.lb.insert(END, "Description")
         for i in range(1, len(self.QuestionsArr)):
             self.lb.insert(END, "Question {0}".format(i))
-            filename = "omsi_answer{0}{1}".format(i,self.QuestionsArr[i].getFiletype())
+            filename = "omsi_answer{0}{1}". \
+               format(i,self.QuestionsArr[i].getFiletype())
             if (os.path.isfile(filename)):
                 with open(filename) as f:
                     st = ""
@@ -438,7 +442,8 @@ class OmsiGui(Frame):
                         st += line
                     self.QuestionsArr[i].setAnswer(st)
             else:
-                self.QuestionsArr[i].setAnswer("Put your answer for question {0} here.".format(i))
+                self.QuestionsArr[i]. \
+                   setAnswer("Put your answer for question {0} here.".format(i))
 
         self.autoSave()
 

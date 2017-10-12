@@ -14,6 +14,17 @@ Files created:
 
        omsi_answer*:  the student's answers
 
+server operation:
+
+   OmsiServer.py:
+
+      OmsiServer.awaitConnections(): 
+      
+         runs a listening socket, creates a new thread for each
+         connection; the thread runs requestHandler()
+
+      OmsiServer.requestHandler(): 
+
 client operation:
 
    OmsiGui.py:
@@ -23,7 +34,7 @@ client operation:
          app = OmsiGui(top)
          top.mainloop()
 
-      to set up a class instance and get things going
+      to set up an OmsiGui class instance and get things going
 
       widgets were set up in widgets() within that class; clicking one
       triggers a method within that class, e.g. saveAnswer()
@@ -36,3 +47,12 @@ client operation:
          connect, then prints out version number, calls
          getQuestionsFromServer() to get the file ExamQuestions (but
          doesn't parse them)
+
+major classes:
+
+   OmsiQuestion, in OmsiQuestion.py:
+
+      one instance for each question
+
+      stores the question and answer, in fields of those same names:
+
