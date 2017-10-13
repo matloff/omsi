@@ -221,19 +221,18 @@ relevant files reside.
 
 <b><i>Connect to the server, at the start of the exam:</i></b>
 
-Download and install the package as above. Then change to the
-__omni-master__ directory, and run
+Download and install the package as above. Then open a terminal window,
+change to the __omni-master__ directory, and run
 
 ```
 python OmsiGui.py
 ```
 
-from a terminal window.
 
-Then connect to the server and get the exam questions by selecting 
-<b>File | Connect</b>. 
-State your student e-mail address and the host and port provided by the
-instructor.
+Then connect to the server and get the exam questions by selecting
+<b>File | Connect</b>.  State the host and port provided by the
+instructor, and   your student e-mail address.  (You can also type them
+as command-line arguments in running **OmsiGui**.)
 
 After you connect to the server, the exam questions will be downloaded
 to your machine.
@@ -245,6 +244,15 @@ occupying the entire right side of the screen on some systems. If this
 is the case grab and drag the bottom of the box to resize the bottom
 window.
 
+<b><i>Copy-and-paste:</i></b>
+
+In programming classes, the instructor may wish to place a template,
+i.e. an outline of the answer, in the question, with students filling in
+the gaps in the code.  Copy-and-paste operations using a mouse may
+depend on the type of machine used.  Instead, OMSI offers a **CopyQtoA**
+selection in the menu, which completely copies the contents of the
+question box to the answer box.  Students then edit.
+
 <b><i>Saving answers:</i></b>
 
 Click the question number on the left of the OMSI screen, and
@@ -253,10 +261,13 @@ Saving your file does NOT upload your answer to the instructor's server;
 the save operation merely saves to a file on your local machine.
 See "Submitting your answers" below for uploading to the instructor.
 
-<b><i>Running code:</i></b>
+<b><i>Compiling/running code:</i></b>
 
-Save the code first, then select <b>File | Run</b>. A new window will
-pop up, displaying the results.
+Save the code first.  Then, if the problem involves a compiled language
+such as C, select <b>File | Compile</b>. A new window will pop up,
+displaying the results.  Then select <b>File | Run</b> (or for an
+interpreted language like R or Python, go to this step directly). A new
+window will pop up, displaying the results.
 
 <b><i>Submitting answers:</i></b>
 
@@ -265,6 +276,10 @@ number on the left side of the OMSI screen, and selecting <b>File |
 Submit</b>. This will upload your answer to the instructor.  You can
 also submit all answers with <b>File | Submit All</b>. A dialog box
 specifying whether submission was successful will then be displayed. 
+
+**IMPORTANT NOTE:**  If the network is busy, there may be a delay, of
+say, 10 or 15 seconds, before the submit operation completes and the
+dialog box comes up.
 
 <b><i>Tips:</i></b>
 
@@ -279,16 +294,17 @@ Again, remember that saving an answer does NOT submit it.  You must do
 that separately.
 
 When you begin the exam, your very first action should be to click on
-Description.  The instructor may have directions there that will make a
+**Description**.  The instructor may have directions there that will make a
 night-and-day difference to your grade!  So first take a few seconds to
 read this.
 
-Python and R won't be running in interactive mode here, so you must
-write explicit **print** operations.  Graphical displays will not work,
-for the same reason.
+If your exam tests you on Python or R, remember that they won't be
+running in interactive mode here, so you must write explicit **print**
+operations.  Graphical displays will not work, for the same reason.
 
-When you submit an answer, make sure the Success! window then pops up to
-confirm receipt.
+Keep in mind that you should get confirmation of these operations.  When
+you submit an answer, for instance, the Success! window then pops up to
+confirm receipt, though as mentioned, this may not occur instantly.
 
 <h2>
 <a name="instructors">Directions for instructors</a>
@@ -338,21 +354,21 @@ Before the exam, the exam questions must be placed in a file called
 **Questions.txt** in the <strong>InstructorDirectory</strong>. The file
 should contain a description and the questions for the exam. If there
 are notes the instructor would like to write to him/herself in the file
-they can be placed at the beginning, in the section labeled NEW.  
+they can be placed at the beginning, in the section labeled **NEW**.  
 
 When parsing the file, OMSI will go through line by line and search for
-keywords NEW, DESCRIPTION or QUESTION.  The roles are as follows:
+keywords **NEW**, **DESCRIPTION** or **QUESTION**.  The roles are as follows:
 
-  * NEW:  Optional. The lines that follow will  contain private notes for the 
-    instructor.  
-  * DESCRIPTION:  Required. The lines that follow will contain instructions 
+  * **NEW**:  Optional. The lines that follow will  contain private 
+  notes for the instructor.  
+  * **DESCRIPTION**:  Required. The lines that follow will contain instructions 
     to students, which would normally go on the front page of a 
     printed exam, say "You will have 50 minutes for this exam."
  .  The students will be able to view it by clicking Description in the menu.  
-  * QUESTION:  Have one of these for each exam problem.  For problems involving
-    code, directions for compiling or running the code go on this same
-    line.  The lines that follow this line contain the question, to 
-    be viewed by the students.
+  * **QUESTION**:  Have one of these lines for each exam problem.  For 
+  problems involving code, directions for compiling or running the 
+  code go on this same line.  The lines that follow this line contain 
+  the question, to be viewed by the students.
 
 Example **Questions.txt** file:
 
@@ -369,26 +385,25 @@ freestanding code will print half(3).
 QUESTION 
 
 What does 'D' stand for in "UCD"?
+
 ```
 
 In this example, two exam questions are defined, one requiring Python
 code and one requiring an essay.  When a student writes and submits the
 answers, they will be saved in files **omsi_answer1.py** and
 **omsi_answer2.txt** in <strong>InstructorDirectory</strong>, in that
-student's subdirectory.  
+student's subdirectory (indexed by e-mail address).  
 
 The suffix in that first file name arises from the specification **-ext
 .py** in the QUESTION line; otherwise the default suffix is **.txt**,
 
-  <b><i>Specifying compile and run options</i></b>
-  
-The compile and run functionalities are by default disabled. If any
-question requires compile and/or run then the **-com** and **-run**
-flags may be specified in a simillar manner as the **-ext** file while
-adding the QUESTION keyword, e.g. 
+<b><i>Specifying compile and run options</i></b>
+ 
+There are various **QUESTION** line options for the case of compiled
+code, e.g.
 
 ```
-QUESTION -com gcc -flags "-Wall -g" -run ./omsi_answer1
+QUESTION -ext .c -com gcc -flags "-Wall -g" -run ./omsi_answer1
 ```
 
 for Question 1.
@@ -397,11 +412,6 @@ Currently command-line arguments are not supported.
 
 
 <b><i>Tips:</i></b>
-
-For instructors making use of compilers and interpreters, it is
-suggested that the instructor have the students launch the client from a
-machine on which these are installed, say having them log in remotely
-using **ssh -Y** for a client running on a Unix-family machine.  
 
 OMSI should greatly improve the examination process for both instructors
 and students.  However, as with any automated system, some care is

@@ -64,7 +64,6 @@ class OmsiGui(Frame):
     # Updates the answer box when the question is clicked
     # in the listbox
     def updateAnswerBox(self, qNum=None):
-        pdb.set_trace()
         # qNum 0 refers to the description
         if not self.QuestionsArr:
             return
@@ -156,7 +155,6 @@ class OmsiGui(Frame):
     #compiles the program file with given flags
     #Shows result as a pop-up box
     def compileProgram(self, qNum = None):
-        ### pdb.set_trace()
         compiler = ""
         msg = ""  #records messeges
         
@@ -199,13 +197,13 @@ class OmsiGui(Frame):
             while proc.poll() is None:  
                 if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
                     proc.kill()     #kill process if it is still running
-                    msg = "\nExecutable could NOT be genarated: Compile - Time Out.\n"
+                    msg = "\nExecutable could NOT be generated: Compile - Time Out.\n"
                     break
              
             retCode = proc.poll()
             if retCode is not None and retCode != 0:
                 errfile = open ("errfile", "r")
-                msg = "Executable could NOT be genarated.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
+                msg = "Executable could NOT be generated.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
                 errfile.close() #close error file
             else:
                 outfile = open("com_" + str(qNum), 'r')
@@ -229,7 +227,6 @@ class OmsiGui(Frame):
     # inserts the current contents of the question box into the answer
     # box
     def copyQtoA(self):
-       pdb.set_trace()
        qNum = self.curqNum
        currq = self.QuestionsArr[qNum].getQuestion()
        self.QuestionsArr[qNum]. \

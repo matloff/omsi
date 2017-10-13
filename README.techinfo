@@ -69,7 +69,11 @@ major classes:
 
       one instance for each question
 
-      stores the question and answer, in fields of those same names, of
-      type Tkinter.Text
+      stores the question and answer, in fields of those same names, in
+      plain ASCII 
+      
+      however, note that the question and answer boxes store text in
+      type Tkinter.Text; self.txt() converts the latter to plain ASCII,
+      while self.txt.insert() inserts ASCII into a box
 
 
