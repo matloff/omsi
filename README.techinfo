@@ -39,7 +39,10 @@ client operation:
          when user clicks on Question n, the current answer for Question
          n is then written to the answer box
 
-         
+      OmsiGui.listboxSelected():
+
+         inserts into the question and answer boxes when user clicks on
+         a question; insert() here is a method in the Tkinter.Text class
 
       uses Tk, so main() sets up a Tk instance top(), then does
 

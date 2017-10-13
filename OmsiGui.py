@@ -64,6 +64,7 @@ class OmsiGui(Frame):
     # Updates the answer box when the question is clicked
     # in the listbox
     def updateAnswerBox(self, qNum=None):
+        pdb.set_trace()
         # qNum 0 refers to the description
         if not self.QuestionsArr:
             return
@@ -71,11 +72,12 @@ class OmsiGui(Frame):
         if qNum == self.curqNum:
             return
 
-        if self.curqNum > 0:
+        if self.curqNum > 0 and not qNum == 'cpyqtoa':
             self.QuestionsArr[self.curqNum]. \
                setAnswer(self.txt.get("1.0", END).encode('utf-8'))
 
         self.txt.delete("1.0", END)
+        if qNum ==  'cpyqtoa': qNum = self.curqNum
         if not qNum == None and qNum > 0:
             self.txt.insert(END, self.QuestionsArr[qNum].getAnswer())
         self.curqNum = qNum
@@ -223,9 +225,18 @@ class OmsiGui(Frame):
         text.pack()
 
         return True
+    
+    # inserts the current contents of the question box into the answer
+    # box
+    def copyQtoA(self):
+       pdb.set_trace()
+       qNum = self.curqNum
+       currq = self.QuestionsArr[qNum].getQuestion()
+       self.QuestionsArr[qNum]. \
+               setAnswer(currq.encode('utf-8'))
+       self.updateAnswerBox('cpyqtoa')
         
     def runProgram(self, qNum = None):       
-        ### pdb.set_trace()
         runCmd = ""
         msg = ""  #records messages
         
@@ -237,7 +248,9 @@ class OmsiGui(Frame):
         if runProg == 'y':
         #check if this program can be "run"
             fType = self.QuestionsArr[qNum].getFiletype()  #file type
-            fName = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
+            #name of the file to be compiled
+            fName = "omsi_answer{0}{1}". \
+               format(qNum, self.QuestionsArr[qNum].getFiletype()) 
             compileProg = self.QuestionsArr[qNum].getCompileProgram()
             
             if compileProg == 'y':
@@ -464,6 +477,7 @@ class OmsiGui(Frame):
         # filemenu.add_command(label="Close", command=self.donothing)
         filemenu.add_command(label="Compile", command=self.compileProgram)
         filemenu.add_command(label="Run", command=self.runProgram)
+        filemenu.add_command(label="CopyQtoA", command=self.copyQtoA)
 
         filemenu.add_separator()
 
@@ -520,10 +534,18 @@ class OmsiGui(Frame):
 
 def main():
     top = Tk()
-    top.geometry("{0}x{1}".format(top.winfo_screenwidth(), top.winfo_screenheight()))
+    top.geometry("{0}x{1}". \
+       format(top.winfo_screenwidth(), top.winfo_screenheight()))
     top.update()
     # top.minsize(top.winfo_width(),top.winfo_height())
     app = OmsiGui(top)
+    narg = len(sys.argv)
+    if narg > 1:
+       app.host = sys.argv[1]
+       if narg >= 3:
+          app.port = sys.argv[2]
+          if narg == 4:
+             app.email = sys.argv[3]
 
     top.mainloop()
 
