@@ -29,6 +29,18 @@ client operation:
 
    OmsiGui.py:
 
+      OmsiGui.updateQuestionBox():
+
+         when user clicks on Question n, the text for Question n is then
+         written to the question box; done by OmsiGui.listboxSelected()
+
+      OmsiGui.updateAnswerBox():
+
+         when user clicks on Question n, the current answer for Question
+         n is then written to the answer box
+
+         
+
       uses Tk, so main() sets up a Tk instance top(), then does
 
          app = OmsiGui(top)
@@ -54,5 +66,7 @@ major classes:
 
       one instance for each question
 
-      stores the question and answer, in fields of those same names:
+      stores the question and answer, in fields of those same names, of
+      type Tkinter.Text
+
 

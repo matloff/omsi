@@ -19,7 +19,8 @@ class OmsiClient:
         try:
             self.assertSocketCanBeCreated()
         except ValueError as e:
-            raise ValueError('Unable to create socket! Check Parameters', self.origHost, self.gPort, e)
+            raise ValueError('Unable to create socket! Check Parameters', 
+               self.origHost, self.gPort, e)
 
     def assertSocketCanBeCreated(self):
         response = self.configureSocket()
