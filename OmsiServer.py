@@ -80,8 +80,7 @@ class OmsiServer:
                 pClientSocket.send("WhatIsTheStudentName?")
                 lStudentEmail = pClientSocket.recv(2048)
 
-                lIsExecuted = 
-                   self.receiveFile(pClientSocket, lFileName, lStudentEmail)
+                lIsExecuted = self.receiveFile(pClientSocket, lFileName, lStudentEmail)
 
                 if lIsExecuted == "s":
                     # transmits TCP message: success
