@@ -123,8 +123,13 @@ class OmsiServer:
 
             # client is executing a function
             # TODO: refactor this or just get rid of it!
-            else:
-                lIsExecuted = self.interpretClientString(data)
+            ### NM, 10/15/27: deleting for now
+            ### else:
+            ###     lIsExecuted = self.interpretClientString(data)
+            else: 
+               print 'illegal client request:\n'
+               print data, '\n'
+               break
             print "Server waiting to recv data"
             ## pdb.set_trace()
             data = pClientSocket.recv(1024)
