@@ -115,6 +115,7 @@ class OmsiServer:
                     successmsg = successmsg + lFileName 
                     print successmsg
                     pClientSocket.send(successmsg)
+                    NEED TO CLOSE SOCKET HERE
 
                 else:
                    # transmits TCP message: fail
