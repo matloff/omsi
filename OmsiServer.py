@@ -113,8 +113,10 @@ class OmsiServer:
 
                 else:
                    # transmits TCP message: fail
-                   print lStudentEmail + ' did not successfully submit ' + lFileName
-                   pClientSocket.send(lStudentEmail + ' did not successfully submit ' + lFileName)
+                   failmsg =  \
+                      lStudentEmail + ' did not successfully submit ' + lFileName                       
+                   print failmsg, '\n'
+                   pClientSocket.send(failmsg)
 
             # client is requesting the questions file
             elif data == "ClientWantsQuestions":
@@ -127,18 +129,18 @@ class OmsiServer:
             ### else:
             ###     lIsExecuted = self.interpretClientString(data)
             else: 
-               print 'illegal client request:\n'
-               print data, '\n'
+               print 'illegal client request:', data, '\n'
                break
             print "Server waiting to recv data"
             ## pdb.set_trace()
             data = pClientSocket.recv(1024)
-            print "Server recvd data {0}".format(data)
-            print len(data), 'bytes\n'
+            ## print "Server recvd data {0}".format(data)
+            print 'server received',len(data), 'bytes\n'
+            print 'first line:', data.split('\n')[0], '\n'
 
         # pClientSocket.shutdown(socket.SHUT_WR)
 
-        # pClientSocket.close()
+        # pClientSocket.close()   this was commented out in 2016!
         self.totalClients -= 1
         print "Closing socket at {0}".format(addr)
         return  # end while
@@ -305,8 +307,10 @@ class OmsiServer:
 
         # send the file
         while (lFileChunk):
+            print 'sending file chunk\n'
+            print 'first line:', lFileChunk.split('\n')[0], '\n'
             pClientSocket.send(lFileChunk)
-            print "Sending file chunk {0}".format(lFileChunk)
+            # print "Sending file chunk {0}".format(lFileChunk)
             lFileChunk = lOpenedQuestions.read(1024)
         pClientSocket.send(chr(0))
         # print "Sending eof chunk {0}".format(lFileChunk)
