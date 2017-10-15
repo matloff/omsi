@@ -322,6 +322,7 @@ class OmsiGui(Frame):
         try:
             lServerResponse = self.OmsiClient.sendFileToServer(filename)
             tkMessageBox.showinfo("Submission Results", str(lServerResponse))
+            self.OmsiClient.close()
         except ValueError as e:
             tkMessageBox.showwarning("Error!", e)
             return
@@ -330,8 +331,14 @@ class OmsiGui(Frame):
         for i in range(1, len(self.QuestionsArr)):
             self.submitAnswer(i)
 
-    # Makes a dialog window pop up asking for host port and email
+    # makes a dialog window pop up asking for host port and email; makes
+    # the connection; downloads and processes the exam questions
     def getConnectionInfo(self):
+
+        # most of the code is making the connection; note, though, that
+        # the actual connection is made getQuestionsFromServer(), called
+        # hear the end here
+
         self.dBox = Toplevel(self.parent)
         self.dBox.transient(self.parent)
 
@@ -339,7 +346,6 @@ class OmsiGui(Frame):
         self.hostEntry = Entry(body)
         self.portEntry = Entry(body)
         self.emailEntry = Entry(body)
-
 
         connected = "Not connected"
         if self.OmsiClient:
@@ -357,8 +363,6 @@ class OmsiGui(Frame):
         Label(body, text="Port:").grid(row=2)
         Label(body, text="Student email:").grid(row=3)
 
-        
-
         self.hostEntry.grid(row=1, column=1)
         self.portEntry.grid(row=2, column=1)
         self.emailEntry.grid(row=3, column=1)
@@ -368,16 +372,19 @@ class OmsiGui(Frame):
 
         buttonBox = Frame(self.dBox)
         if not self.OmsiClient:
-            ok = Button(buttonBox, text="Enter", width=10, command=self.enteredServerInfo, default=ACTIVE)
+            ok = Button(buttonBox, text="Enter", 
+               width=10, command=self.enteredServerInfo, default=ACTIVE)
             ok.pack(side=LEFT, padx=5, pady=5)
-            cancel = Button(buttonBox, text="Cancel", width=10, command=self.cancel)
+            cancel = Button(buttonBox, text="Cancel", 
+               width=10, command=self.cancel)
             cancel.pack(side=RIGHT, padx=5, pady=5)
 
             # Bind enter and escape to respective methods
             self.dBox.bind("<Return>", self.enteredServerInfo)
             
         else:
-            disconn = Button(buttonBox,text="Disconnect",width=10,command=self.disconnectFromServer)
+            disconn = Button(buttonBox,text="Disconnect",
+               width=10,command=self.disconnectFromServer)
             disconn.pack(padx=5,pady=5)
 
         self.dBox.bind("<Escape>", self.cancel)
@@ -396,8 +403,9 @@ class OmsiGui(Frame):
         if not self.OmsiClient:
             return
 
+        # now the exam questions etc.
         self.getVersion()
-        self.getQuestionsFromServer()
+        self.getQuestionsFromServer()  # includes connect op
         self.loadQuestionsFromFile()
 
     def getVersion(self):
@@ -405,18 +413,16 @@ class OmsiGui(Frame):
        tmp = v.readline()
        print 'Version', tmp
 
-    # Connects to the servers to get the questions.
+    # downloads the exam questions from the server
     def getQuestionsFromServer(self):
-        # prepare socket to connect to server
+        print 'downloading the exam questions'
         try:
             socket = self.OmsiClient.configureSocket()
             self.OmsiClient.getExamQuestionsFile(socket)
-            print "Closing socket"
+            print "closing socket"
             socket.close()
-
         except ValueError as e:
-            tkMessageBox.showwarning("Error", e)
-
+            tkMessageBox.showwarning("Error in downloading questions", e)
         return True
 
     # Ensures the info entered in the for the server is valid.

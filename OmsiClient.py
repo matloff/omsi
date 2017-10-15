@@ -120,10 +120,11 @@ class OmsiClient:
         # if file was successfully created, notify server to 
         # begin sending exam questions
         try:
-            print "Requesting exam questions from server."
+            print "requesting exam questions from server"
             pClientSocket.send("ClientWantsQuestions")
 
             # write data from server to file
+            qfilelen = 0
             while True:
                 # ready = select.select([pClientSocket], [], [], 2)
                 print "Client Waiting to recv"
@@ -131,6 +132,7 @@ class OmsiClient:
                 if lChunkOfFile[-1] == chr(0):  # last chunk
                     lSuccess = True
                     lChunkOfFile = lChunkOfFile.rstrip(chr(0))
+                qfilelen = qfilelen + len(lChunkOfFile)
                 # print "Client recvd chunk {0}".format(lChunkOfFile)
                 print "Client recvd Quest. File chunk; first line:\n"
                 print lChunkOfFile.split('\n')[0], '\n'
@@ -141,6 +143,7 @@ class OmsiClient:
             # if exam questions were not successfully downloaded, print error
             if lSuccess:
                 print "Exam questions successfully read from server."
+                print qfilelen, 'bytes in all'
             else:
                 print "Error: Exam questions were not successfully read from server."
 
@@ -167,6 +170,7 @@ class OmsiClient:
             lCanIReadFromFile = False
 
         # if file is ready to be sent, connect to the server
+
         if not lCanIReadFromFile:
             return "cannot read input file"
 
@@ -176,12 +180,17 @@ class OmsiClient:
 
             # tell the server that we are sending a file; 'OMSI0001' is
             # the signal for this;  0 bytes serve delimiter between fields
-            msg = "OMSI0001" + pFileName + "\0" + self.gStudentEmail + "\0"
+            msg = \
+               "OMSI0001" + '\0' + pFileName + "\0" + self.gStudentEmail + "\0"
             self.omsiSocket.send(msg)
-            print 'notified server a file is coming'
+            print 'notified server a file is coming,'
+            print 'via the message', msg
 
             # send the file
             print "sending file %s" % pFileName
+            # wait for ho-ahead from server
+            goahead = self.omsiSocket.recv(1024)
+            print goahead
             # first chunk
             lFileChunk = lOpenFile.read(1024)
             lFileChunk = lFileChunk
@@ -203,7 +212,6 @@ class OmsiClient:
             print 'server response:', lServerResponse
 
             return lServerResponse
-        except ValueError as e:
             raise ValueError("Error sending file to server!", pFileName, e)
         except socket.error as e:
             print "Got error {0} for {1}.\nSetting socket to none and retrying...".format(e, pFileName)

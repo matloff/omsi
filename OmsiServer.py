@@ -30,7 +30,7 @@ class OmsiServer:
         else:
             self.clientMap[clientAddr] = 1
             self.totalClients += 1
-            print "New Connection Detected at {0}.\nTotal Connections: {1}". \
+            print "new connection detected at {0}.\ntotal connections: {1}". \
                format(clientAddr, self.totalClients)
 
         threading.Thread(target=self.requestHandler, 
@@ -61,9 +61,6 @@ class OmsiServer:
     # handles client interaction: detects client connection delegates 
     # requests to the corresponding routines
     def requestHandler(self, pClientSocket, addr):
-        # accept initial request
-        data = pClientSocket.recv(1024)
-        print 'client request:', data, '\n'
 
         # request could be:
         #    empty 
@@ -73,6 +70,7 @@ class OmsiServer:
         
         ### while len(data) != 0:
         while 1:
+            data = pClientSocket.recv(1024)
             if len(data) == 0:
                print 'empty "data" received'
                break
@@ -80,13 +78,17 @@ class OmsiServer:
 
             lIsExecuted = ""
 
-            if data[:8] == 'OMSI0001':
+            if data[:8] == 'OMSI0001':  # client will send file to srvr
                 ### code = int(data[4:8])
                 ### if code == 1:  # client will send file to server
                 ### self.parseSubmitFileRequest(pClientSocket, data)
+                print 'request:', data
                 fields = data.split('\0')
+                print 'fields:',fields
                 lFileName = fields[1]
                 lStudentEmail = fields[2]
+                print 'file to be sent is', lFileName
+                print 'student email is', lStudentEmail
 
 ###             # client is sending a file
 ###             elif data == "ClientIsSendingAFile":
@@ -110,7 +112,7 @@ class OmsiServer:
                 if lIsExecuted == "s":
                     # transmits TCP message: success
                     successmsg = lStudentEmail + ' successfully submitted ' 
-                    successmsg = successmsg + lFileName + ' correctly.'
+                    successmsg = successmsg + lFileName 
                     print successmsg
                     pClientSocket.send(successmsg)
 
@@ -123,8 +125,10 @@ class OmsiServer:
 
             # client is requesting the questions file
             elif data == "ClientWantsQuestions":
+                print 'sending questions to client'
                 # this function handles error messages + edge cases
-                self.sendQuestionsToClient(pClientSocket)
+                qfl = self.sendQuestionsToClient(pClientSocket)
+                print 'total of ',qfl, 'bytes read from questions file' 
 
             # client is executing a function
             # TODO: refactor this or just get rid of it!
@@ -270,7 +274,7 @@ class OmsiServer:
         lSuccess = "f"
         try:
             # let the client know the server is ready
-            ### pClientSocket.send("ReadyToAcceptClientFile")
+            pClientSocket.send("ReadyToAcceptClientFile")
 
             # receive the file
             while 1:
@@ -304,9 +308,10 @@ class OmsiServer:
         try:
             lOpenedQuestions = open(self.examQuestionsPath, 'r')
             lFileChunk = lOpenedQuestions.read(1024)
+            qfilelen = len(lFileChunk)
             lExceptionOccurred = False
         except IOError:
-            print "Something went wrong while reading the Questions file"
+            print "Something wrong with reading the Questions file"
             lFileChunk = ""
             lExceptionOccurred = True
 
@@ -317,6 +322,7 @@ class OmsiServer:
             pClientSocket.send(lFileChunk)
             # print "Sending file chunk {0}".format(lFileChunk)
             lFileChunk = lOpenedQuestions.read(1024)
+            qfilelen = qfilelen + len(lFileChunk)
         pClientSocket.send(chr(0))
         # print "Sending eof chunk {0}".format(lFileChunk)
         # pClientSocket.send(lFileChunk)
@@ -326,7 +332,7 @@ class OmsiServer:
         if lExceptionOccurred == False:
             print 'Successfully sent the questions file to a client'
 
-        return
+        return qfilelen
 
     # asks professor to specify directory to store exam questions and student submissions
     # confirms that the exam questions file is in the directory
@@ -385,8 +391,8 @@ def main():
     omsiServer.startUpExamDirectory()
   
     # print connection information.
-    print "Server for {0} is now running at {1}:{2}".format(sys.argv[2], hostname, sys.argv[1])
-
+    print "Server for {0} is now running at {1}:{2}".format(sys.argv[2], \
+       hostname, sys.argv[1])
 
     while True:
         omsiServer.awaitConnections()
