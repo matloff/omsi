@@ -292,7 +292,7 @@ class OmsiGui(Frame):
             os.remove("errfile") #errfile deleted...may be kept as a log if required
             os.remove("o_" + str(qNum)) #outputfile deleted...may be kept as a record if required
         else:
-        #this question does not requfire run
+        # this question does not allow run
             msg = "\nNot authorised!\n"
             tkMessageBox.showinfo("Run", msg)
             return False
@@ -313,12 +313,11 @@ class OmsiGui(Frame):
             return
 
         if qNum == self.curqNum:
-            # self.answersArr[qNum - 1] = self.txt.get("1.0", END).encode('utf-8')
-            self.QuestionsArr[qNum].setAnswer(self.txt.get("1.0",END).encode('utf-8'))
-
+            self.QuestionsArr[qNum]. \
+               setAnswer(self.txt.get("1.0",END).encode('utf-8'))
         self.saveAnswer(qNum)
-
-        filename = "omsi_answer{0}{1}".format(qNum,self.QuestionsArr[qNum].getFiletype())
+        filename = "omsi_answer{0}{1}". \
+           format(qNum,self.QuestionsArr[qNum].getFiletype())
 
         try:
             lServerResponse = self.OmsiClient.sendFileToServer(filename)
