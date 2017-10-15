@@ -80,24 +80,27 @@ class OmsiServer:
 
             lIsExecuted = ""
 
-            if data[:4] == 'OMSI':
-                code = int(data[4:8])
-                if code == 1:
-                    self.parseSubmitFileRequest(pClientSocket, data)
+            if data[:8] == 'OMSI0001':
+                ### code = int(data[4:8])
+                ### if code == 1:  # client will send file to server
+                ### self.parseSubmitFileRequest(pClientSocket, data)
+                fields = data.split('\0')
+                lFileName = fields[1]
+                lStudentEmail = fields[2]
 
-            # client is sending a file
-            elif data == "ClientIsSendingAFile":
-
-                # tell the client that we are ready to accept the file name
-                pClientSocket.send("WhatIsTheFileName?")
-                # now actually read the file name
-                lFileName = pClientSocket.recv(1024)
-
-                # tell the client that we are ready to accept the 
-                # student email address
-                pClientSocket.send("WhatIsTheStudentName?")
-                lStudentEmail = pClientSocket.recv(2048)
-                print 'email address:', lStudentEmail, '\n'
+###             # client is sending a file
+###             elif data == "ClientIsSendingAFile":
+### 
+###                 # tell the client that we are ready to accept the file name
+###                 pClientSocket.send("WhatIsTheFileName?")
+###                 # now actually read the file name
+###                 lFileName = pClientSocket.recv(1024)
+### 
+###                 # tell the client that we are ready to accept the 
+###                 # student email address
+###                 pClientSocket.send("WhatIsTheStudentName?")
+###                 lStudentEmail = pClientSocket.recv(2048)
+###                 print 'email address:', lStudentEmail, '\n'
 
                 # try to receive the (entire) file; lIsExecuted is
                 # success/failure code
@@ -258,16 +261,16 @@ class OmsiServer:
 
     # routine for receiving a file from a student
     def receiveFile(self, pClientSocket, pFileName, pStudentEmail):
-        ## pdb.set_trace()
 
         # open new file on the server
         lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
+        print 'new server file opened'
 
-        # initialize success indicator to false
+        # initialize success indicator to fail
         lSuccess = "f"
         try:
             # let the client know the server is ready
-            pClientSocket.send("ReadyToAcceptClientFile")
+            ### pClientSocket.send("ReadyToAcceptClientFile")
 
             # receive the file
             while 1:
@@ -275,6 +278,8 @@ class OmsiServer:
                 ready = select.select([pClientSocket], [], [], 2)
                 if ready[0]:
                     lChunkOfFile = pClientSocket.recv(1024)
+                    print 'received:'
+                    print lChunkOfFile
                     lNewFile.write(lChunkOfFile)
                 else:
                     break
