@@ -21,8 +21,10 @@ class OmsiServer:
         self.examQuestionsPath = None
 
     def awaitConnections(self):
-        #blocks and waits for connections
+        # blocks and waits for connections
+        print 'server awaiting connections\n'
         clientSocket, clientAddr = self.socket.accept()
+        print 'connection from client at', clientAddr, '\n'
         if clientAddr in self.clientMap:
             self.clientMap[clientAddr] += 1
         else:
@@ -131,7 +133,7 @@ class OmsiServer:
 
         # pClientSocket.shutdown(socket.SHUT_WR)
 
-        pClientSocket.close()
+        # pClientSocket.close()
         self.totalClients -= 1
         print "Closing socket at {0}".format(addr)
         return  # end while
