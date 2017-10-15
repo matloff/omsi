@@ -163,51 +163,64 @@ class OmsiClient:
 
         # if file is ready to be sent, connect to the server
         if not lCanIReadFromFile:
-            return "File could not be submitted to the server because it was unable to be opened for read! Please retry and make sure you are submitting a valid file."
+            return "cannot read input file"
 
         try:
             if not self.omsiSocket:
                 self.omsiSocket = self.configureSocket()
 
             # tell the server that we are sending a file
+            # 0 byte serves as delimiter between fields
             msg = "OMSI0001" + pFileName + "\0" + self.gStudentEmail + "\0"
+            self.omsiSocket.send(msg)
 
-            # # block this before sending the filename, otherwise both the command and the file name will be appended on the server
+            # block this before sending the filename, otherwise both
+            # the command and the file name will be appended on the server
             # lDebugging = self.omsiSocket.recv(1024);
             # print lDebugging
 
             # # send the name of the file
             # self.omsiSocket.send(pFileName)
 
-            # # block client until server is ready to accept the email of the student
+            # block client until server is ready to accept the email 
+            # of the student 
             # lDebugging = self.omsiSocket.recv(1024)
             # print lDebugging
 
-            # #send the student email
+            # send the student email
             # self.omsiSocket.send(self.gStudentEmail)
 
-            # # all information has been sent, get the go sign from the server
+            # all information has been sent, get the go sign from the server
             # lResponse = self.omsiSocket.recv(1024)
 
             # if something went wrong server side, abort
             # if lResponse != "ReadyToAcceptClientFile":
-            #     print "The server aborted prior to transmission of file, check server logs for more details.\nResponse was {0}".format(lResponse)
-            #     return
+            # print "The server aborted prior to transmission of file, 
+            # check server logs for more details.\nResponse was {0}".
+            # format(lResponse) 
+            # return
 
             # send the file
-            lFileChunk = lOpenFile.read(1024 - len(msg))
-            lFileChunk = msg + lFileChunk
-            print "file chunk " + lFileChunk
+            # msg is from above, a header; don't want to send more than
+            # 1024 bytes at once
+            ### lFileChunk = lOpenFile.read(1024 - len(msg))
+            ### lFileChunk = msg + lFileChunk
+            lFileChunk = lOpenFile.read(1024)
+            lFileChunk = lFileChunk
+            # pdb.set_trace()
             while (lFileChunk):
                 print "Sending File %s" % pFileName
+                print "file chunk:" + lFileChunk
                 self.omsiSocket.send(lFileChunk)
+                print 'sent', len(lFileChunk), 'bytes\n'
                 lFileChunk = lOpenFile.read(1024)
+                print 'read', len(lFileChunk), 'bytes\n'
 
             lOpenFile.close()
+            print 'file closed\n'
 
             lServerResponse = self.omsiSocket.recv(1024)
-
-            print lServerResponse
+            print 'server response:', lServerResponse
 
 
             return lServerResponse

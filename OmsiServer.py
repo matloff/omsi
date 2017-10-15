@@ -4,6 +4,7 @@ import socket
 import sys
 import thread
 import threading
+import pdb
 
 
 class OmsiServer:
@@ -55,12 +56,26 @@ class OmsiServer:
             raise RuntimeError("Could not open socket on Server: " + message)
             sys.exit(1)
 
-    # handles client interaction: detects client connection delegates requests to the corresponding routines
+    # handles client interaction: detects client connection delegates 
+    # requests to the corresponding routines
     def requestHandler(self, pClientSocket, addr):
         # accept initial request
         data = pClientSocket.recv(1024)
+        print 'client request:', data, '\n'
+
+        # request could be:
+        #    empty 
+        #    'ClientWantsQuestions'
+        #    'ClientIsSendingAFile'
+        #    'OMSI' etc., beginning of file send
         
-        while len(data) != 0:
+        ### while len(data) != 0:
+        while 1:
+            if len(data) == 0:
+               print 'empty "data" received'
+               break
+            print 'client request:', data, '\n'
+
             lIsExecuted = ""
 
             if data[:4] == 'OMSI':
@@ -76,17 +91,23 @@ class OmsiServer:
                 # now actually read the file name
                 lFileName = pClientSocket.recv(1024)
 
-                # tell the client that we are ready to accept the student email
+                # tell the client that we are ready to accept the 
+                # student email address
                 pClientSocket.send("WhatIsTheStudentName?")
                 lStudentEmail = pClientSocket.recv(2048)
+                print 'email address:', lStudentEmail, '\n'
 
-                lIsExecuted = self.receiveFile(pClientSocket, lFileName, lStudentEmail)
+                # try to receive the (entire) file; lIsExecuted is
+                # success/failure code
+                lIsExecuted = self.receiveFile(pClientSocket, 
+                   lFileName, lStudentEmail)
 
                 if lIsExecuted == "s":
                     # transmits TCP message: success
-
-                    print lStudentEmail + ' successfully submitted ' + lFileName + ' correctly.'
-                    pClientSocket.send(lStudentEmail + ' successfully submitted ' + lFileName)
+                    successmsg = lStudentEmail + ' successfully submitted ' 
+                    successmsg = successmsg + lFileName + ' correctly.'
+                    print successmsg
+                    pClientSocket.send(successmsg)
 
                 else:
                    # transmits TCP message: fail
@@ -103,15 +124,17 @@ class OmsiServer:
             else:
                 lIsExecuted = self.interpretClientString(data)
             print "Server waiting to recv data"
+            ## pdb.set_trace()
             data = pClientSocket.recv(1024)
             print "Server recvd data {0}".format(data)
+            print len(data), 'bytes\n'
 
         # pClientSocket.shutdown(socket.SHUT_WR)
 
-        # pClientSocket.close()
+        pClientSocket.close()
         self.totalClients -= 1
         print "Closing socket at {0}".format(addr)
-        return
+        return  # end while
 
 
     # for each student that connects to the server, create a folder
@@ -183,7 +206,8 @@ class OmsiServer:
     def parseSubmitFileRequest(self, pClientSocket, data):
         email = ''
         filename = ''
-        #The filename starts at index 8 of the data message
+        # the filename starts at index 8 of the data message,
+        # just past 'OMSI0001'
         i = 8
         j = 8
         length = len(data)
@@ -225,6 +249,7 @@ class OmsiServer:
 
     # routine for receiving a file from a student
     def receiveFile(self, pClientSocket, pFileName, pStudentEmail):
+        ## pdb.set_trace()
 
         # open new file on the server
         lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
