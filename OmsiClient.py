@@ -182,20 +182,19 @@ class OmsiClient:
 
             # send the file
             print "sending file %s" % pFileName
-            print 'first chunk'
+            # first chunk
             lFileChunk = lOpenFile.read(1024)
             lFileChunk = lFileChunk
             while (True):
                 print "file chunk:\n", lFileChunk
                 self.omsiSocket.send(lFileChunk)
                 print 'sent', len(lFileChunk), 'bytes'
-                print 'next chunk, if any'
+                # next chunk, if any
                 lFileChunk = lOpenFile.read(1024)
                 nread = len(lFileChunk)
                 if nread == 0: 
                    print 'end of file'
                    break
-                print 'read', len(lFileChunk), 'bytes'
 
             lOpenFile.close()
             print 'file closed\n'
