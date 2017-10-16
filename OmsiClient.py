@@ -165,10 +165,10 @@ class OmsiClient:
         lOpenFile = self.openFileOnClient(pFileName)
         print lOpenFile
 
-        ### try:
         try:
-            if not self.omsiSocket:
-                self.omsiSocket = self.configureSocket()
+            ### if not self.omsiSocket:
+            ###     self.omsiSocket = self.configureSocket()
+            self.omsiSocket = self.configureSocket()
 
             # tell the server that we are sending a file; 'OMSI0001' is
             # the signal for this;  0 bytes serve delimiter between fields
@@ -200,9 +200,6 @@ class OmsiClient:
             print 'file closed\n'
 
             lServerResponse = self.omsiSocket.recv(1024)
-            print 'server response from within sendFileToServer():', \
-               lServerResponse
-
             return lServerResponse
 ###         raise ValueError("Error sending file to server!", pFileName, e)
         except socket.error as e:
