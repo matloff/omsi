@@ -106,7 +106,8 @@ class OmsiGui(Frame):
         # Create a connection and close the connection info box if 
         # successful.
         try:
-            self.OmsiClient = OmsiClient.OmsiClient(self.host, self.port, self.email)
+            self.OmsiClient = \
+               OmsiClient.OmsiClient(self.host, self.port, self.email)
             self.dBox.withdraw()
             self.dBox.update_idletasks()
             self.cancel()
@@ -321,8 +322,9 @@ class OmsiGui(Frame):
 
         try:
             lServerResponse = self.OmsiClient.sendFileToServer(filename)
+            print 'server response seen from submitAnswer():', lServerResponse
             tkMessageBox.showinfo("Submission Results", str(lServerResponse))
-            self.OmsiClient.close()
+            self.OmsiClient.omsiSocket.close()
         except ValueError as e:
             tkMessageBox.showwarning("Error!", e)
             return

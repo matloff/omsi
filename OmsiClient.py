@@ -89,8 +89,10 @@ class OmsiClient:
         try:
           lFilePath = os.path.join('', pFileName)
           lOpenFile = open(lFilePath, "r")
+          print 'client file opened'
           return lOpenFile
         except IOError:
+            print 'client file could not be opened'
             try:
                 # file was not in the home directory, try to see id the file is in the code's directory
                 lOpenFile = open(pFileName, "r")
@@ -161,19 +163,9 @@ class OmsiClient:
         # open the file -> this handles exceptions effectively
         print "Opening file " + pFileName
         lOpenFile = self.openFileOnClient(pFileName)
+        print lOpenFile
 
-        try:
-            ldebugging = lOpenFile.read(1024)
-            lOpenFile.seek(0)
-            lCanIReadFromFile = True
-        except:
-            lCanIReadFromFile = False
-
-        # if file is ready to be sent, connect to the server
-
-        if not lCanIReadFromFile:
-            return "cannot read input file"
-
+        ### try:
         try:
             if not self.omsiSocket:
                 self.omsiSocket = self.configureSocket()
@@ -181,47 +173,42 @@ class OmsiClient:
             # tell the server that we are sending a file; 'OMSI0001' is
             # the signal for this;  0 bytes serve delimiter between fields
             msg = \
-               "OMSI0001" + '\0' + pFileName + "\0" + self.gStudentEmail + "\0"
+               "OMSI0001" + '\0' + pFileName + "\0" + self.gStudentEmail
             self.omsiSocket.send(msg)
             print 'notified server a file is coming,'
             print 'via the message', msg
 
             # send the file
             print "sending file %s" % pFileName
-            # wait for ho-ahead from server
+            # wait for go-ahead from server
             goahead = self.omsiSocket.recv(1024)
-            print goahead
-            # first chunk
-            lFileChunk = lOpenFile.read(1024)
-            lFileChunk = lFileChunk
+            if goahead != 'ReadyToAcceptClientFile':
+               print 'server and client out of sync'
+               print 'received from server:', goahead
+               print 'closing client socket, suggest reconnect'
             while (True):
-                print "file chunk:\n", lFileChunk
-                self.omsiSocket.send(lFileChunk)
-                print 'sent', len(lFileChunk), 'bytes'
-                # next chunk, if any
                 lFileChunk = lOpenFile.read(1024)
                 nread = len(lFileChunk)
                 if nread == 0: 
                    print 'end of file'
                    break
+                print "file chunk:\n", lFileChunk
+                self.omsiSocket.send(lFileChunk)
+                print 'sent', len(lFileChunk), 'bytes'
 
             lOpenFile.close()
             print 'file closed\n'
 
             lServerResponse = self.omsiSocket.recv(1024)
-            print 'server response:', lServerResponse
+            print 'server response from within sendFileToServer():', \
+               lServerResponse
 
             return lServerResponse
-            raise ValueError("Error sending file to server!", pFileName, e)
+###         raise ValueError("Error sending file to server!", pFileName, e)
         except socket.error as e:
-            print "Got error {0} for {1}.\nSetting socket to none and retrying...".format(e, pFileName)
+            print 'exception'
+            print "Got error {0} for {1}.\nSetting socket to none, retrying". \
+               format(e, pFileName)
             self.omsiSocket = None
             self.sendFileToServer(pFileName)
-
-
-
-
-
-
-
 

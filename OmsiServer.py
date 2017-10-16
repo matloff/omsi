@@ -62,13 +62,6 @@ class OmsiServer:
     # requests to the corresponding routines
     def requestHandler(self, pClientSocket, addr):
 
-        # request could be:
-        #    empty 
-        #    'ClientWantsQuestions'
-        #    'ClientIsSendingAFile'
-        #    'OMSI' etc., beginning of file send
-        
-        ### while len(data) != 0:
         while 1:
             data = pClientSocket.recv(1024)
             if len(data) == 0:
@@ -79,9 +72,6 @@ class OmsiServer:
             lIsExecuted = ""
 
             if data[:8] == 'OMSI0001':  # client will send file to srvr
-                ### code = int(data[4:8])
-                ### if code == 1:  # client will send file to server
-                ### self.parseSubmitFileRequest(pClientSocket, data)
                 print 'request:', data
                 fields = data.split('\0')
                 print 'fields:',fields
@@ -89,20 +79,6 @@ class OmsiServer:
                 lStudentEmail = fields[2]
                 print 'file to be sent is', lFileName
                 print 'student email is', lStudentEmail
-
-###             # client is sending a file
-###             elif data == "ClientIsSendingAFile":
-### 
-###                 # tell the client that we are ready to accept the file name
-###                 pClientSocket.send("WhatIsTheFileName?")
-###                 # now actually read the file name
-###                 lFileName = pClientSocket.recv(1024)
-### 
-###                 # tell the client that we are ready to accept the 
-###                 # student email address
-###                 pClientSocket.send("WhatIsTheStudentName?")
-###                 lStudentEmail = pClientSocket.recv(2048)
-###                 print 'email address:', lStudentEmail, '\n'
 
                 # try to receive the (entire) file; lIsExecuted is
                 # success/failure code
@@ -115,7 +91,6 @@ class OmsiServer:
                     successmsg = successmsg + lFileName 
                     print successmsg
                     pClientSocket.send(successmsg)
-                    NEED TO CLOSE SOCKET HERE
 
                 else:
                    # transmits TCP message: fail
@@ -273,34 +248,32 @@ class OmsiServer:
 
         # initialize success indicator to fail
         lSuccess = "f"
-        try:
-            # let the client know the server is ready
-            pClientSocket.send("ReadyToAcceptClientFile")
+        # let the client know the server is ready
+        pClientSocket.send("ReadyToAcceptClientFile")
 
-            # receive the file
-            while 1:
-                # set a timeout for this
-                ready = select.select([pClientSocket], [], [], 2)
-                if ready[0]:
-                    lChunkOfFile = pClientSocket.recv(1024)
-                    print 'received:'
-                    print lChunkOfFile
-                    lNewFile.write(lChunkOfFile)
-                else:
-                    break
+        # receive the file
+        while 1:
+            # set a timeout for this
+            ready = select.select([pClientSocket], [], [], 2)
+            if ready[0]:
+                lChunkOfFile = pClientSocket.recv(1024)
+                print 'received:'
+                print lChunkOfFile
+                lNewFile.write(lChunkOfFile)
+            else:
+                break
 
-            print("Finished accepting file")
-            lSuccess = "s"
+        print("Finished accepting file")
+        lSuccess = "s"
 
-        finally:
-            if lSuccess == "f":
-                # something went wrong
-                print "File transfer was not successful"
-            # close file, regardless of success
-            lNewFile.close()
+        if lSuccess == "f":
+            # something went wrong
+            print "File transfer was not successful"
+        # close file, regardless of success
+        lNewFile.close()
 
-            # return success information
-            return lSuccess
+        # return success information
+        return lSuccess
 
     # routine for sending the questions file to a student
     def sendQuestionsToClient(self, pClientSocket):
