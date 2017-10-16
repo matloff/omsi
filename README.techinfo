@@ -18,12 +18,17 @@ server operation:
 
    OmsiServer.py:
 
+      main loop:  repeatedly call awaitConnections()
+
       OmsiServer.awaitConnections(): 
       
-         runs a listening socket, creates a new thread for each
-         connection; the thread runs requestHandler()
+         runs a listening socket, creates a new thread when a call
+         finally comes in; creates socket to pair with client;
+         launches a thread that runs requestHandler()
 
       OmsiServer.requestHandler(): 
+
+          loop, waiting for requests from clients
 
 client operation:
 
