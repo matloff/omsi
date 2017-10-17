@@ -408,7 +408,13 @@ QUESTION -ext .c -com gcc -flags "-Wall -g" -run ./omsi_answer1
 
 for Question 1.
 
-Currently command-line arguments are not supported.
+Here is one for R, for a Question 3:
+
+```
+QUESTION -ext .R -run 'Rscript ./omsi_answer3.R'
+```
+Note that fields with embedded spaces must be quoted.
+
 
 
 <b><i>Tips:</i></b>
@@ -417,9 +423,17 @@ OMSI should greatly improve the examination process for both instructors
 and students.  However, as with any automated system, some care is
 needed to insure that things run smoothly.
 
+It's hard for a student to write full code within an exam period.  What
+I like to do is give the students partial code, and have them fill in
+the missing lines.  Clicking the **CopyQtoA** button will copy the contents
+of the question window to the answer window, so students need not type
+in the provided partial code.
+
 It is crucial that the instructor, before the first OMSI-based exam,
 require the students to go through a dry run.  The instructor may wish
-to incentivize this.
+to incentivize this.  Note that the server will record the logins by the
+students, so the instructor can nudge the laggards who haven't gone
+through the dry run.
 
 "Stuff happens."  What if, say, there is a sudden power failure or the
 local WiFi access point suddenly goes out?  What if some students do not
@@ -432,7 +446,7 @@ considering:
     answers on paper.  Some students may not even have laptops.  (See
     note on tablets below.)
 
-  * Students should be told to click the Submit option "early and
+  * Students should be told to click the **Submit** option "early and
     often."  (Each submission would overwrite the last.)  This is
     especially important if there is concern that the local WiFi access
     point might be flooded with traffic at the end of the exam period,
