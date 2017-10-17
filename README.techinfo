@@ -34,6 +34,11 @@ client operation:
 
    OmsiGui.py:
 
+      OmsiGui.getConnect():
+
+          triggered by user clicking Connect; connect to server;
+          getQuestionsFromServer()
+
       OmsiGui.updateQuestionBox():
 
          when user clicks on Question n, the text for Question n is then
