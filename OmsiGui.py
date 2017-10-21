@@ -516,22 +516,34 @@ class OmsiGui(Frame):
         self.textFrame = Frame(self.parent, bg="azure")
         pWindow = PanedWindow(self.textFrame, orient=VERTICAL, bg="LightBlue1")
 
-
         self.textFrame.grid(row=0, column=1, sticky="nswe")
         # self.textFrame.grid_rowconfigure(0, weight=2)
         # self.textFrame.grid_rowconfigure(1, weight=2)
         # self.textFrame.grid_columnconfigure(0, weight=1)
 
+        # Question frame (for question text and scrollbar widgets)
+        qframe = Frame(pWindow, bd=0)
         # Question text box
-        self.question = Text(pWindow, bg="pale turquoise", font=("sans-serif", 20),wrap=WORD)
-        pWindow.add(self.question,sticky = "nwe")
+        self.question = Text(qframe, bg="pale turquoise", font=("sans-serif", 20),wrap=WORD)
         self.question.config(state=DISABLED)
         # self.question.grid(row=0,sticky="nswe",padx=5,pady =5)
+        qvscroll = Scrollbar(qframe, orient=VERTICAL, command=self.question.yview)
+        self.question['yscroll'] = qvscroll.set
+        qvscroll.pack(side="right", fill="y")
+        self.question.pack(side="left", fill="both", expand=True)
+        pWindow.add(qframe,sticky = "nwe")
 
+        # Answer frame (for answer text and scrollbar widgets)
+        aframe = Frame(pWindow, bd=0)
         # Answer text box
-        self.txt = Text(pWindow, bg="LightBlue2", font=("sans-serif", 16),wrap=WORD)
-        pWindow.add(self.txt,sticky = "swe")
+        self.txt = Text(aframe, bg="LightBlue2", font=("sans-serif", 16),wrap=WORD)
+        avscroll = Scrollbar(aframe, orient=VERTICAL, command=self.txt.yview)
+        self.txt['yscroll'] = avscroll.set
+        avscroll.pack(side="right", fill="y")
+        self.txt.pack(side="left", fill="both", expand=True)
+        pWindow.add(aframe,sticky = "swe")
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
+
         pWindow.pack(fill=BOTH, expand=1, pady=5)
         # self.loadQuestionsFromFile()
 
