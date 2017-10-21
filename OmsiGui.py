@@ -1,3 +1,4 @@
+
 from Tkinter import *
 from threading import Timer
 import tkMessageBox
@@ -140,7 +141,7 @@ class OmsiGui(Frame):
         if qNum == 0:
             return
 
-        #Make sure what is in the array is the most up to date
+        # make sure what is in the array is the most up to date
         if qNum == self.curqNum:
             self.QuestionsArr[qNum].setAnswer(self.txt.get("1.0", END).
                encode('utf-8'))
@@ -149,12 +150,13 @@ class OmsiGui(Frame):
            format(qNum, self.QuestionsArr[qNum].getFiletype())
         with open(filename, 'w') as f:
             st = os.stat(filename)
-            os.chmod(filename,st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+            os.chmod(filename, \
+               st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
             f.write(self.QuestionsArr[qNum].getAnswer())
 
-    #function compile Program
-    #compiles the program file with given flags
-    #Shows result as a pop-up box
+    # function compile Program
+    # compiles the program file with given flags
+    # Shows result as a pop-up box
     def compileProgram(self, qNum = None):
         compiler = ""
         msg = ""  #records messeges
@@ -162,15 +164,17 @@ class OmsiGui(Frame):
         if not qNum:
             qNum = self.curqNum
 
-        fType = self.QuestionsArr[qNum].getFiletype()  #file type
-        fName = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
-        flags = self.QuestionsArr[qNum].getFlags() #get flags
+        fType = self.QuestionsArr[qNum].getFiletype()  # file type
+        # name of the file to be compiled
+        fName = "omsi_answer{0}{1}". \
+           format(qNum, self.QuestionsArr[qNum].getFiletype()) 
+        flags = self.QuestionsArr[qNum].getFlags() # get flags
         # flags = ["-"+x for x in flags] #adding "-" before flags
 
         compileProg = self.QuestionsArr[qNum].getCompileProgram()
 
         if compileProg == 'y':
-        #selecting compiler
+        # selecting compiler
             '''if fType == ".c": # Removing hard coded compiler for C/C++
                 compiler = "gcc"
             elif fType == ".cpp":
@@ -178,7 +182,7 @@ class OmsiGui(Frame):
             else:'''
             compiler = self.QuestionsArr[qNum].getCompiler()
 
-            execName = "omsi_answer{0}".format(qNum) #name of the executable
+            execName = "omsi_answer{0}".format(qNum) # name of the executable
 
             if not os.path.isfile(fName):   #check if file exists
                 msg = "File not found. Please make sure you have saved the file."
@@ -188,7 +192,7 @@ class OmsiGui(Frame):
             outfile = open("com_" + str(qNum), 'w') #for proc
             errfile = open("errfile", 'w')  #for proc
 
-            #generating executable...
+            # generating executable...
             startTime = time.time()  #start time
             print "Compiling with {0} {1} -o {2} {3}".format(compiler, ' '.join(flags), execName,fName)
 
