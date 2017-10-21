@@ -185,7 +185,7 @@ class OmsiGui(Frame):
             execName = "omsi_answer{0}".format(qNum) # name of the executable
 
             if not os.path.isfile(fName):   #check if file exists
-                msg = "File not found. Please make sure you have saved the file."
+                msg = "File not found; have you saved the file?"
                 tkMessageBox.showinfo("Error", msg)
                 return False 
             infile = None  #for proc
@@ -194,21 +194,31 @@ class OmsiGui(Frame):
 
             # generating executable...
             startTime = time.time()  #start time
-            print "Compiling with {0} {1} -o {2} {3}".format(compiler, ' '.join(flags), execName,fName)
+            compmsg = "Compiling with {0} {1} -o {2} {3}". \
+               format(compiler, ' '.join(flags), execName,fName)
+            print  compmsg
 
-            proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = outfile, stderr = errfile, universal_newlines = True)
+            proc = \
+               subprocess.Popen([compiler] + flags + ["-o", execName, fName], \
+               stdin = infile, stdout = outfile, stderr = errfile, \
+               universal_newlines = True)
             errfile.close()
             outfile.close()
             while proc.poll() is None:  
-                if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
-                    proc.kill()     #kill process if it is still running
-                    msg = "\nExecutable could NOT be generated: Compile - Time Out.\n"
-                    break
+             if time.time() - startTime >= 2:  
+                 proc.kill()     #kill process if it is still running
+                 msg = \
+                    "\nexecutable could NOT be generated: timed out\n"
+                 break
              
             retCode = proc.poll()
             if retCode is not None and retCode != 0:
                 errfile = open ("errfile", "r")
-                msg = "Executable could NOT be generated.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
+                # show only 3 lines, error msg. might be too long
+                msg = "executable could NOT be generated.\n" + \
+                   "\n".join(errfile.readlines()) + "\n" + \
+                   "\ncompiled with {0} {1} -o {2} {3}". \
+                   format(compiler, ' '.join(flags), execName,fName)
                 errfile.close() #close error file
             else:
                 outfile = open("com_" + str(qNum), 'r')
