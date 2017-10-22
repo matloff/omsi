@@ -276,7 +276,7 @@ emailresults <- function(coursename) {
    for (l in output) {
       tmp <- strsplit(l," ")[[1]]
       emailaddr <- tmp[1]
-      emailaddr <- paste(emailaddr,"@ucdavis.edu",sep="")
+      # emailaddr <- paste(emailaddr,"@ucdavis.edu",sep="")
       cat(l,file="onestudent")
       subject <- paste(coursename,'Quiz',testid,'results',sep=" ")
       # tosend <- paste("mutt",emailaddr,"-s 'quiz results' < onestudent")
