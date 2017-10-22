@@ -13,18 +13,26 @@
 #    START R in the top directory, and run this script
 
 #    CALL grader(), which will loop through the students, facilitating
-#    the instructor's grading of each, with the scripting prompting the
-#    instructor and recording his/her grade; the results will be saved
-#    continuously to a file "outfile"; in the case of exam problems
-#    involving program code, compile/run or run will be executed so as
-#    to check the validity of the code
+#    the instructor's grading of each; for each:
 
-#    note that when an exam problem comes up for grading, the user will
-#    be asked to give the go-ahead by hitting Enter; this is important
-#    in the case of a problem involving program code, to give the user a
-#    chance to view the output before the code is displayed
+#       0.  If the student has not submitted an answer to this question, the
+#       script will automatically assign 0 points and then go on to the next
+#       question.
+#       
+#       1.  If the question involves compiling and/or running code, the
+#       compile/run will be attempted.
+#       
+#       2.  The user will be asked to hit Enter, giving him/her a chance to see
+#       the output, if any, of step 1.
+#       
+#       3.  The student's answer will be displayed.
+#       
+#       4.  The user will be asked to assign points to the student for that
+#       problem.  Hitting Enter will mean full points.
 
-#    after all students are graded, the script will:
+#    The results will be saved continuously to a file "outfile". 
+
+#    After all students are graded, the script will:
 
 #       offer the instructor a chance to make corrections
 #       display the results for all students on the screen
