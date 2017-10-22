@@ -472,6 +472,10 @@ the cheaters.  What can be done about the latter?
     case is to require students to sit in specific seats that are
     randomly assigned to them.  This can be done with OMSI as well.
 
+  * If you are on a Unix system (Mac or Linux), you may find it useful
+    to run the server within the **script** command, so as to have a
+    record of connections and their times.
+
 <h2>
 <a name="grading">Software tools for grading</a> 
 </h2>

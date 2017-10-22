@@ -5,6 +5,7 @@ import sys
 import thread
 import threading
 import pdb
+import time
 
 
 class OmsiServer:
@@ -32,6 +33,9 @@ class OmsiServer:
             self.totalClients += 1
             print "new connection detected at {0}.\ntotal connections: {1}". \
                format(clientAddr, self.totalClients)
+            localtime = time.asctime( time.localtime(time.time()) )
+            print "current time :", localtime
+            print '\n'
 
         threading.Thread(target=self.requestHandler, 
            args=(clientSocket, clientAddr,)).start()
