@@ -26,6 +26,7 @@ class OmsiGui(Frame):
         self.port = None
         self.email = None
         self.OmsiClient = None
+        self.version = None
 
     def donothing(self):
         filewin = Toplevel(self.parent)
@@ -427,6 +428,7 @@ class OmsiGui(Frame):
     def getVersion(self):
        v = open('VERSION')
        tmp = v.readline()
+       self.version = tmp
        print 'Version', tmp
 
     # downloads the exam questions from the server
@@ -475,6 +477,7 @@ class OmsiGui(Frame):
             else:
                 self.QuestionsArr[i]. \
                    setAnswer("Put your answer for question {0} here.".format(i))
+        self.lb.insert(END, "Version " + self.version)
 
         self.autoSave()
 
