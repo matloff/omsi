@@ -109,6 +109,13 @@
 #    studentfilenames:  names of the student answer files; set by OMSI
 #       at the time of the exam
 #    output:  quiz results minus letter grades (latter are not yet determined) 
+#    notpresent: R list, see below
+
+# in order to avoid an error in which the student answer file is supposed
+# to be, say omsi_answer3.R but PtsCmds erroneously has it as
+# omsi_answer3.c, keep track of the number not present for each problem;
+# the R list notpresent will be indexed by studentfilenames, and counts
+# the number not present, reporting it as we grade
 
 # splits s account to '', returning the nonempty fields in a character
 # vector
@@ -153,6 +160,8 @@ waitenter <- function() {
 gradestudentans <- function(i) {
    sfl <- studentfilenames[i]
    if (!sfl %in% list.files()) {
+      notpresent[[sfl]] <- notpresent[[sfl]] + 1
+      if (notpresent[[sfl]] > 10) print('WARNING!!!!')
       cat(sfl,'not present\n')
       return(0)
    }
@@ -177,11 +186,15 @@ grader <- function() {
    testid <<- readline("enter test ID: ") 
    # set up R list that will contain the true answers
    getkey()  
+   # set notpresent list
+   notpresent <<- list(
+   for (fn in 1:studentfilenames) notpresent[[fn] <- 0
+   # init output file
    output <<- vector(mode="character")
    # loop across all student directories
-   ### browser()
    for (emailaddr in list.dirs(full.names=FALSE)) {  
       if (emailaddr == '') next
+      cat('***************************************************\n')
       cat("\n\n","  now grading",emailaddr,"\n")
       setwd(emailaddr)
       # start to build the output line for this student; it will consist
@@ -272,7 +285,7 @@ calcltrgrades <- function() {
 emailresults <- function(coursename) {
    # if sending mail requires a password, remind the user
    # readline("set password externally (if any), then hit Enter")
-   load("outfile")
+   ## load("outfile")
    for (l in output) {
       tmp <- strsplit(l," ")[[1]]
       emailaddr <- tmp[1]
