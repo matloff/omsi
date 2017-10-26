@@ -188,7 +188,7 @@ grader <- function() {
    getkey()  
    # set notpresent list
    notpresent <<- list()
-   for (fn in 1:studentfilenames) notpresent[[fn]] <- 0
+   for (fn in studentfilenames) notpresent[[fn]] <- 0
    # init output file
    output <<- vector(mode="character")
    # loop across all student directories
