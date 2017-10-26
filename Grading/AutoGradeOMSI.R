@@ -187,8 +187,8 @@ grader <- function() {
    # set up R list that will contain the true answers
    getkey()  
    # set notpresent list
-   notpresent <<- list(
-   for (fn in 1:studentfilenames) notpresent[[fn] <- 0
+   notpresent <<- list()
+   for (fn in 1:studentfilenames) notpresent[[fn]] <- 0
    # init output file
    output <<- vector(mode="character")
    # loop across all student directories
