@@ -160,8 +160,9 @@ waitenter <- function() {
 gradestudentans <- function(i) {
    sfl <- studentfilenames[i]
    if (!sfl %in% list.files()) {
-      notpresent[[sfl]] <- notpresent[[sfl]] + 1
-      if (notpresent[[sfl]] > 10) print('WARNING!!!!')
+      ### not quite right yet
+      ### notpresent[[sfl]] <- notpresent[[sfl]] + 1
+      ### if (notpresent[[sfl]] > 10) print('WARNING!!!!')
       cat(sfl,'not present\n')
       return(0)
    }
