@@ -1,0 +1,4 @@
+This text will appear on screen and also in the logfile
+Enter something!
+The user typed: abc
+This goes to the logfile but will not appear on screen

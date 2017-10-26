@@ -1,0 +1,26 @@
+
+NEW
+
+Questions on the server
+
+The prof writes these before the exams start
+
+This file needs to be transferred to the Client upon first connection of the client.
+
+…..
+
+DESCRIPTION
+Here would be a description of the test. This is REQUIRED. Here the Prof would put some stuff like they put on the front page of an exam. Like saying students have an hour and better
+not 
+cheat.
+
+QUESTION -ext .cpp -flags -Wall -g -com g++ -run ./omsi_answer1
+
+This should be question 1.
+
+-ext <file extension> Default is “.txt”
+
+If the following are not specified then the respective functionalities are not available to the student.
+-com <compiler to use> 
+-run <shell cmd to run program> 
+

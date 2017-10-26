@@ -1,0 +1,30 @@
+
+
+NEW
+
+Note to self: Samples; 2 questions asking for Python code, 1 requiring
+an essay.
+
+DESCRIPTION
+
+Students: Remember that Python and R won't be running in interactive
+mode here, since you must call 'print' explicitly.
+
+QUESTION -ext .py -run "python omsi_answer1.py"
+
+Write a function sq(x) that return x^2, and print sq(3).
+
+QUESTION -ext .py -run "python omsi_answer2.py"
+
+Write a function half() that will return x/2, and 
+freestanding code will print half(3).
+
+QUESTION -ext .R -run "Rscript omsi_answer3.R"
+
+Write R code that prints out the mean R's built-in Niles dataset,
+starting with observation 51 (year 1921).
+
+QUESTION 
+
+What does 'D' stand for in "UCD"?
+
