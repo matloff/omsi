@@ -253,6 +253,12 @@ depend on the type of machine used.  Instead, OMSI offers a **CopyQtoA**
 selection in the menu, which completely copies the contents of the
 question box to the answer box.  Students then edit.
 
+If you are using the External Editor option, click **CopyQtoF** instead.
+It will copy the question box to your answer file rather than the answer
+box.  You will be prompted to first delete the corresponding buffer (e.g.
+clicking X on a tab or using **:bdelete**, then reopen a buffer to the
+file after the copying is done.
+
 <b><i>Saving answers:</i></b>
 
 Click the question number on the left of the OMSI screen, and
@@ -305,7 +311,8 @@ You invoke it as, e.g.
 python OmsiGui.py xyx.edu 2000 me@abc.com gedit
 ```
 
-You may need to specify the full path to the editor.
+You may need to specify the full path to the editor.  Note that you must
+specify the server and e-mail information.
 
 You must follow these requirements:
 
@@ -337,7 +344,8 @@ mouse-capable version of the familiar **vim**.
 **Be sure to try OMSI in an actual session before your first OMSI-based
 exam.**  Start up the server, playing the role of the instructor (see
 "Directions for instructors" below), and then start the client, playing
-the role of the student as above.
+the role of the student as above.  It is recommend that you use OMSI for
+a while before trying the External Editor option.
 
 Make sure your laptop is fully charged before the exam.  
 

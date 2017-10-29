@@ -219,7 +219,7 @@ class OmsiGui(Frame):
             errfile.close()
             outfile.close()
             while proc.poll() is None:  
-             if time.time() - startTime >= 2:  
+             if time.time() - startTime >= 8:  
                  proc.kill()     #kill process if it is still running
                  msg = \
                     "\nexecutable could NOT be generated: timed out\n"
@@ -519,20 +519,20 @@ class OmsiGui(Frame):
             self.lb.insert(END, "Question {0}".format(i))
             filename = "omsi_answer{0}{1}". \
                format(i,self.QuestionsArr[i].getFiletype())
-            if (os.path.isfile(filename)):
-                with open(filename) as f:
-                    st = ""
-                    for line in f.readlines():
-                        st += line
-                    self.QuestionsArr[i].setAnswer(st)
+            if self.externEditor != None:
+                self.QuestionsArr[i].\
+                   setAnswer("Using ext. editor, so do not write here.")
             else:
-                if self.externEditor == None:
-                   self.QuestionsArr[i]. \
-                      setAnswer("Put your answer for question {0} here.".\
-                         format(i))
+                if (os.path.isfile(filename)):
+                    with open(filename) as f:
+                        st = ""
+                        for line in f.readlines():
+                            st += line
+                        self.QuestionsArr[i].setAnswer(st)
                 else:
-                   self.QuestionsArr[i]. \
-                      setAnswer("Do not write here.")
+                       self.QuestionsArr[i]. \
+                          setAnswer("Put your answer for question {0} here.".\
+                             format(i))
         self.lb.insert(END, "Version " + self.version)
 
         self.autoSave()
