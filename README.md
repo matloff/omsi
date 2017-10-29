@@ -278,8 +278,16 @@ also submit all answers with <b>File | Submit All</b>. A dialog box
 specifying whether submission was successful will then be displayed. 
 
 **IMPORTANT NOTE:**  If the network is busy, there may be a delay, of
-say, 10 or 15 seconds, before the submit operation completes and the
+a few seconds, before the submit operation completes and the
 dialog box comes up.
+
+<b><i>Connecting from the Command Line::</i></b>
+
+
+
+<b><i>External Editor Option::</i></b>
+
+If you 
 
 <b><i>Tips:</i></b>
 

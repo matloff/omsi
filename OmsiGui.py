@@ -125,8 +125,12 @@ class OmsiGui(Frame):
     # This is run to auto save the current answer.
     def autoSave(self):
         t = Timer(120, self.autoSave)
-        # Guy on stack overflow said this helps with
+        # guy on stack overflow said this helps with
         # being able to end the main thread without complications
+
+        # don't want autosave with external editor, as OMSI will
+        # overwrite what the editor does!
+        if self.externEditor != None: return
         t.daemon = True
         t.start()
         if self.curqNum > 0:
@@ -137,6 +141,8 @@ class OmsiGui(Frame):
             self.saveAnswer(i)
 
     def saveAnswer(self, qNum=None):
+        if self.externEditor != None:
+            tkMessageBox.showwarning("Must save using external editor!",'')
         if not qNum:
             qNum = self.curqNum
 
@@ -444,8 +450,9 @@ class OmsiGui(Frame):
             tkMessageBox.showwarning("Error in downloading questions", e)
         self.getAnswerFileNames()
         if self.externEditor != None:
-           allAnswerFiles = ' '.join(self.answerFiles)
-           os.system(self.externEditor + ' ' + allAnswerFiles)
+           # allAnswerFiles = ' '.join(self.answerFiles)
+           args = [self.externEditor] + self.answerFiles
+           subprocess.Popen(args)
         return True
 
     def getAnswerFileNames(self):
