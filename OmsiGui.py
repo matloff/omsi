@@ -271,7 +271,8 @@ class OmsiGui(Frame):
           self.answerFiles[qNum-1] + ', before clicking OK'
        tkMessageBox.showinfo('',msg)
        self.saveAnswer(qNum,QtoFOp=True)
-       msg = 'Reopen editor buffer for ' + self.answerFiles[qNum-1] 
+       msg = 'Reopen editor buffer for ' + self.answerFiles[qNum-1] + \
+          ' before clicking OK'
        tkMessageBox.showinfo('',msg)
     
     def runProgram(self, qNum = None):       
