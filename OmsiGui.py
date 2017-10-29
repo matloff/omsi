@@ -27,6 +27,7 @@ class OmsiGui(Frame):
         self.email = None
         self.OmsiClient = None
         self.version = None
+        self.externEditor = None
 
     def donothing(self):
         filewin = Toplevel(self.parent)
@@ -441,7 +442,29 @@ class OmsiGui(Frame):
             socket.close()
         except ValueError as e:
             tkMessageBox.showwarning("Error in downloading questions", e)
+        self.getAnswerFileNames()
+        if self.externEditor != None:
+           allAnswerFiles = ' '.join(self.answerFiles)
+           os.system(self.externEditor + ' ' + allAnswerFiles)
         return True
+
+    def getAnswerFileNames(self):
+       # NOTE: questions file name hardcoded
+       # pdb.set_trace()
+       eqs = open('InstructorDirectory/Questions.txt')
+       qlines = eqs.readlines()
+       QUESTIONlines = filter(lambda ql: 'QUESTION' in ql,qlines)
+       answerFiles = []
+       for i in range(len(QUESTIONlines)):
+          ql = QUESTIONlines[i]
+          ansName = 'omsi_answer' + str(i)
+          if '-ext' in ql:
+             tmp = ql.split()
+             j = tmp.index('-ext')
+             ansName += tmp[j+1]
+          else: ansName += '.txt'
+          answerFiles.append(ansName)
+       self.answerFiles = answerFiles
 
     # Ensures the info entered in the for the server is valid.
     def validate(self):
@@ -577,8 +600,10 @@ def main():
        app.host = sys.argv[1]
        if narg >= 3:
           app.port = sys.argv[2]
-          if narg == 4:
+          if narg >= 4:
              app.email = sys.argv[3]
+             if narg == 5:
+                app.externEditor = sys.argv[4]
 
     top.mainloop()
 
