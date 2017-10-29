@@ -261,6 +261,9 @@ Saving your file does NOT upload your answer to the instructor's server;
 the save operation merely saves to a file on your local machine.
 See "Submitting your answers" below for uploading to the instructor.
 
+Note:  If you are using the External Editor option, you must save using
+the editor, not OMSI.
+
 <b><i>Compiling/running code:</i></b>
 
 Save the code first.  Then, if the problem involves a compiled language
@@ -283,11 +286,51 @@ dialog box comes up.
 
 <b><i>Connecting from the Command Line::</i></b>
 
+You have the option of specifying the server location and your e-mail
+address on the command line when you invoke OMSI, e.g.
 
+```
+python OmsiGui.py xyx.edu 2000 me@abc.com
+```
 
 <b><i>External Editor Option::</i></b>
 
-If you 
+You may prefer to use your own text editor, say for syntax
+highlightling, undo/redo, autoindent and so on.  Or your laptop may
+somehow not be rendering correctly in the question and answer boxes.
+You have the option of using your own editor in conjunction with OMSI.
+You invoke it as, e.g.
+
+```
+python OmsiGui.py xyx.edu 2000 me@abc.com gedit
+```
+
+You may need to specify the full path to the editor.
+
+You must follow these requirements:
+
+<UL>
+
+<li> The editor must be a GUI, i.e. not run inside a terminal window.
+</li> </p>
+
+<li> In the command-line invocation of the editor, you must be able to
+specify multiple files to be edited. 
+</li> </p> 
+
+<li> You must let OMSI invoke the editor, rather than your launching it
+yourself.
+</li> </p> 
+
+<li> Do not run shell commands from the editor.
+</li> </p> 
+
+</UL>
+
+Needless to say, do not choose an editor that is slow to launch.
+Suggested ones are **gedit** or **gvim**, the latter being a
+mouse-capable version of the familiar **vim**.
+
 
 <b><i>Tips:</i></b>
 
@@ -435,7 +478,10 @@ It's hard for a student to write full code within an exam period.  What
 I like to do is give the students partial code, and have them fill in
 the missing lines.  Clicking the **CopyQtoA** button will copy the contents
 of the question window to the answer window, so students need not type
-in the provided partial code.
+in the provided partial code.  If you are using an external editor, use
+the **CopyQtoF** button, which copies the question window directly to
+your answer file; you will need to remove that file's buffer from the
+editor, then reopen after the copy is done.
 
 It is crucial that the instructor, before the first OMSI-based exam,
 require the students to go through a dry run.  The instructor may wish

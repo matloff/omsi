@@ -26,6 +26,7 @@ class OmsiGui(Frame):
         self.port = None
         self.email = None
         self.OmsiClient = None
+        self.answerFiles = None
         self.version = None
         self.externEditor = None
 
@@ -140,9 +141,10 @@ class OmsiGui(Frame):
         for i in range(1, len(self.QuestionsArr)):
             self.saveAnswer(i)
 
-    def saveAnswer(self, qNum=None):
-        if self.externEditor != None:
-            tkMessageBox.showwarning("Must save using external editor!",'')
+    def saveAnswer(self, qNum=None, QtoFOp=False):
+        if self.externEditor != None and not QtoFOp:
+            tkMessageBox.showinfo('',"Must save using external editor!")
+            return
         if not qNum:
             qNum = self.curqNum
 
@@ -154,13 +156,17 @@ class OmsiGui(Frame):
             self.QuestionsArr[qNum].setAnswer(self.txt.get("1.0", END).
                encode('utf-8'))
 
-        filename = "omsi_answer{0}{1}". \
-           format(qNum, self.QuestionsArr[qNum].getFiletype())
+        ### filename = "omsi_answer{0}{1}". \
+        ###    format(qNum, self.QuestionsArr[qNum].getFiletype())
+        filename = self.answerFiles[qNum-1]
         with open(filename, 'w') as f:
             st = os.stat(filename)
             os.chmod(filename, \
                st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-            f.write(self.QuestionsArr[qNum].getAnswer())
+            if not QtoFOp:
+               f.write(self.QuestionsArr[qNum].getAnswer())
+            else:
+               f.write(self.QuestionsArr[qNum].getQuestion())
 
     # function compile Program
     # compiles the program file with given flags
@@ -246,16 +252,28 @@ class OmsiGui(Frame):
         text.pack()
 
         return True
-    
-    # inserts the current contents of the question box into the answer
-    # box
+
+    # inserts the current contents of the question box into the answer box
     def copyQtoA(self):
        qNum = self.curqNum
        currq = self.QuestionsArr[qNum].getQuestion()
        self.QuestionsArr[qNum]. \
                setAnswer(currq.encode('utf-8'))
        self.updateAnswerBox('cpyqtoa')
-        
+
+    # inserts the current contents of the question box into the answer file
+    def copyQtoF(self):
+       if self.externEditor == None:
+          tkMessageBox.showinfo('','For those using an external editor')
+          return
+       qNum = self.curqNum
+       msg = 'Close editor buffer for ' + \
+          self.answerFiles[qNum-1] + ', before clicking OK'
+       tkMessageBox.showinfo('',msg)
+       self.saveAnswer(qNum,QtoFOp=True)
+       msg = 'Reopen editor buffer for ' + self.answerFiles[qNum-1] 
+       tkMessageBox.showinfo('',msg)
+    
     def runProgram(self, qNum = None):       
         runCmd = ""
         msg = ""  #records messages
@@ -297,7 +315,8 @@ class OmsiGui(Frame):
             proc = subprocess.Popen(runCmd, stdin = infile, stdout = outfile, stderr = errfile, universal_newlines = True)
             errfile.close()
             while proc.poll() is None:  
-                if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
+                # wait for process to finish 2 seconds for now
+                if time.time() - startTime >= 2:  
                     proc.kill()     #kill process if it is still running
                     msg = "\nRun unsuccessful. Time Out.\n"
                     break
@@ -305,15 +324,17 @@ class OmsiGui(Frame):
             retCode = proc.poll()
             if retCode is not None and retCode != 0:
                 errfile = open ("errfile", "r")
-                msg = "Run unsuccessful.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
+                msg = "Run unsuccessful.\n" + \
+                   "\n".join(errfile.readlines()) + "\n" 
                 errfile.close() #close error file
             else:
-            #output was created...display
+            # output was created...display
                 outfile = open("o_" + str(qNum), 'r')
-                msg = "\nRun successful.\nOutput:\n" + "\n".join(outfile.readlines()) + "\n"
+                msg = "\nRun successful.\nOutput:\n" + \
+                   "\n".join(outfile.readlines()) + "\n"
                 outfile.close()
-            os.remove("errfile") #errfile deleted...may be kept as a log if required
-            os.remove("o_" + str(qNum)) #outputfile deleted...may be kept as a record if required
+            os.remove("errfile") 
+            os.remove("o_" + str(qNum)) 
         else:
         # this question does not allow run
             msg = "\nNot authorised!\n"
@@ -338,7 +359,7 @@ class OmsiGui(Frame):
         if qNum == self.curqNum:
             self.QuestionsArr[qNum]. \
                setAnswer(self.txt.get("1.0",END).encode('utf-8'))
-        self.saveAnswer(qNum)
+        # self.saveAnswer(qNum)
         filename = "omsi_answer{0}{1}". \
            format(qNum,self.QuestionsArr[qNum].getFiletype())
 
@@ -450,21 +471,19 @@ class OmsiGui(Frame):
             tkMessageBox.showwarning("Error in downloading questions", e)
         self.getAnswerFileNames()
         if self.externEditor != None:
-           # allAnswerFiles = ' '.join(self.answerFiles)
            args = [self.externEditor] + self.answerFiles
            subprocess.Popen(args)
         return True
 
     def getAnswerFileNames(self):
-       # NOTE: questions file name hardcoded
-       # pdb.set_trace()
+       # NOTE: questions file path hardcoded
        eqs = open('InstructorDirectory/Questions.txt')
        qlines = eqs.readlines()
        QUESTIONlines = filter(lambda ql: 'QUESTION' in ql,qlines)
        answerFiles = []
        for i in range(len(QUESTIONlines)):
           ql = QUESTIONlines[i]
-          ansName = 'omsi_answer' + str(i)
+          ansName = 'omsi_answer' + str(i+1)
           if '-ext' in ql:
              tmp = ql.split()
              j = tmp.index('-ext')
@@ -491,6 +510,7 @@ class OmsiGui(Frame):
     # Parses the question file to separate questions.
     def loadQuestionsFromFile(self):
         import OmsiUtility
+        # open the downloaded questions file and parse it
         self.QuestionsArr = OmsiUtility.ParseQuestions("ExamQuestions.txt")
         self.lb.delete(0, END)
         self.lb.insert(END, "Description")
@@ -505,8 +525,13 @@ class OmsiGui(Frame):
                         st += line
                     self.QuestionsArr[i].setAnswer(st)
             else:
-                self.QuestionsArr[i]. \
-                   setAnswer("Put your answer for question {0} here.".format(i))
+                if self.externEditor == None:
+                   self.QuestionsArr[i]. \
+                      setAnswer("Put your answer for question {0} here.".\
+                         format(i))
+                else:
+                   self.QuestionsArr[i]. \
+                      setAnswer("Do not write here.")
         self.lb.insert(END, "Version " + self.version)
 
         self.autoSave()
@@ -529,6 +554,7 @@ class OmsiGui(Frame):
         filemenu.add_command(label="Compile", command=self.compileProgram)
         filemenu.add_command(label="Run", command=self.runProgram)
         filemenu.add_command(label="CopyQtoA", command=self.copyQtoA)
+        filemenu.add_command(label="CopyQtoF", command=self.copyQtoF)
 
         filemenu.add_separator()
 
