@@ -338,6 +338,8 @@ Needless to say, do not choose an editor that is slow to launch.
 Suggested ones are **gedit** or **gvim**, the latter being a
 mouse-capable version of the familiar **vim**.
 
+Not all editor/OS combinations will work. 
+
 
 <b><i>Tips:</i></b>
 

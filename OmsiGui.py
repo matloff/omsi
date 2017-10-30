@@ -219,7 +219,7 @@ class OmsiGui(Frame):
             errfile.close()
             outfile.close()
             while proc.poll() is None:  
-             if time.time() - startTime >= 8:  
+             if time.time() - startTime >= 10:  
                  proc.kill()     #kill process if it is still running
                  msg = \
                     "\nexecutable could NOT be generated: timed out\n"
@@ -255,6 +255,9 @@ class OmsiGui(Frame):
 
     # inserts the current contents of the question box into the answer box
     def copyQtoA(self):
+       if self.externEditor != None:
+          tkMessageBox.showinfo('','For those not using an external editor')
+          return
        qNum = self.curqNum
        currq = self.QuestionsArr[qNum].getQuestion()
        self.QuestionsArr[qNum]. \
