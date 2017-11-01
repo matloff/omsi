@@ -505,7 +505,7 @@ class OmsiGui(Frame):
             self.email = self.emailEntry.get()
             if not self.host or not self.port or not self.email:
                 raise ValueError
-            if not re.match('[a-z0-9]+@ucdavis\.edu', self.email):
+            if not re.match('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', self.email):
                 tkMessageBox.showwarning("Bad input", "Invalid Email Address!")
                 return 0
             return 1
