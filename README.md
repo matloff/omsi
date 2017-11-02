@@ -253,12 +253,6 @@ depend on the type of machine used.  Instead, OMSI offers a **CopyQtoA**
 selection in the menu, which completely copies the contents of the
 question box to the answer box.  Students then edit.
 
-If you are using the External Editor option, click **CopyQtoF** instead.
-It will copy the question box to your answer file rather than the answer
-box.  You will be prompted to first delete the corresponding buffer (e.g.
-clicking X on a tab or using **:bdelete**, then reopen a buffer to the
-file after the copying is done.
-
 <b><i>Saving answers:</i></b>
 
 Click the question number on the left of the OMSI screen, and
@@ -266,9 +260,6 @@ select <b>File | Save</b>.` Note that **saving is NOT submitting.**
 Saving your file does NOT upload your answer to the instructor's server;
 the save operation merely saves to a file on your local machine.
 See "Submitting your answers" below for uploading to the instructor.
-
-Note:  If you are using the External Editor option, you must save using
-the editor, not OMSI.
 
 <b><i>Compiling/running code:</i></b>
 
@@ -287,67 +278,15 @@ also submit all answers with <b>File | Submit All</b>. A dialog box
 specifying whether submission was successful will then be displayed. 
 
 **IMPORTANT NOTE:**  If the network is busy, there may be a delay, of
-a few seconds, before the submit operation completes and the
+say, 10 or 15 seconds, before the submit operation completes and the
 dialog box comes up.
-
-<b><i>Connecting from the Command Line::</i></b>
-
-You have the option of specifying the server location and your e-mail
-address on the command line when you invoke OMSI, e.g.
-
-```
-python OmsiGui.py xyx.edu 2000 me@abc.com
-```
-
-<b><i>External Editor Option::</i></b>
-
-You may prefer to use your own text editor, say for syntax
-highlightling, undo/redo, autoindent and so on.  Or your laptop may
-somehow not be rendering correctly in the question and answer boxes.
-You have the option of using your own editor in conjunction with OMSI.
-You invoke it as, e.g.
-
-```
-python OmsiGui.py xyx.edu 2000 me@abc.com gedit
-```
-
-You may need to specify the full path to the editor.  Note that you must
-specify the server and e-mail information.
-
-You must follow these requirements:
-
-<UL>
-
-<li> The editor must be a GUI, i.e. not run inside a terminal window.
-</li> </p>
-
-<li> In the command-line invocation of the editor, you must be able to
-specify multiple files to be edited. 
-</li> </p> 
-
-<li> You must let OMSI invoke the editor, rather than your launching it
-yourself.
-</li> </p> 
-
-<li> Do not run shell commands from the editor.
-</li> </p> 
-
-</UL>
-
-Needless to say, do not choose an editor that is slow to launch.
-Suggested ones are **gedit** or **gvim**, the latter being a
-mouse-capable version of the familiar **vim**.
-
-Not all editor/OS combinations will work. 
-
 
 <b><i>Tips:</i></b>
 
 **Be sure to try OMSI in an actual session before your first OMSI-based
 exam.**  Start up the server, playing the role of the instructor (see
 "Directions for instructors" below), and then start the client, playing
-the role of the student as above.  It is recommend that you use OMSI for
-a while before trying the External Editor option.
+the role of the student as above.
 
 Make sure your laptop is fully charged before the exam.  
 
@@ -488,10 +427,7 @@ It's hard for a student to write full code within an exam period.  What
 I like to do is give the students partial code, and have them fill in
 the missing lines.  Clicking the **CopyQtoA** button will copy the contents
 of the question window to the answer window, so students need not type
-in the provided partial code.  If you are using an external editor, use
-the **CopyQtoF** button, which copies the question window directly to
-your answer file; you will need to remove that file's buffer from the
-editor, then reopen after the copy is done.
+in the provided partial code.
 
 It is crucial that the instructor, before the first OMSI-based exam,
 require the students to go through a dry run.  The instructor may wish
@@ -535,10 +471,6 @@ the cheaters.  What can be done about the latter?
     paper.  A common technique for dealing with this in the paper exam
     case is to require students to sit in specific seats that are
     randomly assigned to them.  This can be done with OMSI as well.
-
-  * If you are on a Unix system (Mac or Linux), you may find it useful
-    to run the server within the **script** command, so as to have a
-    record of connections and their times.
 
 <h2>
 <a name="grading">Software tools for grading</a> 

@@ -1,6 +1,5 @@
 class OmsiQuestion:
-    def __init__(self,question,number,filetype='.txt',flags="", \
-          compileProgram = "", compiler = "", runProgram = "", runCmd = ""):
+    def __init__(self,question,number,filetype='.txt',flags="", compileProgram = "", compiler = "", runProgram = "", runCmd = ""):
         self.number = number
         self.filetype = filetype
         self.answer = "Write your answer here..."

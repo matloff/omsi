@@ -1,3 +1,4 @@
+
 from Tkinter import *
 from threading import Timer
 import tkMessageBox
@@ -25,6 +26,9 @@ class OmsiGui(Frame):
         self.port = None
         self.email = None
         self.OmsiClient = None
+        self.answerFiles = None
+        self.version = None
+        self.externEditor = None
 
     def donothing(self):
         filewin = Toplevel(self.parent)
@@ -122,8 +126,12 @@ class OmsiGui(Frame):
     # This is run to auto save the current answer.
     def autoSave(self):
         t = Timer(120, self.autoSave)
-        # Guy on stack overflow said this helps with
+        # guy on stack overflow said this helps with
         # being able to end the main thread without complications
+
+        # don't want autosave with external editor, as OMSI will
+        # overwrite what the editor does!
+        if self.externEditor != None: return
         t.daemon = True
         t.start()
         if self.curqNum > 0:
@@ -133,28 +141,36 @@ class OmsiGui(Frame):
         for i in range(1, len(self.QuestionsArr)):
             self.saveAnswer(i)
 
-    def saveAnswer(self, qNum=None):
+    def saveAnswer(self, qNum=None, QtoFOp=False):
+        if self.externEditor != None and not QtoFOp:
+            tkMessageBox.showinfo('',"Must save using external editor!")
+            return
         if not qNum:
             qNum = self.curqNum
 
         if qNum == 0:
             return
 
-        #Make sure what is in the array is the most up to date
+        # make sure what is in the array is the most up to date
         if qNum == self.curqNum:
             self.QuestionsArr[qNum].setAnswer(self.txt.get("1.0", END).
                encode('utf-8'))
 
-        filename = "omsi_answer{0}{1}". \
-           format(qNum, self.QuestionsArr[qNum].getFiletype())
+        ### filename = "omsi_answer{0}{1}". \
+        ###    format(qNum, self.QuestionsArr[qNum].getFiletype())
+        filename = self.answerFiles[qNum-1]
         with open(filename, 'w') as f:
             st = os.stat(filename)
-            os.chmod(filename,st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-            f.write(self.QuestionsArr[qNum].getAnswer())
+            os.chmod(filename, \
+               st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+            if not QtoFOp:
+               f.write(self.QuestionsArr[qNum].getAnswer())
+            else:
+               f.write(self.QuestionsArr[qNum].getQuestion())
 
-    #function compile Program
-    #compiles the program file with given flags
-    #Shows result as a pop-up box
+    # function compile Program
+    # compiles the program file with given flags
+    # Shows result as a pop-up box
     def compileProgram(self, qNum = None):
         compiler = ""
         msg = ""  #records messeges
@@ -162,15 +178,17 @@ class OmsiGui(Frame):
         if not qNum:
             qNum = self.curqNum
 
-        fType = self.QuestionsArr[qNum].getFiletype()  #file type
-        fName = "omsi_answer{0}{1}".format(qNum, self.QuestionsArr[qNum].getFiletype()) #name of the file to be compiled
-        flags = self.QuestionsArr[qNum].getFlags() #get flags
+        fType = self.QuestionsArr[qNum].getFiletype()  # file type
+        # name of the file to be compiled
+        fName = "omsi_answer{0}{1}". \
+           format(qNum, self.QuestionsArr[qNum].getFiletype()) 
+        flags = self.QuestionsArr[qNum].getFlags() # get flags
         # flags = ["-"+x for x in flags] #adding "-" before flags
 
         compileProg = self.QuestionsArr[qNum].getCompileProgram()
 
         if compileProg == 'y':
-        #selecting compiler
+        # selecting compiler
             '''if fType == ".c": # Removing hard coded compiler for C/C++
                 compiler = "gcc"
             elif fType == ".cpp":
@@ -178,33 +196,43 @@ class OmsiGui(Frame):
             else:'''
             compiler = self.QuestionsArr[qNum].getCompiler()
 
-            execName = "omsi_answer{0}".format(qNum) #name of the executable
+            execName = "omsi_answer{0}".format(qNum) # name of the executable
 
             if not os.path.isfile(fName):   #check if file exists
-                msg = "File not found. Please make sure you have saved the file."
+                msg = "File not found; have you saved the file?"
                 tkMessageBox.showinfo("Error", msg)
                 return False 
             infile = None  #for proc
             outfile = open("com_" + str(qNum), 'w') #for proc
             errfile = open("errfile", 'w')  #for proc
 
-            #generating executable...
+            # generating executable...
             startTime = time.time()  #start time
-            print "Compiling with {0} {1} -o {2} {3}".format(compiler, ' '.join(flags), execName,fName)
+            compmsg = "Compiling with {0} {1} -o {2} {3}". \
+               format(compiler, ' '.join(flags), execName,fName)
+            print  compmsg
 
-            proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = outfile, stderr = errfile, universal_newlines = True)
+            proc = \
+               subprocess.Popen([compiler] + flags + ["-o", execName, fName], \
+               stdin = infile, stdout = outfile, stderr = errfile, \
+               universal_newlines = True)
             errfile.close()
             outfile.close()
             while proc.poll() is None:  
-                if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
-                    proc.kill()     #kill process if it is still running
-                    msg = "\nExecutable could NOT be generated: Compile - Time Out.\n"
-                    break
+             if time.time() - startTime >= 10:  
+                 proc.kill()     #kill process if it is still running
+                 msg = \
+                    "\nexecutable could NOT be generated: timed out\n"
+                 break
              
             retCode = proc.poll()
             if retCode is not None and retCode != 0:
                 errfile = open ("errfile", "r")
-                msg = "Executable could NOT be generated.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
+                # show only 3 lines, error msg. might be too long
+                msg = "executable could NOT be generated.\n" + \
+                   "\n".join(errfile.readlines()) + "\n" + \
+                   "\ncompiled with {0} {1} -o {2} {3}". \
+                   format(compiler, ' '.join(flags), execName,fName)
                 errfile.close() #close error file
             else:
                 outfile = open("com_" + str(qNum), 'r')
@@ -224,16 +252,32 @@ class OmsiGui(Frame):
         text.pack()
 
         return True
-    
-    # inserts the current contents of the question box into the answer
-    # box
+
+    # inserts the current contents of the question box into the answer box
     def copyQtoA(self):
+       if self.externEditor != None:
+          tkMessageBox.showinfo('','For those not using an external editor')
+          return
        qNum = self.curqNum
        currq = self.QuestionsArr[qNum].getQuestion()
        self.QuestionsArr[qNum]. \
                setAnswer(currq.encode('utf-8'))
        self.updateAnswerBox('cpyqtoa')
-        
+
+    # inserts the current contents of the question box into the answer file
+    def copyQtoF(self):
+       if self.externEditor == None:
+          tkMessageBox.showinfo('','For those using an external editor')
+          return
+       qNum = self.curqNum
+       msg = 'Close editor buffer for ' + \
+          self.answerFiles[qNum-1] + ', before clicking OK'
+       tkMessageBox.showinfo('',msg)
+       self.saveAnswer(qNum,QtoFOp=True)
+       msg = 'Reopen editor buffer for ' + self.answerFiles[qNum-1] + \
+          ' before clicking OK'
+       tkMessageBox.showinfo('',msg)
+    
     def runProgram(self, qNum = None):       
         runCmd = ""
         msg = ""  #records messages
@@ -275,7 +319,8 @@ class OmsiGui(Frame):
             proc = subprocess.Popen(runCmd, stdin = infile, stdout = outfile, stderr = errfile, universal_newlines = True)
             errfile.close()
             while proc.poll() is None:  
-                if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
+                # wait for process to finish 2 seconds for now
+                if time.time() - startTime >= 2:  
                     proc.kill()     #kill process if it is still running
                     msg = "\nRun unsuccessful. Time Out.\n"
                     break
@@ -283,15 +328,17 @@ class OmsiGui(Frame):
             retCode = proc.poll()
             if retCode is not None and retCode != 0:
                 errfile = open ("errfile", "r")
-                msg = "Run unsuccessful.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
+                msg = "Run unsuccessful.\n" + \
+                   "\n".join(errfile.readlines()) + "\n" 
                 errfile.close() #close error file
             else:
-            #output was created...display
+            # output was created...display
                 outfile = open("o_" + str(qNum), 'r')
-                msg = "\nRun successful.\nOutput:\n" + "\n".join(outfile.readlines()) + "\n"
+                msg = "\nRun successful.\nOutput:\n" + \
+                   "\n".join(outfile.readlines()) + "\n"
                 outfile.close()
-            os.remove("errfile") #errfile deleted...may be kept as a log if required
-            os.remove("o_" + str(qNum)) #outputfile deleted...may be kept as a record if required
+            os.remove("errfile") 
+            os.remove("o_" + str(qNum)) 
         else:
         # this question does not allow run
             msg = "\nNot authorised!\n"
@@ -316,7 +363,7 @@ class OmsiGui(Frame):
         if qNum == self.curqNum:
             self.QuestionsArr[qNum]. \
                setAnswer(self.txt.get("1.0",END).encode('utf-8'))
-        self.saveAnswer(qNum)
+        # self.saveAnswer(qNum)
         filename = "omsi_answer{0}{1}". \
            format(qNum,self.QuestionsArr[qNum].getFiletype())
 
@@ -413,6 +460,7 @@ class OmsiGui(Frame):
     def getVersion(self):
        v = open('VERSION')
        tmp = v.readline()
+       self.version = tmp
        print 'Version', tmp
 
     # downloads the exam questions from the server
@@ -425,7 +473,28 @@ class OmsiGui(Frame):
             socket.close()
         except ValueError as e:
             tkMessageBox.showwarning("Error in downloading questions", e)
+        self.getAnswerFileNames()
+        if self.externEditor != None:
+           args = [self.externEditor] + self.answerFiles
+           subprocess.Popen(args)
         return True
+
+    def getAnswerFileNames(self):
+       # NOTE: questions file path hardcoded
+       eqs = open('InstructorDirectory/Questions.txt')
+       qlines = eqs.readlines()
+       QUESTIONlines = filter(lambda ql: 'QUESTION' in ql,qlines)
+       answerFiles = []
+       for i in range(len(QUESTIONlines)):
+          ql = QUESTIONlines[i]
+          ansName = 'omsi_answer' + str(i+1)
+          if '-ext' in ql:
+             tmp = ql.split()
+             j = tmp.index('-ext')
+             ansName += tmp[j+1]
+          else: ansName += '.txt'
+          answerFiles.append(ansName)
+       self.answerFiles = answerFiles
 
     # Ensures the info entered in the for the server is valid.
     def validate(self):
@@ -445,6 +514,7 @@ class OmsiGui(Frame):
     # Parses the question file to separate questions.
     def loadQuestionsFromFile(self):
         import OmsiUtility
+        # open the downloaded questions file and parse it
         self.QuestionsArr = OmsiUtility.ParseQuestions("ExamQuestions.txt")
         self.lb.delete(0, END)
         self.lb.insert(END, "Description")
@@ -452,15 +522,21 @@ class OmsiGui(Frame):
             self.lb.insert(END, "Question {0}".format(i))
             filename = "omsi_answer{0}{1}". \
                format(i,self.QuestionsArr[i].getFiletype())
-            if (os.path.isfile(filename)):
-                with open(filename) as f:
-                    st = ""
-                    for line in f.readlines():
-                        st += line
-                    self.QuestionsArr[i].setAnswer(st)
+            if self.externEditor != None:
+                self.QuestionsArr[i].\
+                   setAnswer("Using ext. editor, so do not write here.")
             else:
-                self.QuestionsArr[i]. \
-                   setAnswer("Put your answer for question {0} here.".format(i))
+                if (os.path.isfile(filename)):
+                    with open(filename) as f:
+                        st = ""
+                        for line in f.readlines():
+                            st += line
+                        self.QuestionsArr[i].setAnswer(st)
+                else:
+                       self.QuestionsArr[i]. \
+                          setAnswer("Put your answer for question {0} here.".\
+                             format(i))
+        self.lb.insert(END, "Version " + self.version)
 
         self.autoSave()
 
@@ -482,6 +558,7 @@ class OmsiGui(Frame):
         filemenu.add_command(label="Compile", command=self.compileProgram)
         filemenu.add_command(label="Run", command=self.runProgram)
         filemenu.add_command(label="CopyQtoA", command=self.copyQtoA)
+        filemenu.add_command(label="CopyQtoF", command=self.copyQtoF)
 
         filemenu.add_separator()
 
@@ -516,22 +593,34 @@ class OmsiGui(Frame):
         self.textFrame = Frame(self.parent, bg="azure")
         pWindow = PanedWindow(self.textFrame, orient=VERTICAL, bg="LightBlue1")
 
-
         self.textFrame.grid(row=0, column=1, sticky="nswe")
         # self.textFrame.grid_rowconfigure(0, weight=2)
         # self.textFrame.grid_rowconfigure(1, weight=2)
         # self.textFrame.grid_columnconfigure(0, weight=1)
 
+        # Question frame (for question text and scrollbar widgets)
+        qframe = Frame(pWindow, bd=0)
         # Question text box
-        self.question = Text(pWindow, bg="pale turquoise", font=("sans-serif", 20),wrap=WORD)
-        pWindow.add(self.question,sticky = "nwe")
+        self.question = Text(qframe, bg="pale turquoise", font=("sans-serif", 20),wrap=WORD)
         self.question.config(state=DISABLED)
         # self.question.grid(row=0,sticky="nswe",padx=5,pady =5)
+        qvscroll = Scrollbar(qframe, orient=VERTICAL, command=self.question.yview)
+        self.question['yscroll'] = qvscroll.set
+        qvscroll.pack(side="right", fill="y")
+        self.question.pack(side="left", fill="both", expand=True)
+        pWindow.add(qframe,sticky = "nwe")
 
+        # Answer frame (for answer text and scrollbar widgets)
+        aframe = Frame(pWindow, bd=0)
         # Answer text box
-        self.txt = Text(pWindow, bg="LightBlue2", font=("sans-serif", 16),wrap=WORD)
-        pWindow.add(self.txt,sticky = "swe")
+        self.txt = Text(aframe, bg="LightBlue2", font=("sans-serif", 16),wrap=WORD)
+        avscroll = Scrollbar(aframe, orient=VERTICAL, command=self.txt.yview)
+        self.txt['yscroll'] = avscroll.set
+        avscroll.pack(side="right", fill="y")
+        self.txt.pack(side="left", fill="both", expand=True)
+        pWindow.add(aframe,sticky = "swe")
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
+
         pWindow.pack(fill=BOTH, expand=1, pady=5)
         # self.loadQuestionsFromFile()
 
@@ -548,8 +637,10 @@ def main():
        app.host = sys.argv[1]
        if narg >= 3:
           app.port = sys.argv[2]
-          if narg == 4:
+          if narg >= 4:
              app.email = sys.argv[3]
+             if narg == 5:
+                app.externEditor = sys.argv[4]
 
     top.mainloop()
 

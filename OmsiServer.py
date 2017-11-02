@@ -5,10 +5,7 @@ import sys
 import thread
 import threading
 import pdb
-import time
 
-# for now, must be executed from omsi_home, defined to the the directory
-# containing this file, with InstructorDirectory/ as a subdirectory etc.
 
 class OmsiServer:
     def __init__(self, gHost, gPort, examName):
@@ -20,14 +17,8 @@ class OmsiServer:
         self.lock = thread.allocate_lock()
         self.totalClients = 0
         self.clientMap = {}
-        # directory to store the student answer files; for now, must be
-        # of the form omsi_home/InstructorDirectory/exam_name
-        self.examDirectory = \
-           os.path.join('InstructorDirectory',examName)
-        # full path name of the questions file; for now, must be of the
-        # form omsi_home/InstructorDirectory/Questions.txt
-        self.examQuestionsPath = \
-           os.path.join('InstructorDirectory','Questions.txt')
+        self.examDirectory = None
+        self.examQuestionsPath = None
 
     def awaitConnections(self):
         # blocks and waits for connections
@@ -41,9 +32,6 @@ class OmsiServer:
             self.totalClients += 1
             print "new connection detected at {0}.\ntotal connections: {1}". \
                format(clientAddr, self.totalClients)
-            localtime = time.asctime( time.localtime(time.time()) )
-            print "current time :", localtime
-            print '\n'
 
         threading.Thread(target=self.requestHandler, 
            args=(clientSocket, clientAddr,)).start()
@@ -184,18 +172,24 @@ class OmsiServer:
 
     # opens new file in a directory on the server
     def openNewFileServerSide(self, pNameOfNewFile, pStudentEmail):
+         # create new or trunctate old file - hence the w flag
         try:
+            # home directory has to exist, we just assert this
             assert os.path.exists(self.examDirectory)
+
             # append student email to Server home directory
             lDirectoryPath = os.path.join(self.examDirectory, pStudentEmail)
+
             # check if directory exists, if not we create it
             if os.path.exists(lDirectoryPath) == False:
                 os.mkdir(lDirectoryPath)
+
             # append fileName to ServerDirectory + Email subdirectory
             # create / override file
             # TODO: keep track of all versions of a submission file
             lFilePath = os.path.join(lDirectoryPath, pNameOfNewFile)
             lNewFile = open(lFilePath, 'wb')
+
             return lNewFile
         except IOError:
             print "File could not be created on the Server"
@@ -314,35 +308,45 @@ class OmsiServer:
 
         return qfilelen
 
-    # unused for now
+    # asks professor to specify directory to store exam questions and student submissions
+    # confirms that the exam questions file is in the directory
+    # stores directory path, file path as Server.gServerExamDirectory, Server.gExamQuestionsFilePath
     def startUpExamDirectory(self):
+
         lExamQuestionsFilePath = False
+
         while not lExamQuestionsFilePath:
-            # hard coding for now
+            ### print """Please enter a home directory for the exam. This will be the directory that all students\' files will be stored in.\nBefore pressing enter, please check that the exam questions are in the directory and named \'Questions.txt\'."""
+
+            # Hard coding for testing purposes.
             self.examDirectory = "InstructorDirectory"
+
             # confirm that exam questions file containing test questions
-            lExamQuestionsFilePath = \
-               self.verifyExamQuestionsFile(self.examDirectory)
+            lExamQuestionsFilePath = self.verifyExamQuestionsFile(self.examDirectory)
+
         self.examQuestionsPath = lExamQuestionsFilePath
 
-    # verify that specified directory contains exam questions file,
-    # returns file path if file not found or not readable, print error
-    # message and return false
-    def verifyExamQuestionsFile(self):
+
+    # verify that specified directory contains exam questions file, returns file path
+    # if file not found or not readable, print error message and return false
+    def verifyExamQuestionsFile(self, pExamDirectory):
+
         # return path of exam questions file
         try:
-            lOpenFile = open(self.examQuestionsPath, 'r')
+            lExamQuestionsFilePath = os.path.join(pExamDirectory, 'Questions.txt')
+            lOpenFile = open(lExamQuestionsFilePath, 'r')
             lOpenFile.close()
-            return True
+            return lExamQuestionsFilePath
+
         # if attempt to open file fails, print error and return false
         except IOError:
-            print 'Questions.txt file not found'
+            print 'Error: File does not exist or is not readable. Please check that the specified path is spelled ' \
+                  'correctly and a file named \'Questions.txt\' is in the specified directory.'
             return False
 
 
-# set up the connection, start listening, start the threads and send
-# feedback to client
 
+# set up the connection, start listening, start the threads and send feedback to client
 def main():
     print "running"
 
@@ -356,12 +360,9 @@ def main():
 
     hostname = socket.gethostname()
 
-    # args: port number, exam name
     omsiServer = OmsiServer(hostname, int(sys.argv[1]), sys.argv[2])
 
-    os.mkdir(omsiServer.examDirectory)
-
-    if not omsiServer.verifyExamQuestionsFile(): sys.exit(1)
+    omsiServer.startUpExamDirectory()
   
     # print connection information.
     print "Server for {0} is now running at {1}:{2}".format(sys.argv[2], \
@@ -370,6 +371,6 @@ def main():
     while True:
         omsiServer.awaitConnections()
 
+# this script is the "Main" script on the back-end. It is supposed to be run by itself
 if __name__ == '__main__':
     main()
-
