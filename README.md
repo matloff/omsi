@@ -20,13 +20,11 @@
 
 <blockquote>
 
-[Sachin Kumawat](mailto:skumawat@ucdavis.edu),  
-[Thong Le](mailto:thmle@ucdavis.edu), 
-[Darya Semyonova](mailto:dsemyonova@ucdavis.edu)
+[Sachin Kumawat](mailto:skumawat@ucdavis.edu),  [Thong Le](mailto:thmle@ucdavis.edu), [Darya Semyonova](mailto:dsemyonova@ucdavis.edu)
 
 </blockquote>
 
-## Maintained by:
+## Maintainer (and author of this document):
 
 <a href="http://heather.cs.ucdavis.edu/matloff.html">
 Norm Matloff 
@@ -78,9 +76,9 @@ traditional pencil-and-paper exam.  However, they use their laptop
 computers to take the exam, using OMSI.  The latter downloads the exam
 questions, and enables the students to upload their answers.  
 
-Moreover, in the case of questions which require writing code, **OMSI
-enables the students to compile and run their code, thus giving them an
-opportunity to discover and fix errors**.
+Moreover, **in the case of exams in programming classes,** OMSI enables
+the students to compile and run their code, thus giving them an
+opportunity to discover and fix errors.
 
 As detailed below, this arrangement has significant benefits for both
 students and instructors.  The system is easy to install and use, and
@@ -208,8 +206,8 @@ open a terminal window and type
 python
 ```
 
-into a terminal window.  Python should start, displaying the >>> prompt.
-(Exit via ctrl-d.)
+in a terminal window.  Python should start, displaying the >>> prompt.
+(Exit via ctrl-d or by typing 'exit()'.)
 
 To install OMSI, download the <b>.zip</b> file.
 Unzipping it will produce a directory/folder <b>omsi-master</b>, where all
@@ -242,21 +240,31 @@ GUI, one on top for the question prompt and one below to write the
 answer. The boxes are resizable and the question box may default to
 occupying the entire right side of the screen on some systems. If this
 is the case grab and drag the bottom of the box to resize the bottom
-window.
+window.  The boundary between the question and answer boxes may actually
+be hidden by your OS toolbar at the bottom of your screen; if so,
+resize the entire window first, then drag it upward so that the boundary
+line is visible.
+
+You have the option of specifying the server location, server port and
+your e-mail address on the command line when you invoke OMSI, e.g.
+
+```
+python OmsiGui.py xyx.edu 2000 me@abc.com
+```
 
 <b><i>Copy-and-paste:</i></b>
 
 In programming classes, the instructor may wish to place a template,
 i.e. an outline of the answer, in the question, with students filling in
 the gaps in the code.  Copy-and-paste operations using a mouse may
-depend on the type of machine used.  Instead, OMSI offers a **CopyQtoA**
-selection in the menu, which completely copies the contents of the
-question box to the answer box.  Students then edit.
+depend on the type of machine/OS used.  Instead, OMSI offers a
+**CopyQtoA** selection in the menu, which completely copies the contents
+of the question box to the answer box.  Students then edit.
 
 <b><i>Saving answers:</i></b>
 
 Click the question number on the left of the OMSI screen, and
-select <b>File | Save</b>.` Note that **saving is NOT submitting.**
+select <b>File | Save</b>.  Note that **saving is NOT submitting.**
 Saving your file does NOT upload your answer to the instructor's server;
 the save operation merely saves to a file on your local machine.
 See "Submitting your answers" below for uploading to the instructor.
@@ -273,12 +281,14 @@ window will pop up, displaying the results.
 
 Submit the answer to a particular question by clicking on the question
 number on the left side of the OMSI screen, and selecting <b>File |
-Submit</b>. This will upload your answer to the instructor.  You can
-also submit all answers with <b>File | Submit All</b>. A dialog box
-specifying whether submission was successful will then be displayed. 
+Submit</b>. This will upload your answer to the instructor.  A dialog
+box specifying whether submission was successful will then be displayed. 
 
-**IMPORTANT NOTE:**  If the network is busy, there may be a delay, of
-say, 10 or 15 seconds, before the submit operation completes and the
+Each time you submit your solution to a question, the new solution
+overwrites the old one.
+
+**IMPORTANT NOTE:**  If the network is busy, there may be a delay of
+a few seconds, before the submit operation completes and the
 dialog box comes up.
 
 <b><i>Tips:</i></b>
@@ -301,6 +311,7 @@ read this.
 If your exam tests you on Python or R, remember that they won't be
 running in interactive mode here, so you must write explicit **print**
 operations.  Graphical displays will not work, for the same reason.
+(There are workarounds for this, not detailed here.)
 
 Keep in mind that you should get confirmation of these operations.  When
 you submit an answer, for instance, the Success! window then pops up to
@@ -379,7 +390,7 @@ You will have 50 minutes for this exam.
 
 QUESTION -ext .py -run "python omsi_answer1.py"
 
-Write a function half() that will return x/2, and 
+Write a Python function half() that will return x/2, and 
 freestanding code will print half(3).
 
 QUESTION 
@@ -391,8 +402,9 @@ What does 'D' stand for in "UCD"?
 In this example, two exam questions are defined, one requiring Python
 code and one requiring an essay.  When a student writes and submits the
 answers, they will be saved in files **omsi_answer1.py** and
-**omsi_answer2.txt** in <strong>InstructorDirectory</strong>, in that
-student's subdirectory (indexed by e-mail address).  
+**omsi_answer2.txt** in <strong>InstructorDirectory</strong> at the
+instructor's server, in that student's subdirectory (indexed by e-mail
+address).  
 
 The suffix in that first file name arises from the specification **-ext
 .py** in the QUESTION line; otherwise the default suffix is **.txt**,
@@ -400,13 +412,15 @@ The suffix in that first file name arises from the specification **-ext
 <b><i>Specifying compile and run options</i></b>
  
 There are various **QUESTION** line options for the case of compiled
-code, e.g.
+code.  For instance, Question 1 might have a line
 
 ```
 QUESTION -ext .c -com gcc -flags "-Wall -g" -run ./omsi_answer1
 ```
 
-for Question 1.
+OMSI, in running **gcc**, will take **omsi_answer1.c** as input, and if
+the compilation is successful, produce the executable file
+**omsi_answer1**.
 
 Here is one for R, for a Question 3:
 
@@ -447,7 +461,7 @@ considering:
     note on tablets below.)
 
   * Students should be told to click the **Submit** option "early and
-    often."  (Each submission would overwrite the last.)  This is
+    often."  (Each submission will overwrite the last.)  This is
     especially important if there is concern that the local WiFi access
     point might be flooded with traffic at the end of the exam period,
     as many students turn in last-minute work.
@@ -461,16 +475,17 @@ experience, the vast majority of students are honest, and they resent
 the cheaters.  What can be done about the latter?
 
   * The OMSI window is designed to fill the student's entire screen.
-    This prevents a student from communicating with others during the
-    exam.  The students must be given strict instructions not to move,
-    iconify or resize OMSI window during the exam.  This is easily
-    monitored by proctors.
+    This prevents a student from communicating with others electronically
+    during the exam, say by e-mail.  The students must be given 
+    strict instructions not to move, iconify or resize OMSI window 
+    during the exam.  This is easily monitored by proctors.
 
   * As usual, there is the problem of a student looking at his/her
     neighbor's work, in this case a laptop screen rather than a piece of
     paper.  A common technique for dealing with this in the paper exam
     case is to require students to sit in specific seats that are
-    randomly assigned to them.  This can be done with OMSI as well.
+    randomly assigned to them, in order to prevent collaboration among
+    friends.  This can be done with OMSI as well.
 
 <h2>
 <a name="grading">Software tools for grading</a> 
@@ -512,7 +527,7 @@ for each student:
 ```
 
 The main tool is **Grading/AutoGradeOMSI.R**.  This code is in R, as it
-is an adaptation from an earlier system I (NM) had developed; also, its
+is an adaptation from an earlier system I had developed; also, its
 statistical and graphic capabilities facilitate analysis of the exam
 grades.  (There is also a file **AutoGrade.py** in that directory, but
 it is under development.)
@@ -529,8 +544,8 @@ Here are some points of improvement:
 
   * Tablet-friendly version of OMSI.
 
-  * Code to check a student's e-mail address against a class list upon
-    connection, with passwords being required.  
+  * Authentication code to check a student's e-mail address against a 
+    class list upon connection, with passwords being required.  
   
   * Code to confirm the integrity of the OMSI client code
     (i.e. verify that the source code hasn't been changed), and to
