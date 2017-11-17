@@ -179,7 +179,6 @@ class OmsiServer:
 
             # append student email to Server home directory
             lDirectoryPath = os.path.join(self.examDirectory, pStudentEmail)
-            pdb.set_trace()
 
             # check if directory exists, if not we create it
             if os.path.exists(lDirectoryPath) == False:
