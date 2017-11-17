@@ -17,8 +17,9 @@ class OmsiServer:
         self.lock = thread.allocate_lock()
         self.totalClients = 0
         self.clientMap = {}
-        self.examDirectory = None
-        self.examQuestionsPath = None
+        self.examDirectory = os.path.join('InstructorDirectory',examName)
+        self.examQuestionsPath = \
+           os.path.join('InstructorDirectory','Questions.txt')
 
     def awaitConnections(self):
         # blocks and waits for connections
@@ -115,7 +116,6 @@ class OmsiServer:
                print 'illegal client request:', data, '\n'
                break
             print "Server waiting to recv data"
-            ## pdb.set_trace()
             data = pClientSocket.recv(1024)
             ## print "Server recvd data {0}".format(data)
             print 'server received',len(data), 'bytes\n'
@@ -277,7 +277,6 @@ class OmsiServer:
 
     # routine for sending the questions file to a student
     def sendQuestionsToClient(self, pClientSocket):
-
         #send the Questions File to the client
         try:
             lOpenedQuestions = open(self.examQuestionsPath, 'r')
@@ -319,7 +318,7 @@ class OmsiServer:
             ### print """Please enter a home directory for the exam. This will be the directory that all students\' files will be stored in.\nBefore pressing enter, please check that the exam questions are in the directory and named \'Questions.txt\'."""
 
             # Hard coding for testing purposes.
-            self.examDirectory = "InstructorDirectory"
+            ### NM del  self.examDirectory = "InstructorDirectory"
 
             # confirm that exam questions file containing test questions
             lExamQuestionsFilePath = self.verifyExamQuestionsFile(self.examDirectory)
@@ -362,7 +361,9 @@ def main():
 
     omsiServer = OmsiServer(hostname, int(sys.argv[1]), sys.argv[2])
 
-    omsiServer.startUpExamDirectory()
+    os.mkdir(omsiServer.examDirectory)
+
+    # omsiServer.startUpExamDirectory()
   
     # print connection information.
     print "Server for {0} is now running at {1}:{2}".format(sys.argv[2], \
