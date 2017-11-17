@@ -191,21 +191,26 @@ class OmsiGui(Frame):
 
             #generating executable...
             startTime = time.time()  #start time
-            print "Compiling with {0} {1} -o {2} {3}".format(compiler, ' '.join(flags), execName,fName)
+            print "Compiling with {0} {1} -o {2} {3}".\
+               format(compiler, ' '.join(flags), execName,fName)
 
-            proc = subprocess.Popen([compiler] + flags + ["-o", execName, fName], stdin = infile, stdout = outfile, stderr = errfile, universal_newlines = True)
+            proc = subprocess.Popen([compiler] + flags + ["-o", 
+               execName, fName], stdin = infile, stdout = outfile, 
+               stderr = errfile, universal_newlines = True)
             errfile.close()
             outfile.close()
             while proc.poll() is None:  
-                if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
+                if time.time() - startTime >= 10:  
                     proc.kill()     #kill process if it is still running
-                    msg = "\nExecutable could NOT be generated: Compile - Time Out.\n"
+                    msg = \
+                       "\nExecutable NOT generated: Compile - Time Out.\n"
                     break
              
             retCode = proc.poll()
             if retCode is not None and retCode != 0:
                 errfile = open ("errfile", "r")
-                msg = "Executable could NOT be generated.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
+                msg = "Executable NOT generated.\n" + "\n".\
+                   join(errfile.readlines()) + "\n" 
                 errfile.close() #close error file
             else:
                 outfile = open("com_" + str(qNum), 'r')
@@ -525,14 +530,29 @@ class OmsiGui(Frame):
         # self.textFrame.grid_columnconfigure(0, weight=1)
 
         # Question text box
-        self.question = Text(pWindow, bg="pale turquoise", font=("sans-serif", 20),wrap=WORD)
-        pWindow.add(self.question,sticky = "nwe")
+        qframe = Frame(pWindow, bd=0)
+        self.question = Text(qframe, bg="pale turquoise", 
+           font=("sans-serif", 20),wrap=WORD)
+        ## pWindow.add(self.question,sticky = "nwe")
         self.question.config(state=DISABLED)
         # self.question.grid(row=0,sticky="nswe",padx=5,pady =5)
+        qvscroll = Scrollbar(qframe, orient=VERTICAL,
+           command=self.question.yview)
+        self.question['yscroll'] = qvscroll.set
+        qvscroll.pack(side="right", fill="y")
+        self.question.pack(side="left", fill="both", expand=True)
+        pWindow.add(qframe,sticky = "nwe")
 
         # Answer text box
-        self.txt = Text(pWindow, bg="LightBlue2", font=("sans-serif", 16),wrap=WORD)
-        pWindow.add(self.txt,sticky = "swe")
+        aframe = Frame(pWindow, bd=0)
+        self.txt = Text(aframe, bg="LightBlue2", 
+           font=("sans-serif", 16),wrap=WORD)
+        avscroll = Scrollbar(aframe, orient=VERTICAL, command=self.txt.yview)
+        self.txt['yscroll'] = avscroll.set
+        avscroll.pack(side="right", fill="y")
+        self.txt.pack(side="left", fill="both", expand=True)
+        pWindow.add(aframe,sticky = "swe")
+        # pWindow.add(self.txt,sticky = "swe")
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
         pWindow.pack(fill=BOTH, expand=1, pady=5)
         # self.loadQuestionsFromFile()

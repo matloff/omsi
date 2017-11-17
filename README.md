@@ -420,7 +420,9 @@ QUESTION -ext .c -com gcc -flags "-Wall -g" -run ./omsi_answer1
 
 OMSI, in running **gcc**, will take **omsi_answer1.c** as input, and if
 the compilation is successful, produce the executable file
-**omsi_answer1**.
+**omsi_answer1**.  (Students running OMSI within a virtual machine may
+have a problem with **-Wall**, so the instructor may wish not to use
+this flag.)
 
 Here is one for R, for a Question 3:
 
