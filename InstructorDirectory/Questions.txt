@@ -21,7 +21,7 @@ freestanding code will print half(3).
 
 QUESTION -ext .R -run "Rscript omsi_answer3.R"
 
-Write R code that prints out the mean R's built-in Niles dataset,
+Write R code that prints out the mean R's built-in Nile dataset,
 starting with observation 51 (year 1921).
 
 QUESTION 
