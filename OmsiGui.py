@@ -479,7 +479,7 @@ class OmsiGui(Frame):
         filemenu.add_command(label="Save", command=self.saveAnswer)
         filemenu.add_command(label="Save All", command=self.saveAllAnswers)
         filemenu.add_command(label="Submit", command=self.submitAnswer)
-        filemenu.add_command(label="Submit All", command=self.submitAllAnswers)
+        # filemenu.add_command(label="Submit All", command=self.submitAllAnswers)
         # filemenu.add_command(label="Close", command=self.donothing)
         filemenu.add_command(label="Compile", command=self.compileProgram)
         filemenu.add_command(label="Run", command=self.runProgram)

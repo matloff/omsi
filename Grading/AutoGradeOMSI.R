@@ -236,7 +236,7 @@ calcltrgrades <- function() {
    }
    # save to file for records
    save(output,file="outfile")
-   write(output,file=paste("Quiz",testid,"Grades",sep=""))
+   write(output,file=paste("../Quiz",testid,"Grades",sep=""))
    cat("\n","  letter grade results:","\n")
    for (i in 1:length(output)) {
       cat(output[i],"\n")
@@ -251,7 +251,7 @@ emailresults <- function(coursename) {
    for (l in output) {
       tmp <- strsplit(l," ")[[1]]
       emailaddr <- tmp[1]
-      emailaddr <- paste(emailaddr,"@ucdavis.edu",sep="")
+      # emailaddr <- paste(emailaddr,"@ucdavis.edu",sep="")
       cat(l,file="onestudent")
       subject <- paste(coursename,'Quiz',testid,'results',sep=" ")
       # tosend <- paste("mutt",emailaddr,"-s 'quiz results' < onestudent")
