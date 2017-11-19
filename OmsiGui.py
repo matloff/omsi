@@ -182,7 +182,8 @@ class OmsiGui(Frame):
             execName = "omsi_answer{0}".format(qNum) #name of the executable
 
             if not os.path.isfile(fName):   #check if file exists
-                msg = "File not found. Please make sure you have saved the file."
+                msg = \
+                   "File not found. Please make sure you have saved the file."
                 tkMessageBox.showinfo("Error", msg)
                 return False 
             infile = None  #for proc
@@ -194,8 +195,14 @@ class OmsiGui(Frame):
             print "Compiling with {0} {1} -o {2} {3}".\
                format(compiler, ' '.join(flags), execName,fName)
 
-            proc = subprocess.Popen([compiler] + flags + ["-o", 
-               execName, fName], stdin = infile, stdout = outfile, 
+            ## proc = subprocess.Popen([compiler] + flags + ["-o", 
+            ##    execName, fName], stdin = infile, stdout = outfile, 
+            ##    stderr = errfile, universal_newlines = True)
+            compileCmd = [compiler]
+            compileCmd += flags
+            compileCmd += ["-o", execName, fName]
+            proc = subprocess.Popen(compileCmd,
+               stdin = infile, stdout = outfile, 
                stderr = errfile, universal_newlines = True)
             errfile.close()
             outfile.close()
@@ -216,7 +223,7 @@ class OmsiGui(Frame):
                 outfile = open("com_" + str(qNum), 'r')
                 msg = "\nExecutable generated successfully.\n" + "\n".join(outfile.readlines()) + "\n"
                 outfile.close()
-            os.remove("errfile") #errfile deleted...may be kept as a log if required
+            os.remove("errfile") #errfile deleted...may be kept as a log 
             os.remove("com_" + str(qNum))
         else:
             msg = "\nNot authorised!\n"
@@ -275,29 +282,37 @@ class OmsiGui(Frame):
             outfile = open("o_" + str(qNum), 'w') #for proc
             errfile = open("errfile", 'w')  #for proc
 
-            runCmd = self.QuestionsArr[qNum].getRunCmd() #get the runCmd - in instructor questions.txt
+            # get the runCmd - in instructor questions.txt
+            runCmd = self.QuestionsArr[qNum].getRunCmd() 
             print runCmd
-            startTime = time.time()  #start time
-            proc = subprocess.Popen(runCmd, stdin = infile, stdout = outfile, stderr = errfile, universal_newlines = True)
-            errfile.close()
-            while proc.poll() is None:  
-                if time.time() - startTime >= 2:  #wait for process to finish 2 seconds for now
-                    proc.kill()     #kill process if it is still running
-                    msg = "\nRun unsuccessful. Time Out.\n"
-                    break
-            outfile.close() 
-            retCode = proc.poll()
-            if retCode is not None and retCode != 0:
-                errfile = open ("errfile", "r")
-                msg = "Run unsuccessful.\n" + "\n".join(errfile.readlines()) + "\n" #Show only 3 lines, error msg. might be too long
-                errfile.close() #close error file
-            else:
-            #output was created...display
-                outfile = open("o_" + str(qNum), 'r')
-                msg = "\nRun successful.\nOutput:\n" + "\n".join(outfile.readlines()) + "\n"
-                outfile.close()
-            os.remove("errfile") #errfile deleted...may be kept as a log if required
-            os.remove("o_" + str(qNum)) #outputfile deleted...may be kept as a record if required
+            runCmd = ' '.join(runCmd)
+            import commands
+            status,output = commands.getstatusoutput(runCmd)
+            msg = output
+##             startTime = time.time()  # start time
+##             proc = subprocess.Popen(runCmd, stdin = infile, stdout = outfile, 
+##                stderr = errfile, universal_newlines = True)
+##             errfile.close()
+##             while proc.poll() is None:  
+##                 if time.time() - startTime >= 10:  
+##                     proc.kill()     #kill process if it is still running
+##                     msg = "\nRun unsuccessful. Time Out.\n"
+##                     break
+##             outfile.close() 
+##             retCode = proc.poll()
+##             if retCode is not None and retCode != 0:
+##                 errfile = open ("errfile", "r")
+##                 msg = "Run unsuccessful.\n" + "\n".\
+##                    join(errfile.readlines()) + "\n" 
+##                 errfile.close() #close error file
+##             else:
+##             #output was created...display
+##                 outfile = open("o_" + str(qNum), 'r')
+##                 msg = "\nRun successful.\nOutput:\n" + "\n".\
+##                    join(outfile.readlines()) + "\n"
+##                 outfile.close()
+##             os.remove("errfile") 
+##             os.remove("o_" + str(qNum)) 
         else:
         # this question does not allow run
             msg = "\nNot authorised!\n"
