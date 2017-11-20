@@ -285,34 +285,37 @@ class OmsiGui(Frame):
             # get the runCmd - in instructor questions.txt
             runCmd = self.QuestionsArr[qNum].getRunCmd() 
             print runCmd
-            runCmd = ' '.join(runCmd)
-            import commands
-            status,output = commands.getstatusoutput(runCmd)
-            msg = output
-##             startTime = time.time()  # start time
-##             proc = subprocess.Popen(runCmd, stdin = infile, stdout = outfile, 
-##                stderr = errfile, universal_newlines = True)
-##             errfile.close()
-##             while proc.poll() is None:  
-##                 if time.time() - startTime >= 10:  
-##                     proc.kill()     #kill process if it is still running
-##                     msg = "\nRun unsuccessful. Time Out.\n"
-##                     break
-##             outfile.close() 
-##             retCode = proc.poll()
-##             if retCode is not None and retCode != 0:
-##                 errfile = open ("errfile", "r")
-##                 msg = "Run unsuccessful.\n" + "\n".\
-##                    join(errfile.readlines()) + "\n" 
-##                 errfile.close() #close error file
-##             else:
-##             #output was created...display
-##                 outfile = open("o_" + str(qNum), 'r')
-##                 msg = "\nRun successful.\nOutput:\n" + "\n".\
-##                    join(outfile.readlines()) + "\n"
-##                 outfile.close()
-##             os.remove("errfile") 
-##             os.remove("o_" + str(qNum)) 
+            # NM, Nov. 19, 2017:  Originally wanted to use commands
+            # module, in order to get both output and runtime errors.
+            # But it turns out that this is not available on Windows.
+            # runCmd = ' '.join(runCmd)
+            # import commands
+            # status,output = commands.getstatusoutput(runCmd)
+            # msg = output
+            startTime = time.time()  # start time
+            proc = subprocess.Popen(runCmd, stdin = infile, stdout = outfile, 
+               stderr = errfile, universal_newlines = True)
+            errfile.close()
+            while proc.poll() is None:  
+                if time.time() - startTime >= 10:  
+                    proc.kill()     #kill process if it is still running
+                    msg = "\nRun unsuccessful. Time Out.\n"
+                    break
+            outfile.close() 
+            retCode = proc.poll()
+            if retCode is not None and retCode != 0:
+                errfile = open ("errfile", "r")
+                msg = "Run unsuccessful.\n" + "\n".\
+                   join(errfile.readlines()) + "\n" 
+                errfile.close() #close error file
+            else:
+            #output was created...display
+                outfile = open("o_" + str(qNum), 'r')
+                msg = "\nRun successful.\nOutput:\n" + "\n".\
+                   join(outfile.readlines()) + "\n"
+                outfile.close()
+            os.remove("errfile") 
+            os.remove("o_" + str(qNum)) 
         else:
         # this question does not allow run
             msg = "\nNot authorised!\n"
