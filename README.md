@@ -300,22 +300,30 @@ the role of the student as above.
 
 Make sure your laptop is fully charged before the exam.  
 
+Submit your answers often. Near the end of an exam period, the network
+may be very busy, possibly making it difficult to get in.  Each
+submission will overwrite the last. 
+
 Again, remember that saving an answer does NOT submit it.  You must do
 that separately.
 
 When you begin the exam, your very first action should be to click on
-**Description**.  The instructor may have directions there that will make a
-night-and-day difference to your grade!  So first take a few seconds to
-read this.
+**Description**.  The instructor may have directions there that will
+make a night-and-day difference to your grade!  So first take a few
+seconds to read this.  Also, it is good to remove your old answer files
+(their names begin with "omsi_answer") from a previous exam.
 
 If your exam tests you on Python or R, remember that they won't be
 running in interactive mode here, so you must write explicit **print**
 operations.  Graphical displays will not work, for the same reason.
-(There are workarounds for this, not detailed here.)
+(There are workarounds for this, not detailed here.)  Note too that
+these are not compiled languages, so you should not hit the Compile
+button.
 
-Keep in mind that you should get confirmation of these operations.  When
-you submit an answer, for instance, the Success! window then pops up to
-confirm receipt, though as mentioned, this may not occur instantly.
+Keep in mind that you should get confirmation of submit and compile
+operations.  When you submit an answer, for instance, the Success!
+window then pops up to confirm receipt, though as mentioned, this may
+not occur instantly.
 
 <h2>
 <a name="instructors">Directions for instructors</a>
