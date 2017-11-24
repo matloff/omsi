@@ -230,7 +230,7 @@ python OmsiGui.py
 Then connect to the server and get the exam questions by selecting
 <b>File | Connect</b>.  State the host and port provided by the
 instructor, and   your student e-mail address.  (You can also type them
-as command-line arguments in running **OmsiGui**.)
+as command-line arguments; see below.)
 
 After you connect to the server, the exam questions will be downloaded
 to your machine.
@@ -239,11 +239,11 @@ to your machine.
 GUI, one on top for the question prompt and one below to write the
 answer. The boxes are resizable and the question box may default to
 occupying the entire right side of the screen on some systems. If this
-is the case grab and drag the bottom of the box to resize the bottom
-window.  The boundary between the question and answer boxes may actually
-be hidden by your OS toolbar at the bottom of your screen; if so,
-resize the entire window first, then drag it upward so that the boundary
-line is visible.
+is the case grab and drag the bottom of the question box to resize the
+bottom window.  The boundary between the question and answer boxes may
+actually be hidden by your OS toolbar at the bottom of your screen; if
+so, resize the entire window first, then drag it upward so that the
+boundary line is visible.
 
 You have the option of specifying the server location, server port and
 your e-mail address on the command line when you invoke OMSI, e.g.
@@ -255,7 +255,7 @@ python OmsiGui.py xyx.edu 2000 me@abc.com
 <b><i>Copy-and-paste:</i></b>
 
 In programming classes, the instructor may wish to place a template,
-i.e. an outline of the answer, in the question, with students filling in
+i.e. an outline of the answer, in the question box, with students filling in
 the gaps in the code.  Copy-and-paste operations using a mouse may
 depend on the type of machine/OS used.  Instead, OMSI offers a
 **CopyQtoA** selection in the menu, which completely copies the contents
@@ -307,11 +307,14 @@ submission will overwrite the last.
 Again, remember that saving an answer does NOT submit it.  You must do
 that separately.
 
-When you begin the exam, your very first action should be to click on
+When you begin the exam, your very first action should be to click 
 **Description**.  The instructor may have directions there that will
 make a night-and-day difference to your grade!  So first take a few
 seconds to read this.  Also, it is good to remove your old answer files
-(their names begin with "omsi_answer") from a previous exam.
+(their names begin with "omsi_answer") from a previous exam before
+starting the current one.
+
+*Tips for programming classes:*
 
 If your exam tests you on Python or R, remember that they won't be
 running in interactive mode here, so you must write explicit **print**
@@ -324,6 +327,10 @@ Keep in mind that you should get confirmation of submit and compile
 operations.  When you submit an answer, for instance, the Success!
 window then pops up to confirm receipt, though as mentioned, this may
 not occur instantly.
+
+If you have a runtime error, the output of your print statements may not
+be displayed. You can remedy this by placing a *return* statement or
+similar before the site of the runtime error.
 
 <h2>
 <a name="instructors">Directions for instructors</a>
