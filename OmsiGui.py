@@ -24,6 +24,7 @@ class OmsiGui(Frame):
         self.host = None
         self.port = None
         self.email = None
+        self.pdfCmd = None
         self.OmsiClient = None
         self.version = None
 
@@ -246,7 +247,10 @@ class OmsiGui(Frame):
        self.QuestionsArr[qNum]. \
                setAnswer(currq.encode('utf-8'))
        self.updateAnswerBox('cpyqtoa')
-        
+
+    def viewPDF(self):
+       os.system(self.pdfCmd)
+
     def runProgram(self, qNum = None):       
         runCmd = ""
         msg = ""  #records messages
@@ -486,6 +490,7 @@ class OmsiGui(Frame):
             else:
                 self.QuestionsArr[i]. \
                    setAnswer("Put your answer for question {0} here.".format(i))
+        vers = self.version
         self.lb.insert(END, "Version " + self.version)
         self.autoSave()
 
@@ -507,6 +512,7 @@ class OmsiGui(Frame):
         filemenu.add_command(label="Compile", command=self.compileProgram)
         filemenu.add_command(label="Run", command=self.runProgram)
         filemenu.add_command(label="CopyQtoA", command=self.copyQtoA)
+        filemenu.add_command(label="View PDF", command=self.viewPDF)
 
         filemenu.add_separator()
 
@@ -588,8 +594,10 @@ def main():
        app.host = sys.argv[1]
        if narg >= 3:
           app.port = sys.argv[2]
-          if narg == 4:
+          if narg >= 4:
              app.email = sys.argv[3]
+             if narg == 5:
+                app.pdfCmd = sys.argv[4]
 
     top.mainloop()
 
