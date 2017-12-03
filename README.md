@@ -77,7 +77,7 @@ computers to take the exam, using OMSI.  The latter downloads the exam
 questions, and enables the students to upload their answers.  
 
 Moreover, **in the case of exams in programming classes,** OMSI enables
-the students to compile and run their code, thus giving them an
+the students to **compile and run their code**, thus giving them an
 opportunity to discover and fix errors.
 
 As detailed below, this arrangement has significant benefits for both
@@ -97,18 +97,18 @@ Benefits for students
 
 Dear students:
 
-__OMSI will often result in your getting a higher grade in an exam than
-you would have in the traditional pencil-and-paper format:__
+OMSI will often result in __your getting a higher grade__ in an exam than
+you would have in the traditional pencil-and-paper format:
 
 <UL>
 
 <li> With essay questions, you have a chance to edit your answers,
-producing more coherent, readable prose.  No cross-outs, arrows, words
+producing more **coherent, readable prose**.  No cross-outs, arrows, words
 squeezed in above a line, no points off for unreadable handwriting. :-)
 </li> </p>
 
 <li> With coding questions, you can compile and run your code,
-giving you a chance to make corrections if your code doesn't work.
+**giving you a chance to make corrections** if your code doesn't work.
 </li> </p> 
 
 </UL>
@@ -138,9 +138,9 @@ has two components:
 students taking the exam.  You get electronic copies of the students'
 exams, eliminating the need for collecting and carrying out out a large
 number of papers, and making work sharing much easier among multiple 
-graders.  As noted in "Benefits for students" above, **OMSI enables the
+graders.  As noted in "Benefits for students" above, OMSI enables the
 student to turn in a better product, and this benefits the instructor as
-well:  Better exam performance by students is both more gratifying to
+well:  **Better exam performance by students is both more gratifying to
 the instructor and also makes for easier, less frustrating grading**.
 </li> </p>
 
@@ -269,6 +269,10 @@ Saving your file does NOT upload your answer to the instructor's server;
 the save operation merely saves to a file on your local machine.
 See "Submitting your answers" below for uploading to the instructor.
 
+By the way, your files are saved to the same directory from which you
+launched OMSI, with file names beginning with 'omsi_answer', e.g.
+__omsi_answer2.txt__,
+
 <b><i>Compiling/running code:</i></b>
 
 Save the code first.  Then, if the problem involves a compiled language
@@ -291,7 +295,7 @@ overwrites the old one.
 a few seconds, before the submit operation completes and the
 dialog box comes up.
 
-<b><i>Tips:</i></b>
+<b><i>Tips for students:</i></b>
 
 **Be sure to try OMSI in an actual session before your first OMSI-based
 exam.**  Start up the server, playing the role of the instructor (see
@@ -307,12 +311,12 @@ submission will overwrite the last.
 Again, remember that saving an answer does NOT submit it.  You must do
 that separately.
 
-When you begin the exam, your very first action should be to click 
+When you begin the exam, your very first action should be to click
 **Description**.  The instructor may have directions there that will
 make a night-and-day difference to your grade!  So first take a few
 seconds to read this.  Also, it is good to remove your old answer files
-(their names begin with "omsi_answer") from a previous exam before
-starting the current one.
+(again, their names begin with "omsi_answer") from a previous exam
+before starting the current one.
 
 *Tips for programming classes:*
 
@@ -320,7 +324,7 @@ If your exam tests you on Python or R, remember that they won't be
 running in interactive mode here, so you must write explicit **print**
 operations.  Graphical displays will not work, for the same reason.
 (There are workarounds for this, not detailed here.)  Note too that
-these are not compiled languages, so you should not hit the Compile
+these are not compiled languages, so you should not hit the **Compile**
 button.
 
 Keep in mind that you should get confirmation of submit and compile
@@ -342,11 +346,12 @@ InstructorDirectory
 
 Within the directory <b>omsi-master</b>, there will be a directory
 <b>InstructorDirectory</b>. You place your exam questions in that
-directory (sample files are included there).  The format for specifying
-the questions is detailed below. 
+directory, in a file **Questions.txt**.  The format for specifying the
+questions is detailed below. 
 
 During the exam, a subdirectory of __InstructorDirectory__ will be
-created for each student, using the e-mail address provided by the
+created for this exam, and within it there will be a further
+subdirectory for each student, using the e-mail address provided by the
 student.  In a student's subdirectory there will be an answer file for
 each question. e.g.  <b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
 
@@ -390,7 +395,8 @@ keywords **NEW**, **DESCRIPTION** or **QUESTION**.  The roles are as follows:
   * **DESCRIPTION**:  Required. The lines that follow will contain instructions 
     to students, which would normally go on the front page of a 
     printed exam, say "You will have 50 minutes for this exam."
- .  The students will be able to view it by clicking Description in the menu.  
+ .  The students will be able to view it by clicking the **Description** 
+    button in the menu.  
   * **QUESTION**:  Have one of these lines for each exam problem.  For 
   problems involving code, directions for compiling or running the 
   code go on this same line.  The lines that follow this line contain 
@@ -448,8 +454,7 @@ QUESTION -ext .R -run 'Rscript ./omsi_answer3.R'
 Note that fields with embedded spaces must be quoted.
 
 
-
-<b><i>Tips:</i></b>
+<b><i>Tips for instructors:</i></b>
 
 OMSI should greatly improve the examination process for both instructors
 and students.  However, as with any automated system, some care is
