@@ -27,7 +27,7 @@ Question 3 asked for executable R code.  The student filled in the
 answer, then hit Save and hit Run.  The latter action brought up the
 pop-up run window, with the result of the run.
 
-Finally, the student tackled Question 5, filling in the blanks in the
+Finally, the student tackled Question 4, filling in the blanks in the
 code, saving and running:
 
 ![alt text](ECS132e.png)
