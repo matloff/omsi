@@ -5,7 +5,7 @@
 ## Example: Real exam problems from ECS 132, UC Davis
 
 After connecting to the server and selecting Question 1, the student
-will this this OMSI screen:
+will see this OMSI screen:
 
 ![alt text](ECS132a.png)
 
