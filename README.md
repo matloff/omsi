@@ -77,7 +77,7 @@ computers to take the exam, using OMSI.  The latter downloads the exam
 questions, and enables the students to upload their answers.  
 
 Moreover, **in the case of exams in programming classes,** OMSI enables
-the students to **compile and run their code**, thus giving them an
+the students to **compile/run their code**, thus giving them an
 opportunity to discover and fix errors.
 
 As detailed below, this arrangement has significant benefits for both
@@ -107,7 +107,7 @@ producing more **coherent, readable prose**.  No cross-outs, arrows, words
 squeezed in above a line, no points off for unreadable handwriting. :-)
 </li> </p>
 
-<li> With coding questions, you can compile and run your code,
+<li> With coding questions, you will compile/run your code using OMSI,
 **giving you a chance to make corrections** if your code doesn't work.
 </li> </p> 
 
@@ -189,7 +189,7 @@ The Linux term *directory* is synonymous with *folder* for Mac and
 Windows.
 
 The term *terminal window* from Mac and Linux is synonymous with *Command
-Prompt* for  Windows (**cmd**).
+Prompt* for  Windows (**cmd** command).
 
 <h3>
 <a name="install">Installing the package (instructors and students)</a>
@@ -208,6 +208,10 @@ python
 
 in a terminal window.  Python should start, displaying the >>> prompt.
 (Exit via ctrl-d or by typing 'exit()'.)
+
+In the case of exams involving coding, the same statements above about
+search path and so on apply to compilers (e.g. **gcc**) and interpreters
+(e.g. **R**).
 
 To install OMSI, download the <b>.zip</b> file.
 Unzipping it will produce a directory/folder <b>omsi-master</b>, where all
@@ -238,12 +242,12 @@ to your machine.
 <b>NOTE:</b> There should be two separate windows on the right of the
 GUI, one on top for the question prompt and one below to write the
 answer. The boxes are resizable and the question box may default to
-occupying the entire right side of the screen on some systems. If this
-is the case grab and drag the bottom of the question box to resize the
-bottom window.  The boundary between the question and answer boxes may
-actually be hidden by your OS toolbar at the bottom of your screen; if
-so, resize the entire window first, then drag it upward so that the
-boundary line is visible.
+occupying most or all of the right side of the screen on some systems.
+If this is the case grab and drag the bottom of the question box to
+expand the bottom window.  The boundary between the question and answer
+boxes may actually be hidden by your OS toolbar at the bottom of your
+screen; if so, resize the entire window first, then drag it upward so
+that the boundary line is visible.
 
 You have the option of specifying the server location, server port and
 your e-mail address on the command line when you invoke OMSI, e.g.
@@ -251,6 +255,9 @@ your e-mail address on the command line when you invoke OMSI, e.g.
 ```
 python OmsiGui.py xyx.edu 2000 me@abc.com
 ```
+
+In addition, if your instructor allows it, you may specify a PDF file of
+material to help you.  See below.
 
 <b><i>Copy-and-paste:</i></b>
 
@@ -263,11 +270,12 @@ of the question box to the answer box.  Students then edit.
 
 <b><i>Saving answers:</i></b>
 
-Click the question number on the left of the OMSI screen, and
-select <b>File | Save</b>.  Note that **saving is NOT submitting.**
-Saving your file does NOT upload your answer to the instructor's server;
-the save operation merely saves to a file on your local machine.
-See "Submitting your answers" below for uploading to the instructor.
+Click the question number on the left of the OMSI screen, and select
+<b>File | Save</b>.  Note that **saving is NOT submitting to the
+server.** Saving your file does NOT upload your answer to the
+instructor's server; the save operation merely saves to a file on your
+local machine.  See "Submitting your answers" below for uploading to the
+instructor.
 
 By the way, your files are saved to the same directory from which you
 launched OMSI, with file names beginning with 'omsi_answer', e.g.
@@ -295,12 +303,33 @@ overwrites the old one.
 a few seconds, before the submit operation completes and the
 dialog box comes up.
 
+<b><i>Viewing a PDF file for consultation:</i></b>
+
+The instructor may allow you to consult a PDF file to help you during
+the exam.  In my case, for instance, my exams are open-book, and the
+book is in the form of an open-source PDF file, so this OMSI option
+makes the book available to my students during exams.  Or your
+instructor may provide you with a PDF "cheatsheet," saying containing
+important formulas.
+
+To view the PDF file, select **File | View PDF **.  Note that in order
+to use this option you must specify so in the command line in launching
+OMSI, e.g.
+
+```
+python OmsiGui.py xyx.edu 2000 me@abc.com "open xyz.pdf"
+```
+
+Depending on your OS, you might have a different command to open the PDF
+file than **open**, e.g. **evince** on a Linux system.
+
 <b><i>Tips for students:</i></b>
 
 **Be sure to try OMSI in an actual session before your first OMSI-based
 exam.**  Start up the server, playing the role of the instructor (see
 "Directions for instructors" below), and then start the client, playing
-the role of the student as above.
+the role of the student as above.  (Note:  If you run the server on your
+local machine, specify the server location as 'localhost'.)
 
 Make sure your laptop is fully charged before the exam.  
 
@@ -313,10 +342,14 @@ that separately.
 
 When you begin the exam, your very first action should be to click
 **Description**.  The instructor may have directions there that will
-make a night-and-day difference to your grade!  So first take a few
+make a night-and-day difference in your grade!  So first take a few
 seconds to read this.  Also, it is good to remove your old answer files
 (again, their names begin with "omsi_answer") from a previous exam
 before starting the current one.
+
+If your instructor allows you to use OMSI's PDF viewing option, use a
+PDF viewer that has a good search facility, so that you can quickly find
+what you need during an exam.
 
 *Tips for programming classes:*
 
@@ -334,7 +367,7 @@ not occur instantly.
 
 If you have a runtime error, the output of your print statements may not
 be displayed. You can remedy this by placing a *return* statement or
-similar before the site of the runtime error.
+similar before the line of the runtime error.
 
 <h2>
 <a name="instructors">Directions for instructors</a>
@@ -480,8 +513,9 @@ considering:
 
   * Paper copies of the exam prompt should be distributed at the start
     of the exam, and students should have the option of turning in their
-    answers on paper.  Some students may not even have laptops.  (See
-    note on tablets below.)
+    answers on paper.  Some students may not even have laptops (though
+    it should be emphasized to students that they do NOT need a "fancy"
+    laptop; an old and slow one is fine.
 
   * Students should be told to click the **Submit** option "early and
     often."  (Each submission will overwrite the last.)  This is
@@ -509,6 +543,9 @@ the cheaters.  What can be done about the latter?
     case is to require students to sit in specific seats that are
     randomly assigned to them, in order to prevent collaboration among
     friends.  This can be done with OMSI as well.
+
+I do recommend use of OMSI's PDF viewing option.  See
+"Viewing a PDF file for consultation" above.
 
 <h2>
 <a name="grading">Software tools for grading</a> 
