@@ -35,6 +35,10 @@ Norm Matloff
 <UL>
 
 <li> 
+<a href="#quickstart">Quick start</a> 
+</li> </p> 
+
+<li> 
 <a href="#what">What is OMSI?</a> 
 </li> </p> 
 
@@ -60,6 +64,15 @@ Norm Matloff
 
 </UL>
 
+
+<h2>
+<a name="quickstart"> Quick start:</a> 
+</h2>
+
+
+There is a fully worked-out example for an exam using the R language 
+in [a README file included in this package](READMEecs132.md).  (You need
+not know R to follow the example.)
 
 <h2>
 <a name="what"> What is OMSI?</a> 
@@ -359,11 +372,6 @@ operations.  Graphical displays will not work, for the same reason.
 (There are workarounds for this, not detailed here.)  Note too that
 these are not compiled languages, so you should not hit the **Compile**
 button.
-
-Keep in mind that you should get confirmation of submit and compile
-operations.  When you submit an answer, for instance, the Success!
-window then pops up to confirm receipt, though as mentioned, this may
-not occur instantly.
 
 If you have a runtime error, the output of your print statements may not
 be displayed. You can remedy this by placing a *return* statement or
