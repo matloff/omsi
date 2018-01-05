@@ -1,30 +1,62 @@
 
-
-NEW
-
-Note to self: Samples; 2 questions asking for Python code, 1 requiring
-an essay.
-
 DESCRIPTION
 
-Students: Remember that Python and R won't be running in interactive
-mode here, since you must call 'print' explicitly.
+Students:  Please note instructions in paper copy of quiz.  Save your
+files often, make sure OMSI fills your entire screen at all times, etc.
 
-QUESTION -ext .py -run "python omsi_answer1.py"
+A question may not fully fit into your OMSI question box, which is not
+scrollable.  You can try adjusting the relative size of the question and
+answer boxes, but remember that clicking CopyQtoA will copy the entire
+question box to the answer box.
 
-Write a function sq(x) that return x^2, and print sq(3).
+In questions involving code which will partially be given to you in the
+question specs, you may need add new lines.  
 
-QUESTION -ext .py -run "python omsi_answer2.py"
+QUESTION -ext .c -com gcc -flags '-fopenmp' -run ./omsi_answer1
 
-Write a function half() that will return x/2, and 
-freestanding code will print half(3).
+In Quiz 4, Question 4, you wrote code to extract a group of consecutive
+columns of one matrix to form a new matrix.  The code below is the same,
+except that it extracts consecutive rows.
 
-QUESTION -ext .R -run "Rscript omsi_answer3.R"
+// creates a new matrix from a group of consecutive rows of an old one
 
-Write R code that prints out the mean R's built-in Niles dataset,
-starting with observation 51 (year 1921).
+#include<omp.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 
-QUESTION 
+int onedim(int row, int col, int nCols) { return row * nCols + col; }
 
-What does 'D' stand for in "UCD"?
+// copies nRowsSubM consecutive rows of m to subMat, starting with 
+// row firstRow in m; m is nRowsM by nColsM
+
+int *getRows(int *m, int nRowsM, int nColsM, int firstRow, int nRowsSubM) {
+   int *subMat = malloc(nRowsSubM * nColsM * sizeof(int));
+   #pragma omp parallel
+   {  int *startFrom,*startTo,i;
+
+      for (int i = 0; i < nRowsSubM; i++) {
+         startFrom = m +      ;
+         startTo = subMat +         ;
+         memcpy(startTo, startFrom, nColsM * sizeof(int));
+      }
+   }
+   return subMat;
+}
+
+int main() {
+   // intended as a 4x3 matrix
+   int z[12] = {5,12,13,6,2,22,15,3,1,2,3,4};
+   omp_set_num_threads(2);
+   // extract the middle 2 rows
+   int *outM = getRows(z,4,3,1,2);
+   // should print
+   //  6  2  22
+   // 15  3   1
+   for (int i = 0; i < 2; i++) {
+      printf("%d %d %d\n",outM[3*i],outM[3*i+1],outM[3*i+2]);
+   }
+}
+
+
 
