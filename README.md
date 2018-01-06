@@ -208,9 +208,9 @@ Prompt* for  Windows (**cmd** command).
 <a name="install">Installing the package (instructors and students)</a>
 </h3>
 
-You will need Python installed on your machine. For Mac and Linux
-systems, it should already be there, but it is easily downloadable for
-Windows.
+You will need Python (not Python3) installed on your machine. For Mac
+and Linux systems, it should already be there, but it is easily
+downloadable for Windows.
 
 You must have Python in your executable search path.  To check this,
 open a terminal window and type
