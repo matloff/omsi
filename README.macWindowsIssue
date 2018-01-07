@@ -1,0 +1,21 @@
+
+In the process of using OMSI, we discovered a bug in Windows that
+affected server operation, as follows:
+
+Apparently if one creates a file on a Unix system (at least a Mac), and
+then opens it on a windows system, the file may become an odd mixture of
+Unix and Windows in terms of end-of-line characters.  This is a known
+issue; see
+
+https://forum.unity.com/threads/inconsistent-line-endings.40671/
+
+When this happened with the Questions.txt file, the result was that
+students running the client on a Mac (but not Linux or Windows) had
+severe problems with distorted line structure.  See the file
+Questions.txt.macWinIssue.SAVE in this package; run od -x and note that
+some lines have 0x0a0d and some have just 0x0a.
+
+Short-term fix:  Avoid running the server on Windows.
+
+Longer-term fix:  Have the server remove any 0x0d bytes from the
+Questions.txt file.

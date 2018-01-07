@@ -1,0 +1,110 @@
+
+
+DESCRIPTION
+
+Students:  Please note instructions in paper copy of quiz.  Save your
+files often, make sure OMSI fills your entire screen at all times, etc.
+
+A question may not fully fit into your OMSI question box, which is not
+scrollable.  You can try adjusting the relative size of the question and
+answer boxes, but remember that clicking CopyQtoA will copy the entire
+question box to the answer box.
+
+QUESTION 
+
+Fill in the blanks with memory-related size terms, e.g. "byte":  In
+assessing the relative performance merits of write-through vs.
+write-back cache policies, we take into account that a write-through
+action will write a _______________ of memory whereas write-back writes
+a __________________.  EXPLAIN YOUR ANSWER.
+
+QUESTION
+
+Cite a line in one of our textbook's example programs in which a
+hardware F&A instruction would be helpful but the Intel LOCK prefix
+would not be.  Assume that F&A allows incrementing by any number, not
+just 1.  EXPLAIN YOUR ANSWER.
+
+QUESTION
+
+Consider the 'pthreads' example, Sec. 1.4.3.1.  In our last quiz, we noted
+that the task granularity might be too fine, with each thread checking
+only one value of 'base' at a time.  We added a global variable 'nbinc'
+to enable coarser granularity.  Here we will add another modification,
+seen in the code snippet below.
+
+Fill in the blank:  This modification is in the spirit of what in OpenMP
+is called the _________________ policy.
+
+pthread_mutex_lock(&nextbaselock);  // old line 47
+base = nextbase;
+nextbase += nbinc;
+if (nbinc > 1) nbinc--;
+pthread_mutex_unlock(&nextbaselock);
+for (b = base; b <= base+nbinc; b += 2) {
+   if (b <= lim)  {
+      // don't bother crossing out if base known composite
+      if (prime[b])  {
+         crossout(b);
+         work++;  // log work done by this thread
+      }
+   }
+   else return work;
+}
+
+QUESTION -ext .c -com gcc -flags '-fopenmp' -run ./omsi_answer4
+
+Here you will write a C function 'whichmax()' that inputs an array and
+then uses OpenMP to determine both the maximum value in the array and
+the index at which the maximum value occurs.  (Don't worry about ties;
+any instance of the max is fine.) There is test code included, and your
+code must compile and run correctly on the test.  For simplicity, assume
+that the number of threads will evenly divide the length of the array.
+
+Partial code is enclosed below.  You may alter those lines if you wish,
+but you must comply with the specified call form, and must leave the
+test code intact.
+
+#include <omp.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+void max(int *x, int nx, int *mx, int *whrmx) {
+   *mx = x[0]; *whrmx = 0;
+   for (int i = 1; i < nx; i++) 
+      if (x[i] > *mx) {
+         *mx = x[i];
+         *whrmx = i;
+      }
+}
+
+// inputs are the array x and its length, nx; outputs are the maximum
+// value *mx and the index at which it occurs, *whrmx
+void wheremax(int *x, int nx, int *mx, int *whrmx) {
+   int nth, chunk; 
+   // the max values found in each chunk, and their indices within chunks
+   int *maxvals, *maxivals;
+   #pragma omp parallel
+   {
+      #pragma omp single
+      {
+      }
+      // where my chunk starts
+      int firsti = me * chunk;
+      max(    );
+   }
+   int whichchunk;
+   max(    ) 
+
+}
+
+int main() {
+   int z[8] = {5,12,13,6,2,22,15,3};
+   int m,wherem;
+   omp_set_num_threads(4);  // overrides the env var
+   wheremax(z,8,&m,&wherem);
+   // should print out 22 and 5
+   printf("the max value was %d\n",m);
+   printf("it occurred at index %d\n",wherem);
+}
+
