@@ -535,6 +535,14 @@ considering:
     emergency, they can copy their local copies of their **omsi_answer***
     files to the key, then turn in the key.
 
+Concerning the issue of where to run the server:  The server needs a
+static IP address, so the instructor will probably not be able to run
+the server on his/her laptop.  I run it on one of our lab computers.  I
+use **ssh** to remotely log in to the server from the classroom, and
+start the server at the appropriate time.  Depending on configuration,
+**ssh** may time out about a certain time, so I run **screen** and run
+the server within a terminal window there (Sachin's idea).
+
 And what about cheating and other forms of academic dishonesty?  In my
 experience, the vast majority of students are honest, and they resent
 the cheaters.  What can be done about the latter?
