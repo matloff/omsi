@@ -15,7 +15,15 @@ severe problems with distorted line structure.  See the file
 Questions.txt.macWinIssue.SAVE in this package; run od -x and note that
 some lines have 0x0a0d and some have just 0x0a.
 
-Short-term fix:  Avoid running the server on Windows.
+Short-term fix:  Avoid running the server on Windows.  
 
-Longer-term fix:  Have the server remove any 0x0d bytes from the
-Questions.txt file.
+Longer-term fix:  Have the server check for, and fix this anomaly in the
+Windows file.
+
+If you suspect a problem and are running the server on a Unix machine
+(Mac, Linux), simply open the file in vi, run
+
+:set ff=unix
+
+and save the file.
+
