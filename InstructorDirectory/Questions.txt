@@ -12,77 +12,14 @@ question box to the answer box.
 
 QUESTION
 
-Consider the Mandelbrot code, pp.89ff.  Instead of watching whether z
-stays in the disk of radius 2, centered at 0+0i, say we wish to use a
-square centered there with each side of length 4, and with sides
-parallel to the horizontal and vertical axes.  State what changes would
-need to be made to the code.
+What does "UCD" stand for?
 
-QUESTION
+QUESTION -ext .R -run 'Rscript omsi_answer2.R'
 
-Consider the scenario at the top of p.71 ("If we are unlucky...").
-Which of the following scenarios is possible?  Assume that all threads
-will be going through the code leading up to the barrier.  (Thread 12
-will mean the thread currently running on processor 12, etc.)
+Write a function f() that returns double its argument.  Fill in the blanks:
 
-(i) Thread 12 fails to go past the barrier, but the others do.
-
-(ii) Thread 3 fails to go past the barrier, but the others do.
-
-(iii) Both threads 3 and 12 fail to go past the barrier, but the others do.
-
-(iv) All of the above are impossible.  Definitely no thread will go past
-the barrier.
-
-QUESTION 
-
-In the code on p.100, consider the possibility of deleting one or both
-of lines 103 and 105.  We wish to delete as many lines as possible, with
-the sole criterion being whether the program runs correctly, i.e. gives
-correct results; if the deletion slows things down, that is not an
-issue.  Answer either None, Delete 103 only, Delete 105 only or Delete
-both.  EXPLAIN YOUR ANSWER.
-
-QUESTION -ext .c -com gcc -flags '-fopenmp' -run ./omsi_answer4
-
-Here you will write OpenMP code that extracts a submatrix subMat from a
-matrix m.  The submatrix will consist of a group of consecutive columns
-of m.
-
-#include<omp.h>
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-
-int onedim(int row, int col, int nCols) { return row * nCols + col; }
-
-// nColsSubM consecutive columns of m will be extracted, starting with
-// column firstCol
-int *getCols(int *m, int nRowsM, int nColsM, int firstCol, int nColsSubM) {
-   int *subMat;
-   #pragma omp parallel
-   {  int *startFrom,*startTo;
-      subMat = malloc(nRowsM * nColsSubM * sizeof(int));
-      for (int row = 0; row < nRowsM; row++) {
-         startFrom =            ;
-         startTo =            ;
-         memcpy(           );
-      }
-   }
-   return subMat;
+f <- function(x) {
 }
 
-int main() {
-   // intended as a 4x3 matrix
-   int z[12] = {5,12,13,6,2,22,15,3,1,2,3,4};
-   omp_set_num_threads(2);
-   // extract the last 2 cols
-   int *outM = getCols(z,4,3,1,2);
-   // check output
-   for (int i = 0; i < 4; i++) {
-      printf("%d %d\n",outM[2*i],outM[2*i+1]);
-   }
-}
-
-
+print(f(5))
 
