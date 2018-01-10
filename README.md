@@ -223,8 +223,17 @@ in a terminal window.  Python should start, displaying the >>> prompt.
 (Exit via ctrl-d or by typing 'exit()'.)
 
 In the case of exams involving coding, the same statements above about
-search path and so on apply to compilers (e.g. **gcc**) and interpreters
-(e.g. **R**).
+search path and so on apply to compilers (e.g. **gcc**) and other
+interpreters.  For example, if your exams will be using R, 
+open a terminal window and type
+
+```
+R
+```
+
+in a terminal window. (Start R directly in this manner, not the R GUI.)
+R should start, displaying the > prompt.  (Exit via ctrl-d or by typing
+'exit()'.)
 
 To install OMSI, download the <b>.zip</b> file.
 Unzipping it will produce a directory/folder <b>omsi-master</b>, where all
@@ -343,6 +352,8 @@ exam.**  Start up the server, playing the role of the instructor (see
 "Directions for instructors" below), and then start the client, playing
 the role of the student as above.  (Note:  If you run the server on your
 local machine, specify the server location as 'localhost'.)
+
+Also, make sure your laptop can connect to your school's WiFi system.
 
 Make sure your laptop is fully charged before the exam.  
 
