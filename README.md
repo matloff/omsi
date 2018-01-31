@@ -147,11 +147,22 @@ has two components:
 
 <UL>
 
-<li> <i>Exam administration.</i>  This manages the actual process of the
-students taking the exam.  You get electronic copies of the students'
-exams, eliminating the need for collecting and carrying out out a large
+<li> <i>Exam administration:</i>  
+</p>
+
+<p>
+This manages the actual process of the students taking the exam.  
+You get electronic copies of the students' exams, eliminating 
+the need for collecting and carrying out out a large
 number of papers, and making work sharing much easier among multiple 
-graders.  As noted in "Benefits for students" above, OMSI enables the
+graders.  At the end of an exam period, there is no chaos, e.g. from
+students who are still writing even when the period is over; the
+instructor merely shuts down the server at that time, and nothing
+further can be submitted.
+</p>
+
+<p>
+As noted in "Benefits for students" above, OMSI enables the
 student to turn in a better product, and this benefits the instructor as
 well:  **Better exam performance by students is both more gratifying to
 the instructor and also makes for easier, less frustrating grading**.
