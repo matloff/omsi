@@ -76,8 +76,7 @@ class OmsiGui(Frame):
         if self.curqNum > 0 and not qNum == 'cpyqtoa':
             self.QuestionsArr[self.curqNum]. \
                setAnswer(self.txt.get("1.0", END).encode('utf-8'))
-
-        self.txt.delete("1.0", END)
+            self.txt.delete("1.0", END)
         if qNum ==  'cpyqtoa': qNum = self.curqNum
         if not qNum == None and qNum > 0:
             self.txt.insert(END, self.QuestionsArr[qNum].getAnswer())
@@ -530,7 +529,7 @@ class OmsiGui(Frame):
         editmenu.add_command(label="Delete", command=self.donothing)
         editmenu.add_command(label="Select All", command=self.donothing)
 
-        menubar.add_cascade(label="Edit", menu=editmenu)
+        # menubar.add_cascade(label="Edit", menu=editmenu)
 
         self.parent.config(menu=menubar)
 
