@@ -299,7 +299,7 @@ i.e. an outline of the answer, in the question box, with students filling in
 the gaps in the code.  Copy-and-paste operations using a mouse may
 depend on the type of machine/OS used.  Instead, OMSI offers a
 **CopyQtoA** selection in the menu, which completely copies the contents
-of the question box to the answer box.  Students then edit.
+of the question box to the end of the answer box.  Students then edit.
 
 <b><i>Saving answers:</i></b>
 
