@@ -569,7 +569,7 @@ class OmsiGui(Frame):
         # Answer text box
         aframe = Frame(pWindow, bd=0)
         self.txt = Text(aframe, bg="LightBlue2", 
-           font=("sans-serif", 16),wrap=WORD)
+           font=("sans-serif", 14),wrap=WORD)
         avscroll = Scrollbar(aframe, orient=VERTICAL, command=self.txt.yview)
         self.txt['yscroll'] = avscroll.set
         avscroll.pack(side="right", fill="y")
