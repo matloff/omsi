@@ -127,8 +127,13 @@ waitenter <- function() {
 # grade the i-th problem 
 gradestudentans <- function(i) {
    sfl <- studentfilenames[i]
-   if (!sfl %in% list.files()) {
+   flsHere <- list.files()
+   if (!sfl %in% flsHere) {
       cat(sfl,'not present\n')
+      print('similar files')
+      tmp <- strsplit(sfl,'.',fixed=TRUE)[[1]][1]
+      cmd <- paste('ls ',tmp,'.*',sep='')
+      print(system(cmd))
       return(0)
    }
    # try cmd, wait for instructor to hit Enter
