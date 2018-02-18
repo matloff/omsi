@@ -17,7 +17,7 @@ class OmsiServer:
         self.socket = self.createSocket()  # listening socket
         self.lock = thread.allocate_lock()
         self.totalClients = 0
-        self.clientMap = {}
+        self.clientMap = {}  # who has connected, indexed by IP
         self.examDirectory = os.path.join('InstructorDirectory',examName)
         self.examQuestionsPath = \
            os.path.join('InstructorDirectory','Questions.txt')
@@ -27,10 +27,9 @@ class OmsiServer:
         print 'server awaiting connections\n'
         clientSocket, clientAddr = self.socket.accept()
         print 'connection from client at', clientAddr, '\n'
-        if clientAddr in self.clientMap:
-            self.clientMap[clientAddr] += 1
-        else:
-            self.clientMap[clientAddr] = 1
+        clientIP = clientAddr[0]
+        if not clientIP in self.clientMap:
+            self.clientMap[clientIP] = []
             self.totalClients += 1
             print "new connection detected at {0}.\ntotal connections: {1}". \
                format(clientAddr, self.totalClients)
@@ -79,7 +78,15 @@ class OmsiServer:
                 lFileName = fields[1]
                 lStudentEmail = fields[2]
                 print 'file to be sent is', lFileName
-                print 'student email is', lStudentEmail
+                print 'student ID:', lStudentEmail,
+                print ', IP:', addr
+                self.clientMap[addr[0]].append(lStudentEmail)
+                print 'client list:'
+                print self.clientMap
+                tmp = ' '.join(['{0} {1}'.format(k, v) for k,v in \
+                   self.clientMap.iteritems()])
+                self.examDirectoryLogFile.writelines(tmp)
+                self.examDirectoryLogFile.flush()
 
                 # try to receive the (entire) file; lIsExecuted is
                 # success/failure code
@@ -361,6 +368,8 @@ def main():
     hostname = socket.gethostname()
     omsiServer = OmsiServer(hostname,int(sys.argv[1]),sys.argv[2])
     os.mkdir(omsiServer.examDirectory)
+    omsiServer.examDirectoryLogFile = \
+       open(omsiServer.examDirectory + '/LOGFILE','w')
     # connection information.
     print "Server for {0} is now running at {1}:{2}".format(sys.argv[2], \
        hostname, sys.argv[1])
