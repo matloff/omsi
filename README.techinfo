@@ -2,7 +2,7 @@
 Some Technical Details
 
 
-Files created:
+files created:
 
    server:
 
@@ -54,7 +54,7 @@ client operation:
          inserts into the question and answer boxes when user clicks on
          a question; insert() here is a method in the Tkinter.Text class
 
-      uses Tk, so main() sets up a Tk instance top(), then does
+      uses Tk, so main() sets up a Tk instance 'top', then does
 
          app = OmsiGui(top)
          top.mainloop()

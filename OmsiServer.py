@@ -62,7 +62,6 @@ class OmsiServer:
     # handles client interaction: detects client connection delegates 
     # requests to the corresponding routines
     def requestHandler(self, pClientSocket, addr):
-
         while 1:
             data = pClientSocket.recv(1024)
             if len(data) == 0:
@@ -89,6 +88,8 @@ class OmsiServer:
                 if lIsExecuted == "s":
                     # transmits TCP message: success
                     successmsg = lStudentEmail + ' successfully submitted ' 
+                    print '************  client:'
+                    print pClientSocket.getpeername()
                     successmsg = successmsg + lFileName 
                     print successmsg
                     pClientSocket.send(successmsg)
@@ -345,18 +346,17 @@ class OmsiServer:
 
 
 
-# set up the connection, start listening, start the threads and send feedback to client
+# set up the connection, start listening, start the threads and 
+# send feedback to client
 def main():
     print "running"
-
     v = open('VERSION')
     tmp = v.readline()
     print 'Version', tmp
-
-    if len(sys.argv) <  3:
-        print "Usage: OmsiServer.py port ExamName"
+    # command line should be:  OmsiServer.py, host, port, exam name
+    if len(sys.argv) <  4:
+        print "Usage: OmsiServer.py host port ExamName"
         sys.exit(1)
-
     hostname = socket.gethostname()
 
     omsiServer = OmsiServer(hostname, int(sys.argv[1]), sys.argv[2])
