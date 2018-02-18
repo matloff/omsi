@@ -17,13 +17,20 @@ files created:
 server operation:
 
    OmsiServer.py:
+      
+      clientMap:  dictionary of all clients so far
 
-      main loop:  repeatedly call awaitConnections()
+      main loop:  
+      
+         create omsiServer, an instance of the class OmsiServer
+
+         repeatedly call awaitConnections()
 
       OmsiServer.awaitConnections(): 
       
          runs a listening socket, creates a new thread when a call
-         finally comes in; creates socket to pair with client;
+         finally comes in; if new client (new IP), adds client to 
+         self.clientMap; creates socket to pair with client;
          launches a thread that runs requestHandler()
 
       OmsiServer.requestHandler(): 

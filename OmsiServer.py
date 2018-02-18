@@ -8,12 +8,13 @@ import pdb
 
 
 class OmsiServer:
+
     def __init__(self, gHost, gPort, examName):
         self.gHost = gHost
         self.gPort = gPort
         self.examName = examName
 
-        self.socket = self.createSocket()
+        self.socket = self.createSocket()  # listening socket
         self.lock = thread.allocate_lock()
         self.totalClients = 0
         self.clientMap = {}
@@ -353,25 +354,19 @@ def main():
     v = open('VERSION')
     tmp = v.readline()
     print 'Version', tmp
-    # command line should be:  OmsiServer.py, host, port, exam name
-    if len(sys.argv) <  4:
-        print "Usage: OmsiServer.py host port ExamName"
+    # command line should be:  OmsiServer.py, port, exam name
+    if len(sys.argv) <  3:
+        print "Usage: OmsiServer.py port exam_name"
         sys.exit(1)
     hostname = socket.gethostname()
-
-    omsiServer = OmsiServer(hostname, int(sys.argv[1]), sys.argv[2])
-
+    omsiServer = OmsiServer(hostname,int(sys.argv[1]),sys.argv[2])
     os.mkdir(omsiServer.examDirectory)
-
-    # omsiServer.startUpExamDirectory()
-  
-    # print connection information.
+    # connection information.
     print "Server for {0} is now running at {1}:{2}".format(sys.argv[2], \
        hostname, sys.argv[1])
-
     while True:
         omsiServer.awaitConnections()
 
-# this script is the "Main" script on the back-end. It is supposed to be run by itself
 if __name__ == '__main__':
     main()
+
