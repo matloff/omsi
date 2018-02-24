@@ -34,6 +34,7 @@ class OmsiClient:
         try:
             # create TCP socket (domain, type)
             pSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            pSocket.settimeout(20)
             # initiate server connection to global
             pSocket.connect((self.gHost, self.gPort))
 
