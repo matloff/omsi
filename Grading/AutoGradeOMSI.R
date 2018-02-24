@@ -170,7 +170,7 @@ grader <- function() {
       total <- 0
       # start grading the problems
       for (i in 1:nproblems) {
-         cat('Problem',i,'\n')
+         cat('\n\nProblem',i,'\n\n')
          score <- gradestudentans(i)
          outputline <- 
             paste(outputline," ", score,"/",pttots[i],sep="")
