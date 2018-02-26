@@ -80,18 +80,31 @@ not know R to follow the example.)
 
 OMSI, short for Online Measurement of Student Insight, is a software
 tool for conducting and grading examinations in a manner that is both
-secure and conducive to high-quality measurement of student insight. It
+secure and conducive to **high-quality measurement of student insight**. It
 is suitable for small or large class exams, be they based on
-**essays, writing code, math analysis or multiple choice questions**.
+**essays, writing code or math analysis.**  This is NOT a "Scantron  
+multiple choice test administrator."
 
 Students come to the classroom at the regular class time, just as with a
 traditional pencil-and-paper exam.  However, they use their laptop
 computers to take the exam, using OMSI.  The latter downloads the exam
 questions, and enables the students to upload their answers.  
 
-Moreover, **in the case of exams in programming classes,** OMSI enables
-the students to **compile/run their code**, thus giving them an
-opportunity to discover and fix errors.
+Moreover, **in the case of exams in programming classes,** OMSI is
+especially valuable:
+
+<blockquote>
+
+OMSI enables the students to **compile/run their code**, thus giving
+them an opportunity to discover and fix errors.  I often give them the
+intended output, for instance, and if their code doesn't match it, this
+feedback allows them to think about where they went wrong (whether a
+logic error or lack of understanding of the concepts in a math problem),
+thus giving them a chance to give the problem more thought and hopefully
+correct their code.
+
+</blockquote>
+
 
 As detailed below, this arrangement has significant benefits for both
 students and instructors.  The system is easy to install and use, and
@@ -127,8 +140,8 @@ squeezed in above a line, no points off for unreadable handwriting. :-)
 </UL>
 
 In both of these aspects, OMSI gives you a better opportunity to
-demonstrate your insight into the course material, compared to the
-traditional exam format.
+demonstrate your insight into the course material (and thus achieve a
+better grade), compared to the traditional exam format.
 
 <h2>
 <a name="benteacher"> 
@@ -158,7 +171,10 @@ number of papers, and making work sharing much easier among multiple
 graders.  At the end of an exam period, there is no chaos, e.g. from
 students who are still writing even when the period is over; the
 instructor merely shuts down the server at that time, and nothing
-further can be submitted.
+further can be submitted.  If a student wishes his/her performance on an
+exam problem to be reassessed, the fact that the files are online means
+that the instructor can check the student's work from anywhere, rather
+than having to wait for the next visit to the office.
 </p>
 
 <p>
@@ -231,7 +247,9 @@ python
 ```
 
 in a terminal window.  Python should start, displaying the >>> prompt.
-(Exit via ctrl-d or by typing 'exit()'.)
+(Exit via ctrl-d or by typing 'exit()'.)  If you have both Python 2 and
+3 on your system, you will need your login file, e.g. **.profile** for
+**bash** to give priority to version 2.
 
 In the case of exams involving coding, the same statements above about
 search path and so on apply to compilers (e.g. **gcc**) and other
