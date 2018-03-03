@@ -1,0 +1,18 @@
+
+Version 1.2.4:
+
+   Added timeout to configureSocket() in OmsiClient, so that if network
+   traffic is heavy, client will give up trying to send file to server,
+   and try again.
+
+   Server now will create a file LOGFILE, recording IP addresses of
+   client connection actions.  File is stored in the same directory as
+   the student answer files.
+
+Version 1.2.5:
+
+   Cleaned up configureSocket() a bit, putting 'try:' within a 'while'
+   loop rather than recursing if error.
+
+   Added this CHANGELOG.
+

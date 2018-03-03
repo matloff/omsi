@@ -165,48 +165,43 @@ class OmsiClient:
         print "Opening file " + pFileName
         lOpenFile = self.openFileOnClient(pFileName)
         print lOpenFile
-
-        try:
-            ### if not self.omsiSocket:
-            ###     self.omsiSocket = self.configureSocket()
-            self.omsiSocket = self.configureSocket()
-
-            # tell the server that we are sending a file; 'OMSI0001' is
-            # the signal for this;  0 bytes serve delimiter between fields
-            msg = \
-               "OMSI0001" + '\0' + pFileName + "\0" + self.gStudentEmail
-            self.omsiSocket.send(msg)
-            print 'notified server a file is coming,'
-            print 'via the message', msg
-
-            # send the file
-            print "sending file %s" % pFileName
-            # wait for go-ahead from server
-            goahead = self.omsiSocket.recv(1024)
-            if goahead != 'ReadyToAcceptClientFile':
-               print 'server and client out of sync'
-               print 'received from server:', goahead
-               print 'closing client socket, suggest reconnect'
-            while (True):
-                lFileChunk = lOpenFile.read(1024)
-                nread = len(lFileChunk)
-                if nread == 0: 
-                   print 'end of file'
-                   break
-                print "file chunk:\n", lFileChunk
-                self.omsiSocket.send(lFileChunk)
-                print 'sent', len(lFileChunk), 'bytes'
-
-            lOpenFile.close()
-            print 'file closed\n'
-
-            lServerResponse = self.omsiSocket.recv(1024)
-            return lServerResponse
-###         raise ValueError("Error sending file to server!", pFileName, e)
-        except socket.error as e:
-            print 'exception'
-            print "Got error {0} for {1}.\nSetting socket to none, retrying". \
-               format(e, pFileName)
-            self.omsiSocket = None
-            self.sendFileToServer(pFileName)
+        while True:
+           try:
+               ### if not self.omsiSocket:
+               ###     self.omsiSocket = self.configureSocket()
+               self.omsiSocket = self.configureSocket()
+               # tell the server that we are sending a file; 'OMSI0001' is
+               # the signal for this;  0 bytes serve delimiter between fields
+               msg = "OMSI0001" + '\0' + pFileName + "\0" + self.gStudentEmail
+               self.omsiSocket.send(msg)
+               print 'notified server a file is coming,'
+               print 'via the message', msg
+               # send the file
+               print "sending file %s" % pFileName
+               # wait for go-ahead from server
+               goahead = self.omsiSocket.recv(1024)
+               if goahead != 'ReadyToAcceptClientFile':
+                  print 'server and client out of sync'
+                  print 'received from server:', goahead
+                  print 'closing client socket, suggest reconnect'
+               while (True):
+                   lFileChunk = lOpenFile.read(1024)
+                   nread = len(lFileChunk)
+                   if nread == 0: 
+                      print 'end of file'
+                      break
+                   print "file chunk:\n", lFileChunk
+                   self.omsiSocket.send(lFileChunk)
+                   print 'sent', len(lFileChunk), 'bytes'
+               lOpenFile.close()
+               print 'file closed\n'
+               lServerResponse = self.omsiSocket.recv(1024)
+               return lServerResponse
+               ### raise ValueError("Error sending file to server!", \
+               ###   pFileName, e)
+           except socket.error as e:
+               print 'exception'
+               print "Got error {0} for {1}".format(e, pFileName)
+               print "Setting socket to none, retrying"
+               self.omsiSocket = None
 
