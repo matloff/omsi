@@ -454,6 +454,10 @@ subdirectory for each student, using the e-mail address provided by the
 student.  In a student's subdirectory there will be an answer file for
 each question. e.g.  <b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
 
+Note:  As of the current version, the server may have trouble with
+downloading very long files on some networks.  It is best to keep the 
+**Questions.txt** file to under 3000 bytes.
+
 <h3>
 Starting the server
 </h3>
@@ -580,7 +584,7 @@ modify existing lines.  Clicking the **CopyQtoA** button will copy the
 contents of the question window to the answer window, so students need
 not type in the provided partial code.
 
-<i>Exisgencies:</i>
+<i>Exigencies:</i>
 
 "Stuff happens."  What if, say, there is a sudden power failure or the
 local WiFi access point suddenly goes out?  What if some students do not
