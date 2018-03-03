@@ -475,7 +475,7 @@ class OmsiGui(Frame):
         import OmsiUtility
         self.QuestionsArr = OmsiUtility.ParseQuestions("ExamQuestions.txt")
         self.lb.delete(0, END)
-        self.lb.insert(END, "Description")
+        self.lb.insert(END, "CLICK THIS FIRST")
         for i in range(1, len(self.QuestionsArr)):
             self.lb.insert(END, "Question {0}".format(i))
             filename = "omsi_answer{0}{1}". \

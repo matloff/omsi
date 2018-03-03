@@ -83,8 +83,14 @@ class OmsiServer:
                 self.clientMap[addr[0]].append(lStudentEmail)
                 print 'client list:'
                 print self.clientMap
-                tmp = ' '.join(['{0} {1}'.format(k, v) for k,v in \
-                   self.clientMap.iteritems()])
+                tmp = self.clientMap.keys()[0] 
+                tmp += ' ' + lStudentEmail
+                tmp += ' ' + lFileName
+                if len(fields) > 3:
+                   tmp += ' ' + fields[3]
+                # tmp += '\n'
+                ### tmp = ' '.join(['{0} {1}'.format(k, v) for k,v in \
+                ###    self.clientMap.iteritems()])
                 self.examDirectoryLogFile.writelines(tmp)
                 self.examDirectoryLogFile.flush()
 
@@ -359,8 +365,8 @@ class OmsiServer:
 def main():
     print "running"
     v = open('VERSION')
-    tmp = v.readline()
-    print 'Version', tmp
+    version = v.readline()
+    print 'Version', version
     # command line should be:  OmsiServer.py, port, exam name
     if len(sys.argv) <  3:
         print "Usage: OmsiServer.py port exam_name"
@@ -370,6 +376,7 @@ def main():
     os.mkdir(omsiServer.examDirectory)
     omsiServer.examDirectoryLogFile = \
        open(omsiServer.examDirectory + '/LOGFILE','w')
+    omsiServer.version = version
     # connection information.
     print "Server for {0} is now running at {1}:{2}".format(sys.argv[2], \
        hostname, sys.argv[1])

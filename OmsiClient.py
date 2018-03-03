@@ -165,6 +165,8 @@ class OmsiClient:
         print "Opening file " + pFileName
         lOpenFile = self.openFileOnClient(pFileName)
         print lOpenFile
+        v = open('VERSION')
+        version = v.readline()
         while True:
            try:
                ### if not self.omsiSocket:
@@ -172,7 +174,8 @@ class OmsiClient:
                self.omsiSocket = self.configureSocket()
                # tell the server that we are sending a file; 'OMSI0001' is
                # the signal for this;  0 bytes serve delimiter between fields
-               msg = "OMSI0001" + '\0' + pFileName + "\0" + self.gStudentEmail
+               msg = "OMSI0001" + '\0' + pFileName + "\0" + \
+                  self.gStudentEmail + "\0" + version
                self.omsiSocket.send(msg)
                print 'notified server a file is coming,'
                print 'via the message', msg
