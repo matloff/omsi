@@ -376,33 +376,45 @@ file than **open**, e.g. **evince** on a Linux system.
 
 <b><i>Tips for students:</i></b>
 
+Properly used, you will find that OMSI provides the instructor with a
+more accurate assessment of your insight into the course material, i.e.
+you get a better grade.  But you do have to keep in mind the following.
+
+<i>Make SURE you are prepared:</i>
+
 **Be sure to try OMSI in an actual session before your first OMSI-based
 exam.**  Start up the server, playing the role of the instructor (see
 "Directions for instructors" below), and then start the client, playing
 the role of the student as above.  (Note:  If you run the server on your
 local machine, specify the server location as 'localhost'.)
 
-Also, make sure your laptop can connect to your school's WiFi system.
+Make sure your laptop can connect to your school's WiFi system.
 
 Make sure your laptop is fully charged before the exam.  
 
-Submit your answers often. Near the end of an exam period, the network
-may be very busy, possibly making it difficult to get in.  Each
-submission will overwrite the last. 
+It is good to remove your old answer files (their names begin with
+"omsi_answer") from a previous exam before starting the current one.
 
-Again, remember that saving an answer does NOT submit it.  You must do
+In programming classes, make absolutely sure that your software is
+configured properly.  For instance, with R, make sure that typing 'R' in
+a terminal window does start R.
+
+<i>Submitting your answers:</i>
+
+Submit your answers often. Near the end of an exam period, the network
+may be very busy, possibly making it difficult to get in.  In some
+cases, the delay in submitting a question may be 30 seconds or more.
+Each submission will overwrite the last. 
+
+Remember that saving an answer does NOT submit it.  You must do
 that separately.
 
-When you begin the exam, your very first action should be to click
-**Description**.  The instructor may have directions there that will
-make a night-and-day difference in your grade!  So first take a few
-seconds to read this.  Also, it is good to remove your old answer files
-(again, their names begin with "omsi_answer") from a previous exam
-before starting the current one.
+<i>Following your instructor's directions:</i>
 
-If your instructor allows you to use OMSI's PDF viewing option, use a
-PDF viewer that has a good search facility, so that you can quickly find
-what you need during an exam.
+When you begin the exam, your very first action should be to click
+**CLICK HERE FIRST**.  The instructor may have directions there that will
+make a night-and-day difference in your grade!  So first take a few
+seconds to read this.  
 
 *Tips for programming classes:*
 
@@ -416,6 +428,12 @@ button.
 If you have a runtime error, the output of your print statements may not
 be displayed. You can remedy this by placing a *return* statement or
 similar before the line of the runtime error.
+
+<i>Other:</i>
+
+If your instructor allows you to use OMSI's PDF viewing option, use a
+PDF viewer that has a good search facility, so that you can quickly find
+what you need during an exam.
 
 <h2>
 <a name="instructors">Directions for instructors</a>
@@ -582,6 +600,14 @@ considering:
     point might be flooded with traffic at the end of the exam period,
     as many students turn in last-minute work.  
 
+`   There is currently a 20-second timeout setting for client
+    transmissions to the server.  After that, the client will try again.
+    Note that on Mac machines, the "spinning rainbow disk" will appear
+    after a few seconds.  This should not cause alarm in the students;
+    it will disappear when the client is finally able to contact the
+    server.  If desired, though, the student can kill the OMSI client
+    and restart it; the previously-saved answers will still be there.
+
     The instructor may also consider running two (or more) servers, in
     order to improve response time.
 
@@ -628,7 +654,7 @@ latter?
   * If the server is run through a static IP address, it is conceivable
     that a dishonest student will take the exam at a location not in the
     classroom, thus enabling illicit "consultation" by hiring, say,
-    dishonest graduate students for help.  Sign-in papers etc. can be
+    dishonest graduate students for help.  Sign-in sheets etc. can be
     used to avoid this.
 
 Note that the server will record the transactions by the
