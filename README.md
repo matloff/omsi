@@ -440,6 +440,10 @@ each question. e.g.  <b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
 Starting the server
 </h3>
 
+I usually run the server on a machine in our student computer lab, but
+it can also be run on the instructor's laptop computer.  (See "Tips"
+below.)
+
 At the start of the exam period (not before), start the server from a
 terminal window by issuing the command
 
@@ -449,9 +453,9 @@ from within the <b>omsi-master</b> directory, e.g.
 
 <b>python OmsiServer.py 5000 'Fall 2019 Midterm 1'</b>
 
-The port number must be above 1024.
+The port number must be at least 1024.
 
-The server Internet address and port number will need to be distributed
+The server Internet address and port number will need to be announced
 to the students at the start of the exam. 
 
 <h3>
@@ -476,7 +480,7 @@ keywords **NEW**, **DESCRIPTION** or **QUESTION**.  The roles are as follows:
   * **DESCRIPTION**:  Required. The lines that follow will contain instructions 
     to students, which would normally go on the front page of a 
     printed exam, say "You will have 50 minutes for this exam."
- .  The students will be able to view it by clicking the **Description** 
+ .  The students will be able to view it by clicking the **CLICK HERE FIRST** 
     button in the menu.  
   * **QUESTION**:  Have one of these lines for each exam problem.  For 
   problems involving code, directions for compiling or running the 
@@ -506,7 +510,7 @@ code and one requiring an essay.  When a student writes and submits the
 answers, they will be saved in files **omsi_answer1.py** and
 **omsi_answer2.txt** in <strong>InstructorDirectory</strong> at the
 instructor's server, in that student's subdirectory (indexed by e-mail
-address).  
+address or other student ID).  
 
 The suffix in that first file name arises from the specification **-ext
 .py** in the QUESTION line; otherwise the default suffix is **.txt**,
@@ -541,17 +545,24 @@ OMSI should greatly improve the examination process for both instructors
 and students.  However, as with any automated system, some care is
 needed to insure that things run smoothly.
 
-It's hard for a student to write full code within an exam period.  What
-I like to do is give the students partial code, and have them fill in
-the missing lines.  Clicking the **CopyQtoA** button will copy the contents
-of the question window to the answer window, so students need not type
-in the provided partial code.
+<i>Making sure the students know the procedures:</i>
 
 It is crucial that the instructor, before the first OMSI-based exam,
 require the students to go through a dry run.  The instructor may wish
-to incentivize this.  Note that the server will record the logins by the
-students, so the instructor can nudge the laggards who haven't gone
-through the dry run.
+to incentivize this.  The instructor can nudge the laggards who haven't
+gone through the dry run (as evidenced by the lack of submitted files
+from them).
+
+<i>Dealing with exam time constraints:</i>
+
+If the exam involves coding, it's hard for a student to write full code
+within an exam period.  What I like to do is give the students partial
+code in the question, and have them fill in the missing lines, and/or
+modify existing lines.  Clicking the **CopyQtoA** button will copy the
+contents of the question window to the answer window, so students need
+not type in the provided partial code.
+
+<i>Exisgencies:</i>
 
 "Stuff happens."  What if, say, there is a sudden power failure or the
 local WiFi access point suddenly goes out?  What if some students do not
@@ -563,29 +574,43 @@ considering:
     of the exam, and students should have the option of turning in their
     answers on paper.  Some students may not even have laptops (though
     it should be emphasized to students that they do NOT need a "fancy"
-    laptop; an old and slow one is fine.
+    laptop; an old and slow one is fine).
 
   * Students should be told to click the **Submit** option "early and
     often."  (Each submission will overwrite the last.)  This is
     especially important if there is concern that the local WiFi access
     point might be flooded with traffic at the end of the exam period,
-    as many students turn in last-minute work.
+    as many students turn in last-minute work.  
+
+    The instructor may also consider running two (or more) servers, in
+    order to improve response time.
 
   * Students should bring a USB key (thumb drive, memory stick).  In an
     emergency, they can copy their local copies of their **omsi_answer***
     files to the key, then turn in the key.
 
-Concerning the issue of where to run the server:  The server needs a
-static IP address, so the instructor will probably not be able to run
-the server on his/her laptop.  I run it on one of our lab computers.  I
-use **ssh** to remotely log in to the server from the classroom, and
-start the server at the appropriate time.  Depending on configuration,
-**ssh** may time out about a certain time, so I run **screen** and run
-the server within a terminal window there (Sachin's idea).
+<i>Where to run the server:</i>
 
-And what about cheating and other forms of academic dishonesty?  In my
-experience, the vast majority of students are honest, and they resent
-the cheaters.  What can be done about the latter?
+I usually run the server on a machine in our student computer lab,
+which gives me a static IP address. I use **ssh** to remotely log in to
+the server from the classroom, and start the server at the appropriate
+time.  Depending on configuration, **ssh** may time out about a certain
+time, so I run **screen** and run the server within a terminal window
+there (Sachin's idea).
+
+The instructor could run the server on a laptop computer in the
+classroom.  However, this gives a dynamic IP address, basically
+visible only to other machines using the same router.  The students'
+laptops must thus also go through the same router.  This should be fine
+as long as the instructor and students are both using the university's
+WiFi access, but it must be carefully tested beforehand.  Note that this
+approach may be more secure.
+
+<i>Cheating:</i>
+
+What about cheating?  In my experience, the vast majority of students
+are honest, and they resent the cheaters.  What can be done about the
+latter?
 
   * The OMSI window is designed to fill the student's entire screen.
     This prevents a student from communicating with others electronically
@@ -600,8 +625,14 @@ the cheaters.  What can be done about the latter?
     randomly assigned to them, in order to prevent collaboration among
     friends.  This can be done with OMSI as well.
 
-I do recommend use of OMSI's PDF viewing option.  See
-"Viewing a PDF file for consultation" above.
+  * If the server is run through a static IP address, it is conceivable
+    that a dishonest student will take the exam at a location not in the
+    classroom, thus enabling illicit "consultation" by hiring, say,
+    dishonest graduate students for help.  Sign-in papers etc. can be
+    used to avoid this.
+
+Note that the server will record the transactions by the
+students in the file **LOGFILE** in the exam directory.
 
 <h2>
 <a name="grading">Software tools for grading</a> 
