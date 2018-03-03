@@ -3,7 +3,8 @@ Version 1.2.4:
 
    Added timeout to configureSocket() in OmsiClient, so that if network
    traffic is heavy, client will give up trying to send file to server,
-   and try again.
+   and try again.  This way at least Mac users need not fear the dreaded
+   "spinning rainbow disk."
 
    Server now will create a file LOGFILE, recording IP addresses of
    client connection actions.  File is stored in the same directory as
