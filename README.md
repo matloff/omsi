@@ -634,7 +634,8 @@ visible only to other machines using the same router.  The students'
 laptops must thus also go through the same router.  This should be fine
 as long as the instructor and students are both using the university's
 WiFi access, but it must be carefully tested beforehand.  Note that this
-approach may be more secure.
+approach may be more secure.  Obtain the server's IP address via the
+**ifconfig** command for Mac or Linux, **ipconfig** for Windows.
 
 <i>Cheating:</i>
 
@@ -658,11 +659,10 @@ latter?
   * If the server is run through a static IP address, it is conceivable
     that a dishonest student will take the exam at a location not in the
     classroom, thus enabling illicit "consultation" by hiring, say,
-    dishonest graduate students for help.  Sign-in sheets etc. can be
-    used to avoid this.
-
-Note that the server will record the transactions by the
-students in the file **LOGFILE** in the exam directory.
+    dishonest graduate students for help.  Sign-in sheets, taking photos
+    etc. can be used to avoid this.  Note that the server will record 
+    the transactions by the students in the file **LOGFILE** 
+    in the exam directory.
 
 <h2>
 <a name="grading">Software tools for grading</a> 
@@ -728,4 +728,8 @@ Here are some points of improvement:
     (i.e. verify that the source code hasn't been changed), and to
     upload each student Run operation to the server, to guard against
     the student running surreptitious communication code.
+
+<h2>
+<a name="future">No warranties of any kind are given for this software</a> 
+</h2>
 
