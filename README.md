@@ -110,10 +110,15 @@ As detailed below, this arrangement has significant benefits for both
 students and instructors.  The system is easy to install and use, and
 can be run on Macs, Windows and Linux.
 
-Here is a screenshot of an example screen from the student's point of
-view:
+Below is a screenshot of an example screen from the student's point of
+view.
 
 ![alt text](Screenshot.png)  
+
+The details will be presented below, but even now the basic layout is
+clear:  In the left panel, the student chooses which exam question to
+work on; the question itself is shown in the upper-right panel; and the
+student writes the solution in the lower-right panel.
 
 <h2>
 <a name="benstudent"> 
