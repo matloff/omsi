@@ -168,10 +168,9 @@ has two components:
 <li> <i>Exam administration:</i>  
 </p>
 
-<p>
 This manages the actual process of the students taking the exam.  
 You get electronic copies of the students' exams, eliminating 
-the need for collecting and carrying out out a large
+the need for collecting and carrying around a large
 number of papers, and making work sharing much easier among multiple 
 graders.  At the end of an exam period, there is no chaos, e.g. from
 students who are still writing even when the period is over; the
@@ -180,9 +179,7 @@ further can be submitted.  If a student wishes his/her performance on an
 exam problem to be reassessed, the fact that the files are online means
 that the instructor can check the student's work from anywhere, rather
 than having to wait for the next visit to the office.
-</p>
 
-<p>
 As noted in "Benefits for students" above, OMSI enables the
 student to turn in a better product, and this benefits the instructor as
 well:  **Better exam performance by students is both more gratifying to
@@ -233,14 +230,14 @@ Contents:
 The Linux term *directory* is synonymous with *folder* for Mac and
 Windows.
 
-The term *terminal window* from Mac and Linux is synonymous with *Command
+The Mac/Linux term *terminal window* is synonymous with *Command
 Prompt* for  Windows (**cmd** command).
 
 <h3>
 <a name="install">Installing the package (instructors and students)</a>
 </h3>
 
-You will need Python (not Python3) installed on your machine. For Mac
+You will need Python 2 (not Python 3) installed on your machine. For Mac
 and Linux systems, it should already be there, but it is easily
 downloadable for Windows.
 
@@ -254,7 +251,9 @@ python
 in a terminal window.  Python should start, displaying the >>> prompt.
 (Exit via ctrl-d or by typing 'exit()'.)  If you have both Python 2 and
 3 on your system, you will need your login file, e.g. **.profile** for
-**bash** to give priority to version 2.
+**bash** to give priority to version 2.  Note: OMSI, which runs in
+Python, will itself invoke Python.  Thus Python 2 must come first in the
+search path.
 
 In the case of exams involving coding, the same statements above about
 search path and so on apply to compilers (e.g. **gcc**) and other
@@ -265,7 +264,7 @@ open a terminal window and type
 R
 ```
 
-in a terminal window. (Start R directly in this manner, not the R GUI.)
+in a terminal window. (Start R directly in this manner, not an R GUI.)
 R should start, displaying the > prompt.  (Exit via ctrl-d or by typing
 'exit()'.)
 
@@ -299,7 +298,7 @@ to your machine.
 GUI, one on top for the question prompt and one below to write the
 answer. The boxes are resizable and the question box may default to
 occupying most or all of the right side of the screen on some systems.
-If this is the case grab and drag the bottom of the question box to
+If this is the case grab and drag up the bottom of the question box to
 expand the bottom window.  The boundary between the question and answer
 boxes may actually be hidden by your OS toolbar at the bottom of your
 screen; if so, resize the entire window first, then drag it upward so
@@ -335,7 +334,8 @@ instructor.
 
 By the way, your files are saved to the same directory from which you
 launched OMSI, with file names beginning with 'omsi_answer', e.g.
-__omsi_answer2.txt__,
+__omsi_answer2.txt__.  This can be useful if you want to check later
+what you submitted.  
 
 <b><i>Compiling/running code:</i></b>
 
@@ -368,9 +368,9 @@ makes the book available to my students during exams.  Or your
 instructor may provide you with a PDF "cheatsheet," saying containing
 important formulas.
 
-To view the PDF file, select **File | View PDF **.  Note that in order
-to use this option you must specify so in the command line in launching
-OMSI, e.g.
+To view the PDF file, select <strong>File | View PDF</strong>.  Note
+that in order to use this option you must specify so in the command line
+when launching OMSI, e.g.
 
 ```
 python OmsiGui.py xyx.edu 2000 me@abc.com "open xyz.pdf"
@@ -409,7 +409,7 @@ a terminal window does start R.
 Submit your answers often. Near the end of an exam period, the network
 may be very busy, possibly making it difficult to get in.  In some
 cases, the delay in submitting a question may be 30 seconds or more.
-Each submission will overwrite the last. 
+Note that each submission will overwrite the last. 
 
 Remember that saving an answer does NOT submit it.  You must do
 that separately.
@@ -536,7 +536,8 @@ In this example, two exam questions are defined, one requiring Python
 code and one requiring an essay.  When a student writes and submits the
 answers, they will be saved in files **omsi_answer1.py** and
 **omsi_answer2.txt** in <strong>InstructorDirectory</strong> at the
-instructor's server, in that student's subdirectory (indexed by e-mail
+instructor's server, in the current exam directory, and
+in that student's subdirectory (indexed by e-mail
 address or other student ID).  
 
 The suffix in that first file name arises from the specification **-ext
@@ -571,6 +572,13 @@ Note that fields with embedded spaces must be quoted.
 OMSI should greatly improve the examination process for both instructors
 and students.  However, as with any automated system, some care is
 needed to insure that things run smoothly.
+
+<i>Making sure you know the procedures:</i>
+
+In familiarizing yourself with OMSI, do a trial, playing the role of
+both instructor and student.  Start up the server as the instructor,
+then take the exam as a student.  Look at the files that are then
+produced at both the servier and client ends.
 
 <i>Making sure the students know the procedures:</i>
 
