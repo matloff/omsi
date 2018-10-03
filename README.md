@@ -659,7 +659,7 @@ latter?
   * The OMSI window is designed to fill the student's entire screen.
     This prevents a student from communicating with others electronically
     during the exam, say by e-mail.  The students must be given 
-    strict instructions not to move, iconify or resize OMSI window 
+    strict instructions not to move, iconify or resize the OMSI window 
     during the exam.  This is easily monitored by proctors.
 
   * As usual, there is the problem of a student looking at his/her
@@ -703,7 +703,7 @@ The basic idea is that the software will display on the screen, for each
 student and each exam problem, the student's answer.  In the case of
 coding questions, the software will also run the code and display the
 result.  In each case, the instructor then inputs the number of points
-he/she wishes to assign:
+he/she wishes to assign.  In summary, OMSI runs
 
 ```
 for each student:
@@ -717,7 +717,7 @@ for each student:
 ```
 
 The main tool is **Grading/AutoGradeOMSI.R**.  This code is in R, as it
-is an adaptation from an earlier system I had developed; also, its
+is an adaptation from an earlier system I had developed; also, R's
 statistical and graphic capabilities facilitate analysis of the exam
 grades.  (There is also a file **AutoGrade.py** in that directory, but
 it is under development.)
