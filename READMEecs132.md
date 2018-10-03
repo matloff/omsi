@@ -31,7 +31,7 @@ brought up the pop-up run window, with the result of the run.
 
 Finally, the student tackled Question 4. In contrast to the previous
 questions, which were math questions even though the answers were
-expressed in R, this question asked the student to read a full R
+expressed in R, this question asked the student to write a full R
 function. Since this might be hard under the time constraints of an
 exam, the instructor wrote most of the code, leaving just a couple of
 blanks for the student to fill in.
