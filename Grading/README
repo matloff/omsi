@@ -2,4 +2,16 @@
 Still under development.  Only AutoGradeOMSI.R working.  See comments at
 the head of the file for directions on use.
 
+If you put the wrong suffix on answer files, here is an example of a
+script to rename them:
+
+f <- function()
+{
+   for (d in list.dirs()[-1]) {  # student files are subdirectories
+      print(d)
+      setwd(d)
+      try(system('mv omsi_answer3.R omsi_answer3.txt'))
+      setwd('..')
+   }
+}
 
