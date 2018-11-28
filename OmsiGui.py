@@ -251,6 +251,7 @@ class OmsiGui(Frame):
        os.system(self.pdfCmd)
 
     def runProgram(self, qNum = None):       
+        self.submitAnswer()
         runCmd = ""
         msg = ""  #records messages
         
@@ -438,7 +439,12 @@ class OmsiGui(Frame):
         self.loadQuestionsFromFile()
 
     def getVersion(self):
-       v = open('VERSION')
+       try:
+          v = open('VERSION')
+       except:
+          print 'ERROR  ERROR  ERROR  ERROR  ERROR  ERROR ' 
+          print 'no VERSION file; did you start from the OMSI directory?'
+          sys.exit(1)
        tmp = v.readline()
        self.version = tmp
        print 'Version', tmp
@@ -504,12 +510,14 @@ class OmsiGui(Frame):
         # filemenu.add_command(label="Open", command = self.onOpen)
         filemenu.add_command(label="Connect", command=self.getConnectionInfo)
         filemenu.add_command(label="Save", command=self.saveAnswer)
-        filemenu.add_command(label="Save All", command=self.saveAllAnswers)
+        # remove Save All option, as some students thought there was
+        # also Submit All
+        # filemenu.add_command(label="Save All", command=self.saveAllAnswers)
         filemenu.add_command(label="Submit", command=self.submitAnswer)
         # filemenu.add_command(label="Submit All", command=self.submitAllAnswers)
         # filemenu.add_command(label="Close", command=self.donothing)
         filemenu.add_command(label="Compile", command=self.compileProgram)
-        filemenu.add_command(label="Run", command=self.runProgram)
+        filemenu.add_command(label="Submit & Run", command=self.runProgram)
         filemenu.add_command(label="CopyQtoA", command=self.copyQtoA)
         filemenu.add_command(label="View PDF", command=self.viewPDF)
 

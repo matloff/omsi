@@ -6,7 +6,8 @@ files created:
 
    server:
 
-      student answer files
+       student answer files, in one directory per student, one big
+       directoy per exam, all in subdirectory of InstructorDirectory/ 
 
    client:
 
@@ -31,11 +32,11 @@ server operation:
          runs a listening socket, creates a new thread when a call
          finally comes in; if new client (new IP), adds client to 
          self.clientMap; creates socket to pair with client;
-         launches a thread that runs requestHandler()
+         launches a thread that runs OmsiServer.requestHandler()
 
       OmsiServer.requestHandler(): 
 
-          loop, waiting for requests from clients
+         loop, waiting for requests from clients
 
 client operation:
 

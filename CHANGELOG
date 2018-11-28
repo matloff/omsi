@@ -17,3 +17,13 @@ Version 1.2.5:
 
    Added this CHANGELOG.
 
+Version 1.2.6:
+
+   Check for VERSION file, to detect whether user has started from the
+   OMSI directory.
+
+   Changed Run command to Submit & Run.  Many students had been
+   forgetting to submit after running (and some thought Submit meant
+   Submit All).  Also get complete record of students' runs, e.g. for
+   studies of debugging etc.
+
