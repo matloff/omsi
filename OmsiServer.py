@@ -5,6 +5,7 @@ import sys
 import thread
 import threading
 import pdb
+import time
 
 
 class OmsiServer:
@@ -72,6 +73,7 @@ class OmsiServer:
             lIsExecuted = ""
 
             if data[:8] == 'OMSI0001':  # client will send file to srvr
+                print time.ctime()
                 print 'request:', data
                 fields = data.split('\0')
                 print 'fields:',fields
