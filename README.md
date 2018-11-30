@@ -83,7 +83,7 @@ tool for conducting and grading examinations in a manner that is both
 secure and conducive to **high-quality measurement of student insight**. It
 is suitable for small or large class exams, be they based on
 **essays, writing code or math analysis.**  This is NOT a "Scantron  
-multiple choice test administrator."
+multiple choice test administration tool."
 
 Students come to the classroom at the regular class time, just as with a
 traditional pencil-and-paper exam.  However, they use their laptop
@@ -99,8 +99,8 @@ OMSI enables the students to **compile/run their code**, thus giving
 them an opportunity to discover and fix errors.  I often give them the
 intended output, for instance, and if their code doesn't match it, this
 feedback allows them to think about where they went wrong (whether a
-logic error or lack of understanding of the concepts in a math problem),
-thus giving them a chance to give the problem more thought and hopefully
+logic error or lack of understanding of the concepts in a math problem).
+This thus gives them a chance to give the problem more thought and hopefully
 correct their code.
 
 </blockquote>
@@ -118,7 +118,8 @@ view.
 The details will be presented below, but even now the basic layout is
 clear:  In the left panel, the student chooses which exam question to
 work on; the question itself is shown in the upper-right panel; and the
-student writes the solution in the lower-right panel.
+student writes the solution in the lower-right panel, whether it be
+code, math or essay.
 
 <h2>
 <a name="benstudent"> 
@@ -131,18 +132,13 @@ Dear students:
 OMSI will often result in __your getting a higher grade__ in an exam than
 you would have in the traditional pencil-and-paper format:
 
-<UL>
-
-<li> With essay questions, you have a chance to edit your answers,
+1. With essay questions, you have a chance to edit your answers,
 producing more **coherent, readable prose**.  No cross-outs, arrows, words
 squeezed in above a line, no points off for unreadable handwriting. :-)
-</li> </p>
 
-<li> With coding questions, you will compile/run your code using OMSI,
+2. With coding questions, you will compile/run your code using OMSI,
 **giving you a chance to make corrections** if your code doesn't work.
-</li> </p> 
 
-</UL>
 
 In both of these aspects, OMSI gives you a better opportunity to
 demonstrate your insight into the course material (and thus achieve a
@@ -270,7 +266,7 @@ R should start, displaying the > prompt.  (Exit via ctrl-d or by typing
 
 To install OMSI, download the <b>.zip</b> file.
 Unzipping it will produce a directory/folder <b>omsi-master</b>, where all
-relevant files reside.
+relevant files reside.  We'll call this the <i>OMSI Home</i>.
 
 <h3>
 <a name="students">Directions for students</a>
@@ -279,7 +275,7 @@ relevant files reside.
 <b><i>Connect to the server, at the start of the exam:</i></b>
 
 Download and install the package as above. Then open a terminal window,
-change to the __omni-master__ directory, and run
+change to the OMSI Home, and run
 
 ```
 python OmsiGui.py
@@ -287,9 +283,9 @@ python OmsiGui.py
 
 
 Then connect to the server and get the exam questions by selecting
-<b>File | Connect</b>.  State the host and port provided by the
-instructor, and   your student e-mail address.  (You can also type them
-as command-line arguments; see below.)
+<b>File | Connect</b>.  State the host, port and exam code provided by
+the instructor, and   your student e-mail address.  (You can also type
+them as command-line arguments; see below.)
 
 After you connect to the server, the exam questions will be downloaded
 to your machine.
@@ -304,15 +300,19 @@ boxes may actually be hidden by your OS toolbar at the bottom of your
 screen; if so, resize the entire window first, then drag it upward so
 that the boundary line is visible.
 
-You have the option of specifying the server location, server port and
-your e-mail address on the command line when you invoke OMSI, e.g.
+You have the option of specifying needed information on the command line
+instead of later into the GUI.  In addition, if your instructor allows
+it, you may specify a PDF file of material to help you.  See below.
+
+For instance:
 
 ```
-python OmsiGui.py xyx.edu 2000 me@abc.com
+python OmsiGui.py xyx.edu 2000 me@abc.com Midterm1 /usr/bin/okular
 ```
 
-In addition, if your instructor allows it, you may specify a PDF file of
-material to help you.  See below.
+(You need not specify all of these on the command line, but the ones you
+do specify must be in order, nothing skipped.)
+
 
 <b><i>Copy-and-paste:</i></b>
 
@@ -332,28 +332,35 @@ instructor's server; the save operation merely saves to a file on your
 local machine.  See "Submitting your answers" below for uploading to the
 instructor.
 
-By the way, your files are saved to the same directory from which you
-launched OMSI, with file names beginning with 'omsi_answer', e.g.
-__omsi_answer2.txt__.  This can be useful if you want to check later
-what you submitted.  
+By the way, your files are saved in your OMSI Home directory, i.e.  the
+same directory from which you launched OMSI, with file names beginning
+with 'omsi_answer', e.g.  __omsi_answer2.txt__.  This can be useful if
+you want to check later what you submitted.  
 
 <b><i>Compiling/running code:</i></b>
 
 Save the code first.  Then, if the problem involves a compiled language
 such as C, select <b>File | Compile</b>. A new window will pop up,
-displaying the results.  Then select <b>File | Run</b> (or for an
-interpreted language like R or Python, go to this step directly). A new
-window will pop up, displaying the results.
+displaying the results.  Then select <b>File | Submit & Run</b> (or for
+an interpreted language like R or Python, go to this step directly, no
+compile step). A new window will pop up, displaying the results.
 
 <b><i>Submitting answers:</i></b>
 
 Submit the answer to a particular question by clicking on the question
 number on the left side of the OMSI screen, and selecting <b>File |
 Submit</b>. This will upload your answer to the instructor.  A dialog
-box specifying whether submission was successful will then be displayed. 
+box specifying whether submission was successful will then be displayed
+after a second or two.  (Do not perform any OMSI operations while
+waiting for this.)
 
-Each time you submit your solution to a question, the new solution
+Note:
+
+1. Each time you submit your solution to a question, the new solution
 overwrites the old one.
+
+2. Each time you run your code, it is automatically submitted to the
+   server.
 
 **IMPORTANT NOTE:**  If the network is busy, there may be a delay of
 a few seconds, before the submit operation completes and the
