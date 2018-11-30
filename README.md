@@ -301,17 +301,17 @@ screen; if so, resize the entire window first, then drag it upward so
 that the boundary line is visible.
 
 You have the option of specifying needed information on the command line
-instead of later into the GUI.  In addition, if your instructor allows
-it, you may specify a PDF file of material to help you.  See below.
-
-For instance:
+instead of later into the GUI.  For instance:
 
 ```
-python OmsiGui.py xyx.edu 2000 me@abc.com Midterm1 /usr/bin/okular
+python OmsiGui.py xyx.edu 2000 me@abc.com Midterm1 
 ```
 
 (You need not specify all of these on the command line, but the ones you
 do specify must be in order, nothing skipped.)
+
+In addition, if your instructor allows it, you may specify a PDF file of
+material to help you.  See below.
 
 
 <b><i>Copy-and-paste:</i></b>
@@ -350,9 +350,11 @@ compile step). A new window will pop up, displaying the results.
 Submit the answer to a particular question by clicking on the question
 number on the left side of the OMSI screen, and selecting <b>File |
 Submit</b>. This will upload your answer to the instructor.  A dialog
-box specifying whether submission was successful will then be displayed
-after a second or two.  (Do not perform any OMSI operations while
-waiting for this.)
+box specifying whether submission was successful will then be displayed.
+
+**IMPORTANT:**  There may be a delay of a few seconds before the submit
+operation completes and the confirmation box comes up.  Do not perform
+any OMSI operations while waiting for this.
 
 Note:
 
@@ -362,17 +364,13 @@ overwrites the old one.
 2. Each time you run your code, it is automatically submitted to the
    server.
 
-**IMPORTANT NOTE:**  If the network is busy, there may be a delay of
-a few seconds, before the submit operation completes and the
-dialog box comes up.
-
 <b><i>Viewing a PDF file for consultation:</i></b>
 
 The instructor may allow you to consult a PDF file to help you during
 the exam.  In my case, for instance, my exams are open-book, and the
 book is in the form of an open-source PDF file, so this OMSI option
 makes the book available to my students during exams.  Or your
-instructor may provide you with a PDF "cheatsheet," saying containing
+instructor may provide you with a PDF "cheatsheet," say containing
 important formulas.
 
 To view the PDF file, select <strong>File | View PDF</strong>.  Note
@@ -411,7 +409,11 @@ In programming classes, make absolutely sure that your software is
 configured properly.  For instance, with R, make sure that typing 'R' in
 a terminal window does start R.
 
-<i>Submitting your answers:</i>
+*Starting OMSI:*
+
+Make sure you launch OMSI from your OMSI Home directory.
+
+*Submitting your answers:*
 
 Submit your answers often. Near the end of an exam period, the network
 may be very busy, possibly making it difficult to get in.  In some
@@ -421,7 +423,7 @@ Note that each submission will overwrite the last.
 Remember that saving an answer does NOT submit it.  You must do
 that separately.
 
-<i>Following your instructor's directions:</i>
+*Following your instructor's directions:*
 
 When you begin the exam, your very first action should be to click
 **CLICK HERE FIRST**.  The instructor may have directions there that will
@@ -441,7 +443,7 @@ If you have a runtime error, the output of your print statements may not
 be displayed. You can remedy this by placing a *return* statement or
 similar before the line of the runtime error.
 
-<i>Other:</i>
+*Other:*
 
 If your instructor allows you to use OMSI's PDF viewing option, use a
 PDF viewer that has a good search facility, so that you can quickly find
@@ -455,8 +457,8 @@ what you need during an exam.
 InstructorDirectory
 </h3>
 
-Within the directory <b>omsi-master</b>, there will be a directory
-<b>InstructorDirectory</b>. You place your exam questions in that
+Within the OMSI Home directory, there will be a subdirectory named
+**InstructorDirectory**. You place your exam questions in that
 directory, in a file **Questions.txt**.  The format for specifying the
 questions is detailed below. 
 
@@ -474,23 +476,29 @@ downloading very long files on some networks.  It is best to keep the
 Starting the server
 </h3>
 
-I usually run the server on a machine in our student computer lab, but
-it can also be run on the instructor's laptop computer.  (See "Tips"
-below.)
+I usually run the server on a machine in our student computer lab, using
+**ssh** to remote login to the lab computer.  (It can also be run on the
+instructor's laptop computer, providing the latter is configured to be a
+server.  See "Tips" below.)
 
 At the start of the exam period (not before), start the server from a
 terminal window by issuing the command
 
-<b>python OmsiServer.py [portNumber] [quoted exam name] </b>
+```
+python OmsiServer.py [portNumber] [exam code] 
+```
 
-from within the <b>omsi-master</b> directory, e.g.
+from within the OMSI Home directory, e.g.
 
-<b>python OmsiServer.py 5000 'Fall 2019 Midterm 1'</b>
+```
+python OmsiServer.py 5000 Midterm1
+```
 
 The port number must be at least 1024.
 
-The server Internet address and port number will need to be announced
-to the students at the start of the exam. 
+The server Internet address, port number and exam code (no embedded
+spaces) will need to be announced to the students at the start of the
+exam. 
 
 <h3>
 Closing the server
@@ -550,6 +558,10 @@ address or other student ID).
 The suffix in that first file name arises from the specification **-ext
 .py** in the QUESTION line; otherwise the default suffix is **.txt**,
 
+The **-run** field tells OMSI how to run a student's code.  This will be
+invoked when the student Clicks **Run**, and later when the exam is
+graded, if the instructor uses the OMSI grader.
+
 <b><i>Specifying compile and run options</i></b>
  
 There are various **QUESTION** line options for the case of compiled
@@ -559,12 +571,12 @@ code.  For instance, Question 1 might have a line
 QUESTION -ext .c -com gcc -flags "-Wall -g" -run ./omsi_answer1
 ```
 
-OMSI, in running **gcc**, will take **omsi_answer1.c** as input, and if
-the compilation is successful, produce the executable file
-**omsi_answer1**.  The **-flags** field is mandatory.
-(Students running OMSI within a virtual machine may
-have a problem with **-Wall**, so the instructor may wish not to use
-this flag.)
+OMSI will compile the students code using **gcc**, taking
+**omsi_answer1.c** as input, and if the compilation is successful, it
+will produce the executable file **omsi_answer1**.  The **-flags** field
+is mandatory.  (Students running OMSI within a virtual machine may have
+a problem with **-Wall**, so the instructor may wish not to use this
+flag.)
 
 Here is one for R, for a Question 3:
 
@@ -582,10 +594,10 @@ needed to insure that things run smoothly.
 
 <i>Making sure you know the procedures:</i>
 
-In familiarizing yourself with OMSI, do a trial, playing the role of
+In familiarizing yourself with OMSI, do a trial run, playing the role of
 both instructor and student.  Start up the server as the instructor,
 then take the exam as a student.  Look at the files that are then
-produced at both the servier and client ends.
+produced at both the server and client ends.
 
 <i>Making sure the students know the procedures:</i>
 
@@ -624,7 +636,7 @@ considering:
     point might be flooded with traffic at the end of the exam period,
     as many students turn in last-minute work.  
 
-`   There is currently a 20-second timeout setting for client
+    There is currently a 20-second timeout setting for client
     transmissions to the server.  After that, the client will try again.
     Note that on Mac machines, the "spinning rainbow disk" will appear
     after a few seconds.  This should not cause alarm in the students;
@@ -646,7 +658,27 @@ which gives me a static IP address. I use **ssh** to remotely log in to
 the server from the classroom, and start the server at the appropriate
 time.  Depending on configuration, **ssh** may time out about a certain
 time, so I run **screen** and run the server within a terminal window
-there (Sachin's idea).
+there (Sachin's idea).  I also run **script** at the server, to get a
+full record of all transactions, possibly of great use if there is
+suspicion of cheating.
+
+In other words, I issue commands like this example:
+
+```
+ssh pc22.cs.ucdavis.edu
+cd omsi.home  # wherever OMSI Home is
+screen
+script Midterm1
+python OmsiServer.py 2000 Midterm1
+ctrl-a, ctrl-d  # exit 'screen'
+exit  # leaving pc22
+ssh pc22.cs.ucdavis.edu  # preparing to shut down server, end of exam
+screen -r  # resume 'screen' (but server has been running all along)
+ctrl-c  # kill server
+exit  # end 'script', have record now in Midterm1 file
+exit  # end 'screen'
+exit  # leave pc22
+```
 
 The instructor could run the server on a laptop computer in the
 classroom.  However, this gives a dynamic IP address, basically
@@ -674,15 +706,20 @@ latter?
     paper.  A common technique for dealing with this in the paper exam
     case is to require students to sit in specific seats that are
     randomly assigned to them, in order to prevent collaboration among
-    friends.  This can be done with OMSI as well.
+    friends.  One can also have an exam question that requires each
+    student to state who her left and right neighbors are.
+    These measures can be taken with OMSI as well.
 
   * If the server is run through a static IP address, it is conceivable
     that a dishonest student will take the exam at a location not in the
     classroom, thus enabling illicit "consultation" by hiring, say,
     dishonest graduate students for help.  Sign-in sheets, taking photos
     etc. can be used to avoid this.  Note that the server will record 
-    the transactions by the students in the file **LOGFILE** 
-    in the exam directory.
+    the transactions by the students in the 'script' file in the exam 
+    directory (if run as above).  Use of an exam code, especially a 
+    longer one not easily guessable or easily sent surreptiously by 
+    cell phone, is a major preventing remedy.  Needless to say, use of 
+    cell phones during the exam should be strictly forbidden.
 
 <h2>
 <a name="grading">Software tools for grading</a> 
@@ -706,11 +743,11 @@ retaining the stragglers not picked up by the students, and so on.
 
 </blockquote>
 
-The basic idea is that the software will display on the screen, for each
-student and each exam problem, the student's answer.  In the case of
-coding questions, the software will also run the code and display the
-result.  In each case, the instructor then inputs the number of points
-he/she wishes to assign.  In summary, OMSI runs
+The basic idea is that the grading software will display on the screen,
+for each student and each exam problem, the student's answer.  In the
+case of coding questions, the software will also run the code and
+display the result.  In each case, the instructor then inputs the number
+of points he/she wishes to assign.  In summary, OMSI runs
 
 ```
 for each student:
