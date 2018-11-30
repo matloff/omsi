@@ -90,6 +90,8 @@ class OmsiServer:
                 tmp += ' ' + lFileName
                 if len(fields) > 3:
                    tmp += ' ' + fields[3]
+                   if len(fields) > 4:
+                      tmp += ' ' + fields[4]
                 # tmp += '\n'
                 ### tmp = ' '.join(['{0} {1}'.format(k, v) for k,v in \
                 ###    self.clientMap.iteritems()])

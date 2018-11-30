@@ -7,13 +7,14 @@ import pdb
 
 # module that provides an interface for all client-requests to server
 class OmsiClient:
-    def __init__(self, gHost, gPort, gStudentEmail):
+    def __init__(self, gHost, gPort, gStudentEmail,gExamID):
         # Store the original host name that was entered for UI purposes.
         self.origHost = gHost
         # Make sure the hostname is the actual address.
         self.gHost = socket.gethostbyname(gHost)
         self.gPort = gPort
         self.gStudentEmail = gStudentEmail
+        self.gExamID = gExamID
         self.omsiSocket = None
 
         try:
@@ -175,7 +176,8 @@ class OmsiClient:
                # tell the server that we are sending a file; 'OMSI0001' is
                # the signal for this;  0 bytes serve delimiter between fields
                msg = "OMSI0001" + '\0' + pFileName + "\0" + \
-                  self.gStudentEmail + "\0" + version
+                  self.gStudentEmail + "\0" + version \
+                  + self.gExamID
                self.omsiSocket.send(msg)
                print 'notified server a file is coming,'
                print 'via the message', msg

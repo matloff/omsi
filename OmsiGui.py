@@ -24,6 +24,7 @@ class OmsiGui(Frame):
         self.host = None
         self.port = None
         self.email = None
+        self.examID = None
         self.pdfCmd = None
         self.OmsiClient = None
         self.version = None
@@ -95,6 +96,7 @@ class OmsiGui(Frame):
         self.host = None
         self.port = None
         self.email = None
+        self.examID = None
         self.cancel()
 
     # The user entered the server info and clicked connect.
@@ -108,7 +110,8 @@ class OmsiGui(Frame):
         # successful.
         try:
             self.OmsiClient = \
-               OmsiClient.OmsiClient(self.host, self.port, self.email)
+               OmsiClient.OmsiClient(self.host, self.port, self.email,\
+               self.examID)
             self.dBox.withdraw()
             self.dBox.update_idletasks()
             self.cancel()
@@ -361,8 +364,9 @@ class OmsiGui(Frame):
         for i in range(1, len(self.QuestionsArr)):
             self.submitAnswer(i)
 
-    # makes a dialog window pop up asking for host port and email; makes
-    # the connection; downloads and processes the exam questions
+    # makes a dialog window pop up asking for host port and 
+    # e-mail address; makes the connection; downloads and 
+    # processes the exam questions
     def getConnectionInfo(self):
 
         # most of the code is making the connection; note, though, that
@@ -376,6 +380,7 @@ class OmsiGui(Frame):
         self.hostEntry = Entry(body)
         self.portEntry = Entry(body)
         self.emailEntry = Entry(body)
+        self.examIDEntry = Entry(body)
 
         connected = "Not connected"
         if self.OmsiClient:
@@ -387,15 +392,19 @@ class OmsiGui(Frame):
             self.portEntry.insert(0,self.port)
         if self.email:
             self.emailEntry.insert(0,self.email)
+        if self.examID:
+            self.examIDEntry.insert(0,self.examID)
 
         Label(body,text=connected).grid(row=0)
         Label(body, text="Host:").grid(row=1)
         Label(body, text="Port:").grid(row=2)
-        Label(body, text="Student email:").grid(row=3)
+        Label(body, text="Student e-mail:").grid(row=3)
+        Label(body, text="Exam code:").grid(row=4)
 
         self.hostEntry.grid(row=1, column=1)
         self.portEntry.grid(row=2, column=1)
         self.emailEntry.grid(row=3, column=1)
+        self.examIDEntry.grid(row=4, column=1)
 
         self.hostEntry.focus_set()
         body.pack()
@@ -467,12 +476,14 @@ class OmsiGui(Frame):
             self.host = self.hostEntry.get()
             self.port = int(self.portEntry.get())
             self.email = self.emailEntry.get()
-            if not self.host or not self.port or not self.email:
+            self.examID = self.examIDEntry.get()
+            if not self.host or not self.port or not self.email \
+               or not self.examID:
                 raise ValueError
             return 1
         except ValueError:
             tkMessageBox.showwarning(
-                "Bad input", "Enter host, post and email!"
+                "Bad input", "Enter host, post, email, exam code!"
             )
             return 0
 
@@ -599,12 +610,14 @@ def main():
     narg = len(sys.argv)
     if narg > 1:
        app.host = sys.argv[1]
-       if narg >= 3:
+       if narg > 2:
           app.port = sys.argv[2]
-          if narg >= 4:
+          if narg > 3:
              app.email = sys.argv[3]
-             if narg == 5:
-                app.pdfCmd = sys.argv[4]
+             if narg > 4:
+                app.examID = sys.argv[4]
+                if narg > 5:
+                   app.pdfCmd = sys.argv[5]
 
     top.mainloop()
 
