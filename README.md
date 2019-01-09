@@ -378,7 +378,7 @@ that in order to use this option you must specify so in the command line
 when launching OMSI, e.g.
 
 ```
-python OmsiGui.py xyx.edu 2000 me@abc.com "open xyz.pdf"
+python OmsiGui.py xyx.edu 2000 me@abc.com Midterm1 "open xyz.pdf"
 ```
 
 Depending on your OS, you might have a different command to open the PDF
