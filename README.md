@@ -500,6 +500,9 @@ The server Internet address, port number and exam code (no embedded
 spaces) will need to be announced to the students at the start of the
 exam. 
 
+**NOTE:** Please see the file **README.macWindowsIssue** in this
+package.
+
 <h3>
 Closing the server
 </h3>

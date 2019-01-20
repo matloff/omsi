@@ -182,9 +182,9 @@ grader <- function() {
       # save output after each student, so as to not have to start all
       # over again if the script crashes; then can do the rest
       # separately
-      save(output,file="outfile")
       # back up
       setwd(topdir)
+      save(output,file="outfile")
    }
    # the instructor now has a chance to make corrections to the
    # scores/grades
