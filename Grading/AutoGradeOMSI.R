@@ -138,7 +138,7 @@ gradestudentans <- function(i) {
    }
    # try cmd, wait for instructor to hit Enter
    if (!is.na(cmnds[i])) {
-      system(cmnds[i])
+      system(cmnds[i],timeout=10)
       waitenter()
    }
    # display user text
