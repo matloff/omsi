@@ -516,39 +516,39 @@ class OmsiGui(Frame):
         self.parent.grid_columnconfigure(1, weight=6)
         self.parent.grid_rowconfigure(0, weight=1)
         menubar = Menu(self.parent)
+
+        # File menu
         filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="New", command=self.donothing)
-        # filemenu.add_command(label="Open", command = self.onOpen)
         filemenu.add_command(label="Connect", command=self.getConnectionInfo)
         filemenu.add_command(label="Save", command=self.saveAnswer)
-        # remove Save All option, as some students thought there was
-        # also Submit All
-        # filemenu.add_command(label="Save All", command=self.saveAllAnswers)
         filemenu.add_command(label="Submit", command=self.submitAnswer)
-        # filemenu.add_command(label="Submit All", command=self.submitAllAnswers)
-        # filemenu.add_command(label="Close", command=self.donothing)
         filemenu.add_command(label="Compile", command=self.compileProgram)
         filemenu.add_command(label="Submit & Run", command=self.runProgram)
         filemenu.add_command(label="CopyQtoA", command=self.copyQtoA)
         filemenu.add_command(label="View PDF", command=self.viewPDF)
-
         filemenu.add_separator()
-
         filemenu.add_command(label="Exit", command=self.parent.quit)
         menubar.add_cascade(label="File", menu=filemenu)
 
+        # Edit menu, not added right now
         editmenu = Menu(menubar, tearoff=0)
         editmenu.add_command(label="Undo", command=self.donothing)
-
         editmenu.add_separator()
-
         editmenu.add_command(label="Cut", command=self.donothing)
         editmenu.add_command(label="Copy", command=self.donothing)
         editmenu.add_command(label="Paste", command=self.donothing)
         editmenu.add_command(label="Delete", command=self.donothing)
         editmenu.add_command(label="Select All", command=self.donothing)
-
         # menubar.add_cascade(label="Edit", menu=editmenu)
+
+
+        # Preference menu, for looks
+        #TODO Define functions for the callbacks
+        prefmenu = Menu(menubar, tearoff=0)
+        prefmenu.add_command(label="Font", command=self.fontsettings)
+        prefmenu.add_command(label="Color", command=self.colorsettings)
+        menubar.add_cascade(label="Preferences", menu=prefmenu)
 
         self.parent.config(menu=menubar)
 
@@ -558,21 +558,20 @@ class OmsiGui(Frame):
         self.lb = Listbox(self.questionFrame, width=20, bg="lavender")
         self.lb.insert(1, "Click on File to connect to server...")
         self.lb.bind('<<ListboxSelect>>', self.listboxSelected)
-
         self.lb.pack(fill=BOTH, expand=1, padx=5, pady=5)
 
         # Frame for the question and answer text boxes
         self.textFrame = Frame(self.parent, bg="azure")
         pWindow = PanedWindow(self.textFrame, orient=VERTICAL, bg="LightBlue1")
-
-
         self.textFrame.grid(row=0, column=1, sticky="nswe")
+
         # self.textFrame.grid_rowconfigure(0, weight=2)
         # self.textFrame.grid_rowconfigure(1, weight=2)
         # self.textFrame.grid_columnconfigure(0, weight=1)
 
         # Question text box
         qframe = Frame(pWindow, bd=0)
+        #TODO Add a preference to change this background color
         self.question = Text(qframe, bg="pale turquoise", 
            font=("sans-serif", 20),wrap=WORD)
         ## pWindow.add(self.question,sticky = "nwe")
@@ -598,7 +597,14 @@ class OmsiGui(Frame):
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
         pWindow.pack(fill=BOTH, expand=1, pady=5)
         # self.loadQuestionsFromFile()
-
+    #TODO implement these functions.
+    # Add windows, like the connect button does
+    def colorsettings(self, color):
+        self.question.configure(bg = )
+        self.txt.configure(bg=)
+        return
+    def fontsettings(self):
+        return
 
 def main():
     top = Tk()
