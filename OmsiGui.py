@@ -542,13 +542,22 @@ class OmsiGui(Frame):
         editmenu.add_command(label="Select All", command=self.donothing)
         # menubar.add_cascade(label="Edit", menu=editmenu)
 
+        #The sub-menus
+
+        #Font size menu
+        fontmenu = Menu(tearoff=0)
+        fontmenu.add_command(label="8", command=lambda: self.changefont(8) )
+        fontmenu.add_command(label="10", command=lambda: self.changefont(10))
+        fontmenu.add_command(label="12", command=lambda: self.changefont(12))
+        fontmenu.add_command(label="14", command=lambda: self.changefont(14))
+        fontmenu.add_command(label="16", command=lambda: self.changefont(16))
+        fontmenu.add_command(label="18", command=lambda: self.changefont(18))
 
         # Preference menu, for looks
-        #TODO Define functions for the callbacks
         prefmenu = Menu(menubar, tearoff=0)
-        prefmenu.add_command(label="Font", command=self.fontsettings)
-        prefmenu.add_command(label="Color", command=self.colorsettings)
+        prefmenu.add_cascade(label="Font Size", menu=fontmenu)
         menubar.add_cascade(label="Preferences", menu=prefmenu)
+
 
         self.parent.config(menu=menubar)
 
@@ -573,7 +582,7 @@ class OmsiGui(Frame):
         qframe = Frame(pWindow, bd=0)
         #TODO Add a preference to change this background color
         self.question = Text(qframe, bg="pale turquoise", 
-           font=("sans-serif", 20),wrap=WORD)
+           font=("sans-serif", 14),wrap=WORD) #Making them the same size
         ## pWindow.add(self.question,sticky = "nwe")
         self.question.config(state=DISABLED)
         # self.question.grid(row=0,sticky="nswe",padx=5,pady =5)
@@ -597,14 +606,10 @@ class OmsiGui(Frame):
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
         pWindow.pack(fill=BOTH, expand=1, pady=5)
         # self.loadQuestionsFromFile()
-    #TODO implement these functions.
-    # Add windows, like the connect button does
-    def colorsettings(self, color):
-        self.question.configure(bg = )
-        self.txt.configure(bg=)
-        return
-    def fontsettings(self):
-        return
+        
+    def changefont(self, fontsize):
+        self.question.configure(font = ("sans-serif", fontsize))
+        self.txt.configure(font = ("sans-serif", fontsize))
 
 def main():
     top = Tk()
