@@ -10,7 +10,7 @@ import sys, subprocess
 import filecmp
 import time
 import OmsiClient 
-
+import configparser
 import pdb
 
 # This is the GUI portion of the OMSI application.
@@ -28,6 +28,8 @@ class OmsiGui(Frame):
         self.pdfCmd = None
         self.OmsiClient = None
         self.version = None
+        self.configfile = "config.ini"
+        self.loadprefs() #Needs to be after widgets is called
 
     def donothing(self):
         filewin = Toplevel(self.parent)
@@ -480,6 +482,12 @@ class OmsiGui(Frame):
             if not self.host or not self.port or not self.email \
                or not self.examID:
                 raise ValueError
+            # Update the config email here
+            config = configparser.ConfigParser() 
+            config.read(self.configfile)
+            config.set("USER", "email", str(self.emailEntry.get()))
+            with open(self.configfile, mode='w') as newfile:
+                config.write(newfile) # Update the config
             return 1
         except ValueError:
             tkMessageBox.showwarning(
@@ -610,6 +618,22 @@ class OmsiGui(Frame):
     def changefont(self, fontsize):
         self.question.configure(font = ("sans-serif", fontsize))
         self.txt.configure(font = ("sans-serif", fontsize))
+        # Update prefs
+        config = configparser.ConfigParser()
+        config.read(self.configfile)
+        config.set("USER", "fontsize", str(fontsize))
+        with open(self.configfile, mode='w') as newfile:
+            config.write(newfile) # Update the config
+    
+    # Load the config file any set any values that may be in there
+    def loadprefs(self):
+        config = configparser.ConfigParser() 
+        config.read('config.ini')
+        # Will automatically grab the default value if the user does not have any
+        self.question.configure(font = ("sans-serif", config["USER"]["fontsize"]))
+        self.txt.configure(font = ("sans-serif", config["USER"]["fontsize"]))
+        self.email = config["USER"]["email"]
+
 
 def main():
     top = Tk()
