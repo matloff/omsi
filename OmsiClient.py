@@ -62,7 +62,32 @@ class OmsiClient:
         # something went wrong
         except IOError:
             return False
+    
+    # creates code file on the client's machine
+    def createCodeFile(self):
 
+        try:
+
+            lFilePath = 'code.R'
+            lNewFile = open(lFilePath, 'w')
+            return lNewFile
+
+        # something went wrong
+        except IOError:
+            return False
+
+    # creates data file on the client's machine
+    def createSuppFile(self):
+
+        try:
+
+            lFilePath = 'SuppFile'
+            lNewFile = open(lFilePath, 'w')
+            return lNewFile
+
+        # something went wrong
+        except IOError:
+            return False
 
     # close the connection
     # returning success/failure message or 
@@ -157,6 +182,56 @@ class OmsiClient:
 
             # return File
             return lSuccess, lExamQuestionsFile
+
+    # download any files in files/ from professor's machine
+    def getSuppFile(self, pClientSocket):
+
+        lCodeFile = self.createSuppFile()
+
+        # if file was not created, notify the user
+        if not lCodeFile:
+            print 'Error: Supplementary file not created on client\'s machine.'
+            return
+
+        # create boolean to track success
+        lSuccess = False
+
+        # if file was successfully created, notify server to 
+        # begin sending exam questions
+        try:
+            print "requesting supplementary file from server"
+            pClientSocket.send("ClientWantsSuppFile")
+
+            # write data from server to file
+            qfilelen = 0
+            while True:
+                # ready = select.select([pClientSocket], [], [], 2)
+                print "Client Waiting to recv"
+                lChunkOfFile = pClientSocket.recv(1024)
+                if lChunkOfFile[-1] == chr(0):  # last chunk
+                    lSuccess = True
+                    lChunkOfFile = lChunkOfFile.rstrip(chr(0))
+                qfilelen = qfilelen + len(lChunkOfFile)
+                # print "Client recvd chunk {0}".format(lChunkOfFile)
+                print "Client recvd Supp. File chunk; first line:\n"
+                print lChunkOfFile.split('\n')[0], '\n'
+                lCodeFile.write(lChunkOfFile)
+                if lSuccess: break
+
+        finally:
+            # if exam questions were not successfully downloaded, print error
+            if lSuccess:
+                print "Supplementary file successfully read from server."
+                print qfilelen, 'bytes in all'
+            else:
+                print "Error: Supplementary file not successfully read from server."
+
+            # close file, regardless of success
+            lCodeFile.close()
+            # close socket
+
+            # return File
+            return lSuccess, lCodeFile
 
 
     # sends a file from the client to the server

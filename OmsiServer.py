@@ -22,6 +22,8 @@ class OmsiServer:
         self.examDirectory = os.path.join('InstructorDirectory',examName)
         self.examQuestionsPath = \
            os.path.join('InstructorDirectory','Questions.txt')
+        self.suppFilePath= \
+           os.path.join('InstructorDirectory', 'SuppFile')
 
     def awaitConnections(self):
         # blocks and waits for connections
@@ -125,6 +127,10 @@ class OmsiServer:
                 # this function handles error messages + edge cases
                 qfl = self.sendQuestionsToClient(pClientSocket)
                 print 'total of ',qfl, 'bytes read from questions file' 
+            elif data == "ClientWantsSuppFile":
+                if os.path.isfile(self.suppFilePath):
+                    qfl = self.sendFileToClient(pClientSocket)
+                    print 'total of ',qfl, 'bytes read from data file' 
 
             # client is executing a function
             # TODO: refactor this or just get rid of it!
@@ -325,6 +331,43 @@ class OmsiServer:
             print 'Successfully sent the questions file to a client'
 
         return qfilelen
+ 
+    # routine for sending a file to a student
+    def sendFileToClient(self, pClientSocket):
+        fn = self.suppFilePath
+        if os.path.isfile(fn):
+            #send the data File to the client
+            try:
+                lOpenedFile = open(fn, 'r')
+                lFileChunk = lOpenedFile.read(1024)
+                qfilelen = len(lFileChunk)
+                lExceptionOccurred = False
+            except IOError:
+                print "No such file"
+                lFileChunk = ""
+                lExceptionOccurred = True
+
+            # send the file
+            while (lFileChunk):
+                print 'sending file chunk\n'
+                print 'first line:', lFileChunk.split('\n')[0], '\n'
+                pClientSocket.send(lFileChunk)
+                # print "Sending file chunk {0}".format(lFileChunk)
+                lFileChunk = lOpenedFile.read(1024)
+                qfilelen = qfilelen + len(lFileChunk)
+            pClientSocket.send(chr(0))
+            # print "Sending eof chunk {0}".format(lFileChunk)
+            # pClientSocket.send(lFileChunk)
+
+            # display success message for debugging purposes only
+            # TODO: comment this out for prod. It clogs up the command prompt unnecessarily
+            if lExceptionOccurred == False:
+                print 'Successfully sent file to a client'
+
+            return qfilelen
+        else:
+            print 'No file to send'
+        return False
 
     # asks professor to specify directory to store exam questions and student submissions
     # confirms that the exam questions file is in the directory

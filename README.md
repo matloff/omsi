@@ -16,11 +16,11 @@
 
 </blockquote>
 
-## Later contributors::
+## Later contributors:
 
 <blockquote>
 
-[Sachin Kumawat](mailto:skumawat@ucdavis.edu),  [Thong Le](mailto:thmle@ucdavis.edu), [Darya Semyonova](mailto:dsemyonova@ucdavis.edu)
+[S. Ismail](mailto:sismail@ucdavis.edu), [Sachin Kumawat](mailto:skumawat@ucdavis.edu),  [Thong Le](mailto:thmle@ucdavis.edu), [Darya Semyonova](mailto:dsemyonova@ucdavis.edu), [Sana Vaziri](mailto:vaziri@ucdavis.edu)
 
 </blockquote>
 
@@ -82,8 +82,8 @@ OMSI, short for Online Measurement of Student Insight, is a software
 tool for conducting and grading examinations in a manner that is both
 secure and conducive to **high-quality measurement of student insight**. It
 is suitable for small or large class exams, be they based on
-**essays, writing code or math analysis.**  This is NOT a "Scantron  
-multiple choice test administration tool."
+**essays, writing code or math analysis.**  
+This is NOT a "Scantron  multiple choice test administration tool."
 
 Students come to the classroom at the regular class time, just as with a
 traditional pencil-and-paper exam.  However, they use their laptop
@@ -378,7 +378,7 @@ that in order to use this option you must specify so in the command line
 when launching OMSI, e.g.
 
 ```
-python OmsiGui.py xyx.edu 2000 me@abc.com Midterm1 "open xyz.pdf"
+python OmsiGui.py xyx.edu 2000 me@abc.com "open xyz.pdf"
 ```
 
 Depending on your OS, you might have a different command to open the PDF
@@ -462,15 +462,38 @@ Within the OMSI Home directory, there will be a subdirectory named
 directory, in a file **Questions.txt**.  The format for specifying the
 questions is detailed below. 
 
-During the exam, a subdirectory of __InstructorDirectory__ will be
+*The Questions.txt file:*
+
+During the exam, a subdirectory of **InstructorDirectory** will be
 created for this exam, and within it there will be a further
 subdirectory for each student, using the e-mail address provided by the
 student.  In a student's subdirectory there will be an answer file for
 each question. e.g.  <b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
 
+*The SuppFile file:*
+
+The instructor can also optionally place a file **SuppFile** in
+**InstructorDirectory**.  This file will be automatically downloaded to
+the students' computers when the students connect to the server.  It may
+contain code or data to be used during the exam.
+
+Say for instance the instructor wants to make available to the students
+some R functions to be called by the students' code.  The instructor
+could place the functions in **SuppFile**, and have the students load it
+via R's **source()** function.
+
+For sharing more complicated objects with students during an exam, say
+data frames, the instructor can save them into **SuppFile** by
+using R's **save()** function; make sure to use the **ascii = TRUE**
+option, as a binary file will not transfer properly.  The students can
+then execute **load('SuppFile')** to load the materials.
+
+*Known issues:*
+
 Note:  As of the current version, the server may have trouble with
 downloading very long files on some networks.  It is best to keep the 
-**Questions.txt** file to under 3000 bytes.
+**Questions.txt** file to under 3000 bytes.  The same is true for
+**SuppFile**.
 
 <h3>
 Starting the server
@@ -499,9 +522,6 @@ The port number must be at least 1024.
 The server Internet address, port number and exam code (no embedded
 spaces) will need to be announced to the students at the start of the
 exam. 
-
-**NOTE:** Please see the file **README.macWindowsIssue** in this
-package.
 
 <h3>
 Closing the server
@@ -587,6 +607,11 @@ Here is one for R, for a Question 3:
 QUESTION -ext .R -run 'Rscript ./omsi_answer3.R'
 ```
 Note that fields with embedded spaces must be quoted.
+
+*Vital note:* Do not touch the same **Questions.txt** file with both a
+Windows machine and a Mac. It is well-known that such mixing of
+machines on the same file can cause corruption in the contents;
+see [the details](README.macWindowsIssue).
 
 
 <b><i>Tips for instructors:</i></b>

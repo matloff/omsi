@@ -445,6 +445,8 @@ class OmsiGui(Frame):
         # now the exam questions etc.
         self.getVersion()
         self.getQuestionsFromServer()  # includes connect op
+        self.getSuppFileFromServer()  # includes connect op
+        
         self.loadQuestionsFromFile()
 
     def getVersion(self):
@@ -468,6 +470,20 @@ class OmsiGui(Frame):
             socket.close()
         except ValueError as e:
             tkMessageBox.showwarning("Error in downloading questions", e)
+        return True
+
+    def getSuppFileFromServer(self):
+        print 'downloading code from server'
+        try:
+            socket = self.OmsiClient.configureSocket()
+            self.OmsiClient.getSuppFile(socket)
+            print "closing socket"
+            socket.close()
+        except ValueError as e:
+            tkMessageBox.showwarning("Error in downloading supplementary file", e)
+        
+        msg = "\n Successfully copied supplementary file to OMSI directory. \n"
+        tkMessageBox.showinfo("Successful copy", msg)
         return True
 
     # Ensures the info entered in the for the server is valid.
