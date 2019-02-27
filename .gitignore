@@ -1,3 +1,5 @@
 ProfessorHomeDirectory
 *.pyc
 omsi_answer*
+SuppFile
+ExamQuestions.txt
