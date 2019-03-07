@@ -20,7 +20,7 @@
 
 <blockquote>
 
-[S. Ismail](mailto:sismail@ucdavis.edu), [Sachin Kumawat](mailto:skumawat@ucdavis.edu),  [Thong Le](mailto:thmle@ucdavis.edu), [Darya Semyonova](mailto:dsemyonova@ucdavis.edu), [Sana Vaziri](mailto:vaziri@ucdavis.edu)
+[S. Ismail](mailto:sismail@ucdavis.edu), [Sachin Kumawat](mailto:skumawat@ucdavis.edu),  [Thong Le](mailto:thmle@ucdavis.edu), [Chase Maguire](mailto:cmaguire@ucdavis.edu [Darya Semyonova](mailto:dsemyonova@ucdavis.edu), [Sana Vaziri](mailto:vaziri@ucdavis.edu)
 
 </blockquote>
 
@@ -260,7 +260,7 @@ open a terminal window and type
 R
 ```
 
-in a terminal window. (Start R directly in this manner, not an R GUI.)
+in a terminal window. (Start R directly in this manner, not from an R GUI.)
 R should start, displaying the > prompt.  (Exit via ctrl-d or by typing
 'exit()'.)
 
@@ -384,6 +384,27 @@ python OmsiGui.py xyx.edu 2000 me@abc.com "open xyz.pdf"
 Depending on your OS, you might have a different command to open the PDF
 file than **open**, e.g. **evince** on a Linux system.
 
+<b><i>Viewing an R or Python help file:</i></b>
+
+For instance, say you are using R in an OMSI exam question, and have
+forgotten how to use R's **rbind()** function.  Simply place
+
+``` r
+help(rbind,help_type='text')
+```
+
+in your answer window, and hit Run!
+
+A slight modification must be made if you are running Windows.  Running
+the above, the help message will appear momentarily, then vanish.  To
+circumvent that, plug in an infinite loop, e.g.
+
+``` r
+help(rbind,help_type='text')
+while(1) x <- 8
+```
+
+
 <b><i>Tips for students:</i></b>
 
 Properly used, you will find that OMSI provides the instructor with a
@@ -480,20 +501,25 @@ contain code or data to be used during the exam.
 Say for instance the instructor wants to make available to the students
 some R functions to be called by the students' code.  The instructor
 could place the functions in **SuppFile**, and have the students load it
-via R's **source()** function.
+via R's **source()** function.  For a data file, say of CSV type, have
+the students load it using **read.csv()**.
 
-For sharing more complicated objects with students during an exam, say
-data frames, the instructor can save them into **SuppFile** by
-using R's **save()** function; make sure to use the **ascii = TRUE**
-option, as a binary file will not transfer properly.  The students can
-then execute **load('SuppFile')** to load the materials.
+An alternative, at least in the R case, is to exploit the fact that R's
+**source()**, **read.csv()** etc. can read from the Web, e.g.
+
+``` r
+> source('http://heather.cs.ucdavis.edu/a.R')  # contains a line x <- 8
+> x
+[1] 8
+
+```
 
 *Known issues:*
 
 Note:  As of the current version, the server may have trouble with
 downloading very long files on some networks.  It is best to keep the 
 **Questions.txt** file to under 3000 bytes.  The same is true for
-**SuppFile**.
+**SuppFile**, etc.
 
 <h3>
 Starting the server
