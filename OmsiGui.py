@@ -253,6 +253,7 @@ class OmsiGui(Frame):
     def viewPDF(self):
        os.system(self.pdfCmd)
 
+
     def runProgram(self, qNum = None):       
         self.submitAnswer()
         runCmd = ""
@@ -267,10 +268,8 @@ class OmsiGui(Frame):
         #check if this program can be "run"
             fType = self.QuestionsArr[qNum].getFiletype()  #file type
             #name of the file to be compiled
-            fName = "omsi_answer{0}{1}". \
-               format(qNum, self.QuestionsArr[qNum].getFiletype()) 
+            fName = "omsi_answer{0}{1}".format(qNum, fType) 
             compileProg = self.QuestionsArr[qNum].getCompileProgram()
-            
             if compileProg == 'y':
             #check if executable exists (if required)
                 execName = "omsi_answer" + str(qNum)  #name of the executable    
@@ -322,7 +321,13 @@ class OmsiGui(Frame):
                    join(outfile.readlines()) + "\n"
                 outfile.close()
             os.remove("errfile") 
-            os.remove("o_" + str(qNum)) 
+            os.remove("o_" + str(qNum))
+            try:
+                os.system("evince Rplots.pdf") 
+                pass
+            except:
+                os.system(self.pdfCmd.split(' ')[] + " Rplots.pdf")
+                pass
         else:
         # this question does not allow run
             msg = "\nNot authorised!\n"
@@ -330,6 +335,8 @@ class OmsiGui(Frame):
             return False
 
         # display msg in pop-up box
+        # Display the image that was created here as well
+        #   Or create a new popup
         fileWin = Toplevel(self.parent)
         text = Text(fileWin)
         text.insert(END,msg)
@@ -598,7 +605,6 @@ class OmsiGui(Frame):
         # self.txt.grid(row=1,sticky="nswe",pa dx=5,pady=5)
         pWindow.pack(fill=BOTH, expand=1, pady=5)
         # self.loadQuestionsFromFile()
-
 
 def main():
     top = Tk()
