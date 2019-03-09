@@ -322,12 +322,13 @@ class OmsiGui(Frame):
                 outfile.close()
             os.remove("errfile") 
             os.remove("o_" + str(qNum))
-            try:
-                os.system("evince Rplots.pdf") 
-                pass
-            except:
-                os.system(self.pdfCmd.split(' ')[] + " Rplots.pdf")
-                pass
+            if self.pdfCmd != None:
+                try:
+                    os.system(self.pdfCmd.split(' ')[0] + " Rplots.pdf")
+                    pass
+                except:
+                    tkMessageBox.showwarning("Error with open command!")
+
         else:
         # this question does not allow run
             msg = "\nNot authorised!\n"
