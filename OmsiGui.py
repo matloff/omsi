@@ -253,6 +253,13 @@ class OmsiGui(Frame):
     def viewPDF(self):
        os.system(self.pdfCmd)
 
+    def viewGraph(self):
+        if self.pdfCmd != None:
+            try:
+                os.system(self.pdfCmd.split(' ')[0] + " Rplots.pdf")
+                pass
+            except:
+                tkMessageBox.showwarning("Error with open command!")
 
     def runProgram(self, qNum = None):       
         self.submitAnswer()
@@ -322,12 +329,6 @@ class OmsiGui(Frame):
                 outfile.close()
             os.remove("errfile") 
             os.remove("o_" + str(qNum))
-            if self.pdfCmd != None:
-                try:
-                    os.system(self.pdfCmd.split(' ')[0] + " Rplots.pdf")
-                    pass
-                except:
-                    tkMessageBox.showwarning("Error with open command!")
 
         else:
         # this question does not allow run
@@ -539,6 +540,7 @@ class OmsiGui(Frame):
         filemenu.add_command(label="Submit & Run", command=self.runProgram)
         filemenu.add_command(label="CopyQtoA", command=self.copyQtoA)
         filemenu.add_command(label="View PDF", command=self.viewPDF)
+        filemenu.add_command(label="View R graphs", command=self.viewGraph)
 
         filemenu.add_separator()
 
