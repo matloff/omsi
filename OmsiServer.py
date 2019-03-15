@@ -7,6 +7,8 @@ import threading
 import pdb
 import time
 
+# March 14, 2019:  SuppFile acquisition removed by NM.
+
 
 class OmsiServer:
 
