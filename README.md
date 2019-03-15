@@ -90,7 +90,15 @@ traditional pencil-and-paper exam.  However, they use their laptop
 computers to take the exam, using OMSI.  The latter downloads the exam
 questions, and enables the students to upload their answers.  
 
-Moreover, **in the case of exams in programming classes,** OMSI is
+As detailed below, this arrangement has significant benefits for both
+students and instructors.  The system is easy to install and use, and
+can be run on Macs, Windows and Linux.
+
+<h3>
+Special benefit in programming courses:
+</h3>
+
+In the case of exams in programming classes, OMSI is
 especially valuable:
 
 <blockquote>
@@ -105,10 +113,25 @@ correct their code.
 
 </blockquote>
 
+<h3>
+Special benefit in math/statistics courses:
+</h3>
 
-As detailed below, this arrangement has significant benefits for both
-students and instructors.  The system is easy to install and use, and
-can be run on Macs, Windows and Linux.
+<blockquote>
+
+Note that even in math courses, the programming feature facilitates 
+giving exams online.  Instead of being limited to multiple choice, the
+exam can have the student present the answer as program code, e.g. in R,
+
+<pre>
+3*x^2
+</pre>
+
+for 3x<sup>2</sup>.  OMSI also allows display of graphics in R. 
+
+</blockquote>
+
+<h3>Sample screen:</h3>
 
 Below is a screenshot of an example screen from the student's point of
 view.
@@ -164,17 +187,25 @@ has two components:
 <li> <i>Exam administration:</i>  
 </p>
 
-This manages the actual process of the students taking the exam.  
+OMSI manages the actual process of the students taking the exam.  
+
 You get electronic copies of the students' exams, eliminating 
 the need for collecting and carrying around a large
 number of papers, and making work sharing much easier among multiple 
-graders.  At the end of an exam period, there is no chaos, e.g. from
+graders. 
+</p>
+
+At the end of an exam period, there is no chaos, e.g. from
 students who are still writing even when the period is over; the
 instructor merely shuts down the server at that time, and nothing
-further can be submitted.  If a student wishes his/her performance on an
-exam problem to be reassessed, the fact that the files are online means
-that the instructor can check the student's work from anywhere, rather
-than having to wait for the next visit to the office.
+further can be submitted.  
+</p>
+
+If a student wishes his/her performance on an exam problem to be
+reassessed, the fact that the files are online means that the instructor
+can check the student's work from anywhere, rather than having to wait
+for the next visit to the office.
+</p>
 
 As noted in "Benefits for students" above, OMSI enables the
 student to turn in a better product, and this benefits the instructor as
@@ -260,13 +291,15 @@ open a terminal window and type
 R
 ```
 
-in a terminal window. (Start R directly in this manner, not from an R GUI.)
-R should start, displaying the > prompt.  (Exit via ctrl-d or by typing
+in a terminal window. (Start R directly in this manner, not from 
+RStudio.) R should start, displaying the > prompt.  (Exit 
+via ctrl-d or by typing
 'exit()'.)
 
-To install OMSI, download the <b>.zip</b> file.
-Unzipping it will produce a directory/folder <b>omsi-master</b>, where all
-relevant files reside.  We'll call this the <i>OMSI Home</i>.
+To install OMSI, download the <b>.zip</b> file from [the OMSI
+site](https://github.com/matloff/omsi).  Unzipping it will produce a
+directory/folder <b>omsi-master</b>, where all relevant files reside.
+We'll call this the <i>OMSI Home</i>.
 
 <h3>
 <a name="students">Directions for students</a>
@@ -322,6 +355,8 @@ the gaps in the code.  Copy-and-paste operations using a mouse may
 depend on the type of machine/OS used.  Instead, OMSI offers a
 **CopyQtoA** selection in the menu, which completely copies the contents
 of the question box to the end of the answer box.  Students then edit.
+(You may need to scroll down in the answers box to see the copied
+material)
 
 <b><i>Saving answers:</i></b>
 
@@ -332,10 +367,10 @@ instructor's server; the save operation merely saves to a file on your
 local machine.  See "Submitting your answers" below for uploading to the
 instructor.
 
-By the way, your files are saved in your OMSI Home directory, i.e.  the
-same directory from which you launched OMSI, with file names beginning
-with 'omsi_answer', e.g.  __omsi_answer2.txt__.  This can be useful if
-you want to check later what you submitted.  
+By the way, your files are saved locally in your OMSI Home directory,
+i.e.  the same directory from which you launched OMSI, with file names
+beginning with 'omsi_answer', e.g.  __omsi_answer2.txt__.  This can be
+useful if you want to check later what you submitted.  
 
 <b><i>Compiling/running code:</i></b>
 
@@ -344,6 +379,8 @@ such as C, select <b>File | Compile</b>. A new window will pop up,
 displaying the results.  Then select <b>File | Submit & Run</b> (or for
 an interpreted language like R or Python, go to this step directly, no
 compile step). A new window will pop up, displaying the results.
+
+OMSI has the capability of displaying R graphics.  See below.
 
 <b><i>Submitting answers:</i></b>
 
@@ -358,11 +395,11 @@ any OMSI operations while waiting for this.
 
 Note:
 
-1. Each time you submit your solution to a question, the new solution
-overwrites the old one.
-
-2. Each time you run your code, it is automatically submitted to the
+1. Each time you run your code, it is automatically submitted to the
    server.
+
+2. Each time you submit your solution to a question, the new solution
+overwrites the old one, both locally and on the server.
 
 <b><i>Viewing a PDF file for consultation:</i></b>
 
@@ -378,13 +415,17 @@ that in order to use this option you must specify so in the command line
 when launching OMSI, e.g.
 
 ```
-python OmsiGui.py xyx.edu 2000 me@abc.com "open xyz.pdf"
+python OmsiGui.py xyx.edu 2000 me@abc.com exam2 "open abc.pdf"
 ```
 
+for a consultation file **abc.pdf**.
 Depending on your OS, you might have a different command to open the PDF
 file than **open**, e.g. **evince** on a Linux system.
 
 <b><i>Viewing an R or Python help file:</i></b>
+
+Depending on your OS, you may be able to view help files from within
+OMSI.
 
 For instance, say you are using R in an OMSI exam question, and have
 forgotten how to use R's **rbind()** function.  Simply place
@@ -393,16 +434,26 @@ forgotten how to use R's **rbind()** function.  Simply place
 help(rbind,help_type='text')
 ```
 
-in your answer window, and hit Run!
+in your answer window, and hit Run!  For some OSs, you may need to try
+<b>type='pdf'</b> or <b>type='html'</b>.
 
-A slight modification must be made if you are running Windows.  Running
-the above, the help message will appear momentarily, then vanish.  To
-circumvent that, plug in an infinite loop, e.g.
+Also, in R a line like
 
 ``` r
-help(rbind,help_type='text')
-while(1) x <- 8
+args(rbind)
 ```
+
+should work independent of your OS, to do a quick check of the required
+arguments for a function.
+
+<b><i>Viewing output of R graphics:</i></b>
+
+If, say, you call **hist()** to form and display a histogram, R will
+write the output to a file **Rplots.pdf**, since it does not know of a
+screen to display on.  You can view the plot by clicking
+<strong>File | View R graphs</strong>, provided you specified a PDF
+viewer when you launched the OMSI client (see above).
+
 
 
 <b><i>Tips for students:</i></b>
@@ -456,7 +507,7 @@ seconds to read this.
 If your exam tests you on Python or R, remember that they won't be
 running in interactive mode here, so you must write explicit **print**
 operations.  Graphical displays will not work, for the same reason.
-(There are workarounds for this, not detailed here.)  Note too that
+(See the R workaround, above.)  Note too that
 these are not compiled languages, so you should not hit the **Compile**
 button.
 
@@ -491,28 +542,6 @@ subdirectory for each student, using the e-mail address provided by the
 student.  In a student's subdirectory there will be an answer file for
 each question. e.g.  <b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
 
-*The SuppFile file:*
-
-The instructor can also optionally place a file **SuppFile** in
-**InstructorDirectory**.  This file will be automatically downloaded to
-the students' computers when the students connect to the server.  It may
-contain code or data to be used during the exam.
-
-Say for instance the instructor wants to make available to the students
-some R functions to be called by the students' code.  The instructor
-could place the functions in **SuppFile**, and have the students load it
-via R's **source()** function.  For a data file, say of CSV type, have
-the students load it using **read.csv()**.
-
-An alternative, at least in the R case, is to exploit the fact that R's
-**source()**, **read.csv()** etc. can read from the Web, e.g.
-
-``` r
-> source('http://heather.cs.ucdavis.edu/a.R')  # contains a line x <- 8
-> x
-[1] 8
-
-```
 
 *Known issues:*
 
@@ -534,13 +563,13 @@ At the start of the exam period (not before), start the server from a
 terminal window by issuing the command
 
 ```
-python OmsiServer.py [portNumber] [exam code] 
+python OmsiServer.py portNumber examName examCode
 ```
 
 from within the OMSI Home directory, e.g.
 
 ```
-python OmsiServer.py 5000 Midterm1
+python OmsiServer.py 5000 Midterm1 breadbox
 ```
 
 The port number must be at least 1024.
@@ -641,6 +670,17 @@ see [the details](README.macWindowsIssue).
 
 
 <b><i>Tips for instructors:</i></b>
+
+OMSI does not directly enable display of graphics.  An alternative, at
+least in the R case, is to exploit the fact that R's **source()**,
+**read.csv()** etc. can read from the Web, e.g.
+
+``` r
+> source('http://heather.cs.ucdavis.edu/a.R')  # contains a line x <- 8
+> x
+[1] 8
+
+```
 
 OMSI should greatly improve the examination process for both instructors
 and students.  However, as with any automated system, some care is
