@@ -20,7 +20,7 @@
 
 <blockquote>
 
-[S. Ismail](mailto:sismail@ucdavis.edu), [Sachin Kumawat](mailto:skumawat@ucdavis.edu),  [Thong Le](mailto:thmle@ucdavis.edu), [Chase Maguire](mailto:cmaguire@ucdavis.edu [Darya Semyonova](mailto:dsemyonova@ucdavis.edu), [Sana Vaziri](mailto:vaziri@ucdavis.edu)
+[S. Ismail](mailto:sismail@ucdavis.edu), [Sachin Kumawat](mailto:skumawat@ucdavis.edu),  [Thong Le](mailto:thmle@ucdavis.edu), [Chase Maguire](mailto:cmaguire@ucdavis.edu), [Darya Semyonova](mailto:dsemyonova@ucdavis.edu), [Sana Vaziri](mailto:vaziri@ucdavis.edu)
 
 </blockquote>
 
@@ -88,7 +88,9 @@ This is NOT a "Scantron  multiple choice test administration tool."
 Students come to the classroom at the regular class time, just as with a
 traditional pencil-and-paper exam.  However, they use their laptop
 computers to take the exam, using OMSI.  The latter downloads the exam
-questions, and enables the students to upload their answers.  
+questions, and enables the students to upload their answers.  Most
+importantly, use of the laptop enables the student to actually do
+his/her exam work on the laptop.
 
 As detailed below, this arrangement has significant benefits for both
 students and instructors.  The system is easy to install and use, and
@@ -164,8 +166,8 @@ squeezed in above a line, no points off for unreadable handwriting. :-)
 
 
 In both of these aspects, OMSI gives you a better opportunity to
-demonstrate your insight into the course material (and thus achieve a
-better grade), compared to the traditional exam format.
+demonstrate your insight into the course material -- and thus achieve a
+better grade -- compared to the traditional exam format.
 
 <h2>
 <a name="benteacher"> 
@@ -264,8 +266,8 @@ Prompt* for  Windows (**cmd** command).
 <a name="install">Installing the package (instructors and students)</a>
 </h3>
 
-You will need Python 2 (not Python 3) installed on your machine. For Mac
-and Linux systems, it should already be there, but it is easily
+You will need Python 2.7 (not Python 3) installed on your machine. For Mac
+and Linux systems, it may already be there, but it is easily
 downloadable for Windows.
 
 You must have Python in your executable search path.  To check this,
@@ -276,9 +278,9 @@ python
 ```
 
 in a terminal window.  Python should start, displaying the >>> prompt.
-(Exit via ctrl-d or by typing 'exit()'.)  If you have both Python 2 and
+(Exit via ctrl-d or by typing 'exit()'.)  If you have both Python 2.7 and
 3 on your system, you will need your login file, e.g. **.profile** for
-**bash** to give priority to version 2.  Note: OMSI, which runs in
+**bash** to give priority to version 2.7.  Note: OMSI, which runs in
 Python, will itself invoke Python.  Thus Python 2 must come first in the
 search path.
 
