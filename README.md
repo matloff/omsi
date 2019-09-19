@@ -298,6 +298,9 @@ RStudio.) R should start, displaying the > prompt.  (Exit
 via ctrl-d or by typing
 'exit()'.)
 
+**Make absolutely sure Python and R can be run from the command line as
+above.**
+
 To install OMSI, download the <b>.zip</b> file from [the OMSI
 site](https://github.com/matloff/omsi).  Unzipping it will produce a
 directory/folder <b>omsi-master</b>, where all relevant files reside.
@@ -309,8 +312,8 @@ We'll call this the <i>OMSI Home</i>.
 
 <b><i>Connect to the server, at the start of the exam:</i></b>
 
-Download and install the package as above. Then open a terminal window,
-change to the OMSI Home, and run
+After installing the package earlier, open a terminal window, change to
+the OMSI Home, and run
 
 ```
 python OmsiGui.py
