@@ -215,7 +215,7 @@ well:  **Better exam performance by students is both more gratifying to
 the instructor and also makes for easier, less frustrating grading**.
 </li> </p>
 
-<li> <i>Exam grading.</i> OMSI does NOT take the place of instructor
+<li> *Exam grading:* OMSI does NOT take the place of instructor
 judgment in assigning points to exam problems. 
 But it does make things much easier, by automating
 much of the drudgery. For instance, OMSI automatically records grades
@@ -461,9 +461,7 @@ screen to display on.  You can view the plot by clicking
 <strong>File | View R graphs</strong>, provided you specified a PDF
 viewer when you launched the OMSI client (see above).
 
-
-
-<b><i>Tips for students:</i></b>
+# Tips for students
 
 Properly used, you will find that OMSI provides the instructor with a
 more accurate assessment of your insight into the course material, i.e.
@@ -672,24 +670,13 @@ machines on the same file can cause corruption in the contents;
 see [the details](README.macWindowsIssue).
 
 
-<b><i>Tips for instructors:</i></b>
-
-OMSI does not directly enable display of graphics.  An alternative, at
-least in the R case, is to exploit the fact that R's **source()**,
-**read.csv()** etc. can read from the Web, e.g.
-
-``` r
-> source('http://heather.cs.ucdavis.edu/a.R')  # contains a line x <- 8
-> x
-[1] 8
-
-```
+# Tips for instructors
 
 OMSI should greatly improve the examination process for both instructors
 and students.  However, as with any automated system, some care is
 needed to insure that things run smoothly.
 
-<i>Making sure you know the procedures:</i>
+## Making sure you know the procedures
 
 In familiarizing yourself with OMSI, do a trial run, playing the role of
 both instructor and student.  Start up the server as the instructor,
@@ -777,6 +764,10 @@ exit  # end 'screen'
 exit  # leave pc22
 ```
 
+*Running the server on a laptop:*
+
+For experts only!
+
 The instructor could run the server on a laptop computer in the
 classroom.  However, this gives a dynamic IP address, basically
 visible only to other machines using the same router.  The students'
@@ -818,6 +809,10 @@ latter?
     cell phone, is a major preventing remedy.  Needless to say, use of 
     cell phones during the exam should be strictly forbidden.
 
+I have a [set of
+groundrules](http://heather.cs.ucdavis.edu/~matloff/OMSIRuleshtml) that
+instructors may find useful.
+
 <h2>
 <a name="grading">Software tools for grading</a> 
 </h2>
@@ -858,7 +853,7 @@ for each student:
 ```
 
 The main tool is **Grading/AutoGradeOMSI.R**.  This code is in R, as it
-is an adaptation from an earlier system I had developed; also, R's
+is an adaptation from an earlier system I had developed. Also, R's
 statistical and graphic capabilities facilitate analysis of the exam
 grades.  (There is also a file **AutoGrade.py** in that directory, but
 it is under development.)
