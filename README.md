@@ -810,7 +810,7 @@ latter?
     cell phones during the exam should be strictly forbidden.
 
 I have a [set of
-groundrules](http://heather.cs.ucdavis.edu/~matloff/OMSIRuleshtml) that
+groundrules](http://heather.cs.ucdavis.edu/OMSIrules.html) that
 instructors may find useful.
 
 <h2>
