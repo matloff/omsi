@@ -312,8 +312,8 @@ We'll call this the <i>OMSI Home</i>.
 
 <b><i>Connect to the server, at the start of the exam:</i></b>
 
-After installing the package earlier, open a terminal window, change to
-the OMSI Home, and run
+Assuming you  installed the package earlier, open a terminal window,
+change to the OMSI Home, and run
 
 ```
 python OmsiGui.py
@@ -372,10 +372,10 @@ instructor's server; the save operation merely saves to a file on your
 local machine.  See "Submitting your answers" below for uploading to the
 instructor.
 
-By the way, your files are saved locally in your OMSI Home directory,
-i.e.  the same directory from which you launched OMSI, with file names
-beginning with 'omsi_answer', e.g.  __omsi_answer2.txt__.  This can be
-useful if you want to check later what you submitted.  
+By the way, your answer files are saved locally in your OMSI Home
+directory, i.e.  the same directory from which you launched OMSI, with
+file names beginning with 'omsi_answer', e.g.  __omsi_answer2.txt__.
+This can be useful if you want to check later what you submitted.  
 
 <b><i>Compiling/running code:</i></b>
 
@@ -440,7 +440,9 @@ help(rbind,help_type='text')
 ```
 
 in your answer window, and hit Run!  For some OSs, you may need to try
-<b>type='pdf'</b> or <b>type='html'</b>.
+<b>type='pdf'</b> or <b>type='html'</b>.  Of course, you should
+determine the proper argument for your system *before* you take your
+first exam.
 
 Also, in R a line like
 
