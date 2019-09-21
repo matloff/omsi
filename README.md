@@ -469,41 +469,34 @@ Properly used, you will find that OMSI provides the instructor with a
 more accurate assessment of your insight into the course material, i.e.
 you get a better grade.  But you do have to keep in mind the following.
 
-<i>Make SURE you are prepared:</i>
-
+- <i>Make SURE you are prepared:</i>
 **Be sure to try OMSI in an actual session before your first OMSI-based
 exam.**  Start up the server, playing the role of the instructor (see
 "Directions for instructors" below), and then start the client, playing
 the role of the student as above.  (Note:  If you run the server on your
 local machine, specify the server location as 'localhost'.)
 
-Make sure your laptop can connect to your school's WiFi system.
+- Make sure your laptop can connect to your school's WiFi system.
 
-Make sure your laptop is fully charged before the exam.  
+- Make sure your laptop is fully charged before the exam.  
 
-It is good to remove your old answer files (their names begin with
+- It is good to remove your old answer files (their names begin with
 "omsi_answer") from a previous exam before starting the current one.
 
-In programming classes, make absolutely sure that your software is
+- In programming classes, make absolutely sure that your software is
 configured properly.  For instance, with R, make sure that typing 'R' in
 a terminal window does start R.
 
-*Starting OMSI:*
+- *Starting OMSI:* Make sure you launch OMSI from your OMSI Home directory.
 
-Make sure you launch OMSI from your OMSI Home directory.
+- *Submitting your answers:* Submit your answers often. Near the end of
+  an exam period, the network may be very busy, possibly making it
+difficult to get in.  Note that each submission will overwrite the last. 
 
-*Submitting your answers:*
-
-Submit your answers often. Near the end of an exam period, the network
-may be very busy, possibly making it difficult to get in.  In some
-cases, the delay in submitting a question may be 30 seconds or more.
-Note that each submission will overwrite the last. 
-
-Remember that saving an answer does NOT submit it.  You must do
+- Remember that saving an answer does NOT submit it.  You must do
 that separately.
 
-*Following your instructor's directions:*
-
+- *Following your instructor's directions:*
 When you begin the exam, your very first action should be to click
 **CLICK HERE FIRST**.  The instructor may have directions there that will
 make a night-and-day difference in your grade!  So first take a few
@@ -511,20 +504,20 @@ seconds to read this.
 
 *Tips for programming classes:*
 
-If your exam tests you on Python or R, remember that they won't be
+- If your exam tests you on Python or R, remember that they won't be
 running in interactive mode here, so you must write explicit **print**
 operations.  Graphical displays will not work, for the same reason.
 (See the R workaround, above.)  Note too that
 these are not compiled languages, so you should not hit the **Compile**
 button.
 
-If you have a runtime error, the output of your print statements may not
+- If you have a runtime error, the output of your print statements may not
 be displayed. You can remedy this by placing a *return* statement or
 similar before the line of the runtime error.
 
-*Other:*
+*Other tips:*
 
-If your instructor allows you to use OMSI's PDF viewing option, use a
+- If your instructor allows you to use OMSI's PDF viewing option, use a
 PDF viewer that has a good search facility, so that you can quickly find
 what you need during an exam.
 
@@ -552,7 +545,7 @@ each question. e.g.  <b>omsi_answer1.txt</b> or <b>omsi_answer2.java</b>
 
 *Known issues:*
 
-Note:  As of the current version, the server may have trouble with
+As of the current version, the server may have trouble with
 downloading very long files on some networks.  It is best to keep the 
 **Questions.txt** file to under 3000 bytes.  The same is true for
 **SuppFile**, etc.
@@ -580,6 +573,9 @@ python OmsiServer.py 5000 Midterm1 breadbox
 ```
 
 The port number must be at least 1024.
+
+This will create a directory **Midterm1**, in which the students'
+submitted answers will be stored.
 
 The server Internet address, port number and exam code (no embedded
 spaces) will need to be announced to the students at the start of the
@@ -644,7 +640,7 @@ The suffix in that first file name arises from the specification **-ext
 .py** in the QUESTION line; otherwise the default suffix is **.txt**,
 
 The **-run** field tells OMSI how to run a student's code.  This will be
-invoked when the student Clicks **Run**, and later when the exam is
+invoked when the student clicks **Run**, and later when the exam is
 graded, if the instructor uses the OMSI grader.
 
 <b><i>Specifying compile and run options</i></b>
@@ -656,7 +652,7 @@ code.  For instance, Question 1 might have a line
 QUESTION -ext .c -com gcc -flags "-Wall -g" -run ./omsi_answer1
 ```
 
-OMSI will compile the students code using **gcc**, taking
+OMSI will compile the student's code using **gcc**, taking
 **omsi_answer1.c** as input, and if the compilation is successful, it
 will produce the executable file **omsi_answer1**.  The **-flags** field
 is mandatory.  (Students running OMSI within a virtual machine may have
