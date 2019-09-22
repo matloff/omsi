@@ -35,7 +35,7 @@ Norm Matloff
 <UL>
 
 <li> 
-<a href="#quickstart">Quick start for students and instructors:</a> 
+<a href="#quickstart">5-Minute Quick start for students and instructors:</a> 
 </li> </p> 
 
 <li> 
@@ -66,7 +66,7 @@ Norm Matloff
 
 
 <h2>
-<a name="quickstart"> Quick start for students and instructors:</a> 
+<a name="quickstart"> 5-Minute Quick start for students and instructors:</a> 
 </h2>
 
 (In addition to the quick steps below, there is a fully worked-out
@@ -74,16 +74,18 @@ example for an exam using the R language in [a README file included in
 this package](READMEecs132.md).  You need not know R to follow the
 example.)
 
+You'll need Python 2.7 on your machine.
+
 Here you will start the server (normally done by the instructor); 
 start the client (normally done by the student); play the role of the
-student, working a couple of quick exam problems and submitting them to
-the server; play the role of the instructor, inspecting the student's
+student, working a quick exam problem and submitting it to
+the server; and play the role of the instructor, inspecting the student's
 submitted work.
 
 - Go to [the OMSI repo](http://github.com/matloff/omsi), download the
-  **.zip** file, unzip it, and enter the resulting directory/folder. You
-should see files **OmsiServer.py** etc.  Use this terminal window for
-the server.
+  **.zip** file (**Clone or download | Download ZIP**), unzip it, and
+enter the resulting directory/folder. You should see files
+**OmsiServer.py** etc.  Use this terminal window for the server.
 
 - From the same directory/folder, open a second
   terminal window, this one for the client.
@@ -95,7 +97,7 @@ $ python OmsiServer.py 2000 abc
 ```
 
 - In the second window, start the client, say with student ID me@xyz.edu
-  and exam code 88 (ID and code fake for this test):
+  and exam code 88 (ID and code fake for this dry run):
 
 ``` 
 $ python OmsiGui.py localhost 2000 me@xyz.edu 88
@@ -107,7 +109,7 @@ $ python OmsiGui.py localhost 2000 me@xyz.edu 88
 - In the GUI, you'll now see a 2-question sample exam that comes with
   the package. Choose Question 2.
 
-- You'll see the question ("Write a function..." in the upper-right box.
+- You'll see the question ("Write a function...") in the upper-right box.
   Type the answer in the lower-right box:
 
 ``` 
@@ -123,11 +125,14 @@ server, and the code will be run in another dialog box, showing the
 answer, 10.
 
 - Exit the client, **File | Exit**.  To see that your submitted answer
-  is indeed there at the server, enter
+  is indeed there at the server, enter the directory/folder
 **InstructorDirectory/abc/me@xyx.edu**, and observe that there it is, in
 the file **omsi_answer2.py**.
 
 - Kill the server by hitting ctrl-C.
+
+Note that since you had the host and client on the same machine, the
+host was 'localhost'.
 
 <h2>
 <a name="what"> What is OMSI?</a> 
@@ -844,14 +849,14 @@ latter?
     strict instructions not to move, iconify or resize the OMSI window 
     during the exam.  This is easily monitored by proctors.
 
-  * As usual, there is the problem of a student looking at his/her
-    neighbor's work, in this case a laptop screen rather than a piece of
-    paper.  A common technique for dealing with this in the paper exam
-    case is to require students to sit in specific seats that are
-    randomly assigned to them, in order to prevent collaboration among
-    friends.  One can also have an exam question that requires each
-    student to state who her left and right neighbors are.
-    These measures can be taken with OMSI as well.
+  * As usual with any type of exam, there is the problem of a student
+    looking at his/her neighbor's work, in this case a laptop screen
+rather than a piece of paper.  A common technique for dealing with this
+in the paper exam case is to require students to sit in specific seats
+that are randomly assigned to them, in order to prevent collaboration
+among friends.  One can also have an exam question that requires each
+student to state who her left and right neighbors are.  These measures
+can be taken with OMSI as well.
 
   * If the server is run through a static IP address, it is conceivable
     that a dishonest student will take the exam at a location not in the
