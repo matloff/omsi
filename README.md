@@ -84,7 +84,7 @@ submitted work.
 
 - Go to [the OMSI repo](http://github.com/matloff/omsi), download the
   **.zip** file (**Clone or download | Download ZIP**), unzip it, and
-enter the resulting directory/folder. You should see files
+enter the resulting directory/folder **omsi-master**. You should see files
 **OmsiServer.py** etc.  Use this terminal window for the server.
 
 - From the same directory/folder, open a second
