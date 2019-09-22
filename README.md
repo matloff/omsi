@@ -66,7 +66,7 @@ Norm Matloff
 
 
 <h2>
-<a name="quickstart"> Quick start: for students and instructors:</a> 
+<a name="quickstart"> Quick start for students and instructors:</a> 
 </h2>
 
 (In addition to the quick steps below, there is a fully worked-out
