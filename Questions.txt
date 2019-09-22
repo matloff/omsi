@@ -1,0 +1,25 @@
+
+
+DESCRIPTION
+
+Students:  Please note instructions in paper copy of quiz.  Save your
+files often, make sure OMSI fills your entire screen at all times, etc.
+
+A question may not fully fit into your OMSI question box, which is not
+scrollable.  You can try adjusting the relative size of the question and
+answer boxes, but remember that clicking CopyQtoA will copy the entire
+question box to the answer box.
+
+QUESTION
+
+What does "UCD" stand for?
+
+QUESTION -ext .py -run 'python omsi_answer2.py'
+
+Write a function f() that returns double its argument.  Fill in the blanks:
+
+def f(   ):
+   return 
+
+print f(5)
+
