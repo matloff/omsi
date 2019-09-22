@@ -14,12 +14,12 @@ QUESTION
 
 What does "UCD" stand for?
 
-QUESTION -ext .R -run 'Rscript omsi_answer2.R'
+QUESTION -ext .py -run 'python omsi_answer2.py'
 
 Write a function f() that returns double its argument.  Fill in the blanks:
 
-f <- function(x) {
-}
+def f(   ):
+   return 
 
-print(f(5))
+print f(5)
 

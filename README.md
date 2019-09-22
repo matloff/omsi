@@ -35,7 +35,7 @@ Norm Matloff
 <UL>
 
 <li> 
-<a href="#quickstart">Quick start</a> 
+<a href="#quickstart">Quick start for students and instructors:</a> 
 </li> </p> 
 
 <li> 
@@ -66,13 +66,68 @@ Norm Matloff
 
 
 <h2>
-<a name="quickstart"> Quick start:</a> 
+<a name="quickstart"> Quick start: for students and instructors:</a> 
 </h2>
 
+(In addition to the quick steps below, there is a fully worked-out
+example for an exam using the R language in [a README file included in
+this package](READMEecs132.md).  You need not know R to follow the
+example.)
 
-There is a fully worked-out example for an exam using the R language 
-in [a README file included in this package](READMEecs132.md).  (You need
-not know R to follow the example.)
+Here you will start the server (normally done by the instructor); 
+start the client (normally done by the student); play the role of the
+student, working a couple of quick exam problems and submitting them to
+the server; play the role of the instructor, inspecting the student's
+submitted work.
+
+- Go to [the OMSI repo](http://github.com/matloff/omsi), download the
+  **.zip** file, unzip it, and enter the resulting directory/folder. You
+should see files **OmsiServer.py** etc.  Use this terminal window for
+the server.
+
+- From the same directory/folder, open a second
+  terminal window, this one for the client.
+
+- In the first window, start the server, say at port 2000 and exam name 'abc':
+
+``` 
+$ python OmsiServer.py 2000 abc
+```
+
+- In the second window, start the client, say with student ID me@xyz.edu
+  and exam code 88 (ID and code fake for this test):
+
+``` 
+$ python OmsiGui.py localhost 2000 me@xyz.edu 88
+```
+
+- In the client GUI that comes up, choose **File | Connect**.  Click
+  **Enter** in the dialog box that pops up.
+
+- In the GUI, you'll now see a 2-question sample exam that comes with
+  the package. Choose Question 2.
+
+- You'll see the question ("Write a function..." in the upper-right box.
+  Type the answer in the lower-right box:
+
+``` 
+def f(x):
+    return 2*x
+
+print f(5)
+```
+
+- Choose **File | Save** and **File | Submit & Run**.  A dialog box will
+  pop up, reporting that the file was successfully submitted to the
+server, and the code will be run in another dialog box, showing the
+answer, 10.
+
+- Exit the client, **File | Exit**.  To see that your submitted answer
+  is indeed there at the server, enter
+**InstructorDirectory/abc/me@xyx.edu**, and observe that there it is, in
+the file **omsi_answer2.py**.
+
+- Kill the server by hitting ctrl-C.
 
 <h2>
 <a name="what"> What is OMSI?</a> 
@@ -80,10 +135,10 @@ not know R to follow the example.)
 
 OMSI, short for Online Measurement of Student Insight, is a software
 tool for conducting and grading examinations in a manner that is both
-secure and conducive to **high-quality measurement of student insight**. It
-is suitable for small or large class exams, be they based on
-**essays, writing code or math analysis.**  
-This is NOT a "Scantron  multiple choice test administration tool."
+secure and conducive to **high-quality measurement of student insight**.
+It is suitable for small or large class exams, be they based on
+**essays, writing code or math analysis.**  This is NOT a "Scantron
+multiple choice test administration tool."
 
 Students come to the classroom at the regular class time, just as with a
 traditional pencil-and-paper exam.  However, they use their laptop
