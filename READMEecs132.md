@@ -25,9 +25,12 @@ Now, on to Question 3:
 
 ![alt text](ECS132d.png)
 
-Question 3 asked for executable R code.  The student filled in the
-answer, then hit **File | Save** and **File | Run**.  The latter action
-brought up the pop-up run window, with the result of the run.
+Here Question 3 asked for executable R code.  The student filled in the
+answer, then hit **File | Save** and **File | Submit & Run**.  The
+latter action brought up the pop-up run window, with the result of the
+run. Note the need for calling **print()**; as explained in the OMSI
+documentation, R is not running in interactive mode here, so merely
+typing an expression doesn't get it printed.
 
 Finally, the student tackled Question 4. In contrast to the previous
 questions, which were math questions even though the answers were
@@ -45,5 +48,5 @@ and ran the code.
 
 The student made sure that all her answers had been submitted (each
 submission for a problem overwrites the last), exited OMSI, and went
-home happy. :-)
+home happy. :-)  (**File | Exit** to leave OMSI.)
 

@@ -439,8 +439,8 @@ forgotten how to use R's **rbind()** function.  Simply place
 help(rbind,help_type='text')
 ```
 
-in your answer window, and hit Run!  For some OSs, you may need to try
-<b>type='pdf'</b> or <b>type='html'</b>.  Of course, you should
+in your answer window, and hit Submit & Run!  For some OSs, you may need
+to try <b>type='pdf'</b> or <b>type='html'</b>.  Of course, you should
 determine the proper argument for your system *before* you take your
 first exam.
 
@@ -638,8 +638,8 @@ The suffix in that first file name arises from the specification **-ext
 .py** in the QUESTION line; otherwise the default suffix is **.txt**,
 
 The **-run** field tells OMSI how to run a student's code.  This will be
-invoked when the student clicks **Run**, and later when the exam is
-graded, if the instructor uses the OMSI grader.
+invoked when the student clicks **Submit & Run**, and later when the
+exam is graded, if the instructor uses the OMSI grader.
 
 <b><i>Specifying compile and run options</i></b>
  
@@ -870,13 +870,14 @@ Here are some points of improvement:
 
   * Tablet-friendly version of OMSI.
 
-  * Authentication code to check a student's e-mail address against a 
+  * Authentication code to check a student's e-mail address against a
     class list upon connection, with passwords being required.  
   
-  * Code to confirm the integrity of the OMSI client code
-    (i.e. verify that the source code hasn't been changed), and to
-    upload each student Run operation to the server, to guard against
-    the student running surreptitious communication code.
+  * Code to confirm the integrity of the OMSI client code (i.e. verify
+    that the source code hasn't been changed), and to upload each
+student Submit & Run operation to the server, to guard against the
+student running surreptitious communication code.
+
 
 <h2>
 <a name="future">No warranties of any kind are given for this software</a> 
