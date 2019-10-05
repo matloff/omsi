@@ -124,8 +124,8 @@ print f(5)
 server, and the code will be run in another dialog box, showing the
 answer, 10.
 
-- Exit the client, **File | Exit**.  To see that your submitted answer
-  is indeed there at the server, enter the directory/folder
+- Exit the client, **File | Exit**.  To see that your submitted answers
+  (note plural) are indeed there at the server, enter the directory/folder
 **InstructorDirectory/abc/me@xyx.edu**, and observe that there it is, in
 the file **omsi_answer2.py**.
 
@@ -430,7 +430,8 @@ Click the question number on the left of the OMSI screen, and select
 server.** Saving your file does NOT upload your answer to the
 instructor's server; the save operation merely saves to a file on your
 local machine.  See "Submitting your answers" below for uploading to the
-instructor.
+instructor.  Note too that **Save** saves your answer to the current
+problem, not all of the problems.
 
 By the way, your answer files are saved locally in your OMSI Home
 directory, i.e.  the same directory from which you launched OMSI, with
@@ -449,10 +450,13 @@ OMSI has the capability of displaying R graphics.  See below.
 
 <b><i>Submitting answers:</i></b>
 
-Submit the answer to a particular question by clicking on the question
+Submit the **answer to a particular question** by clicking on the question
 number on the left side of the OMSI screen, and selecting <b>File |
 Submit</b>. This will upload your answer to the instructor.  A dialog
 box specifying whether submission was successful will then be displayed.
+
+Note that clicking the **Submit** only submits your answer to the
+problem you are currently working on, **not all the problems**.
 
 **IMPORTANT:**  There may be a delay of a few seconds before the submit
 operation completes and the confirmation box comes up.  Do not perform
