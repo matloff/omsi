@@ -271,8 +271,7 @@ class OmsiServer:
 
         # open new file on the server
         # lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
-        lNewFile = self.openNewFileServerSide('tmp', pStudentEmail)
-        print 'new server file opened'
+        # print 'new server file opened'
 
         # initialize success indicator to fail
         lSuccess = "f"
@@ -289,9 +288,10 @@ class OmsiServer:
                 tmpFile += lChunkOfFile
                 print 'received from '+pStudentEmail+':'
                 print lChunkOfFile
-                lNewFile.write(lChunkOfFile)
+                ## lNewFile.write(lChunkOfFile)
             else:
-                lNewFile.close()
+                ## lNewFile.close()
+                print 'creating/updating student answer file'
                 lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
                 lNewFile.write(tmpFile)
                 lNewFile.close()
