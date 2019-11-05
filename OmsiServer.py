@@ -87,8 +87,8 @@ class OmsiServer:
                 print 'student ID:', lStudentEmail,
                 print ', IP:', addr
                 self.clientMap[addr[0]].append(lStudentEmail)
-                print 'client list:'
-                print self.clientMap
+                # print 'client list:'
+                # print self.clientMap
                 tmp = self.clientMap.keys()[0] 
                 tmp += ' ' + lStudentEmail
                 tmp += ' ' + lFileName
@@ -270,7 +270,8 @@ class OmsiServer:
     def receiveFile(self, pClientSocket, pFileName, pStudentEmail):
 
         # open new file on the server
-        lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
+        # lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
+        lNewFile = self.openNewFileServerSide('tmp', pStudentEmail)
         print 'new server file opened'
 
         # initialize success indicator to fail
@@ -279,25 +280,33 @@ class OmsiServer:
         pClientSocket.send("ReadyToAcceptClientFile")
 
         # receive the file
+        tmpFile = ''
         while 1:
             # set a timeout for this
             ready = select.select([pClientSocket], [], [], 2)
             if ready[0]:
                 lChunkOfFile = pClientSocket.recv(1024)
-                print 'received:'
+                tmpFile += lChunkOfFile
+                print 'received from '+pStudentEmail+':'
                 print lChunkOfFile
                 lNewFile.write(lChunkOfFile)
             else:
+                lNewFile.close()
+                lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
+                lNewFile.write(tmpFile)
+                lNewFile.close()
+                print("Finished accepting file")
+                lSuccess = "s"
                 break
 
-        print("Finished accepting file")
-        lSuccess = "s"
+        # print("Finished accepting file")
+        # lSuccess = "s"
 
         if lSuccess == "f":
             # something went wrong
             print "File transfer was not successful"
-        # close file, regardless of success
-        lNewFile.close()
+        ### close file, regardless of success
+        ##lNewFile.close()
 
         # return success information
         return lSuccess
