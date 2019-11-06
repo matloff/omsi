@@ -20,7 +20,13 @@
 
 <blockquote>
 
-[S. Ismail](mailto:sismail@ucdavis.edu), [Sachin Kumawat](mailto:skumawat@ucdavis.edu),  [Thong Le](mailto:thmle@ucdavis.edu), [Chase Maguire](mailto:cmaguire@ucdavis.edu), [Darya Semyonova](mailto:dsemyonova@ucdavis.edu), [Sana Vaziri](mailto:vaziri@ucdavis.edu)
+[Arnav Acharyya](mailto:aacharyya@ucdavis.edu),
+[S. Ismail](mailto:sismail@ucdavis.edu), 
+[Sachin Kumawat](mailto:skumawat@ucdavis.edu),  
+[Thong Le](mailto:thmle@ucdavis.edu), 
+[Chase Maguire](mailto:cmaguire@ucdavis.edu), 
+[Darya Semyonova](mailto:dsemyonova@ucdavis.edu), 
+[Sana Vaziri](mailto:vaziri@ucdavis.edu)
 
 </blockquote>
 
