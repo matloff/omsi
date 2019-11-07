@@ -290,7 +290,8 @@ class OmsiServer:
                 print lChunkOfFile
                 ## lNewFile.write(lChunkOfFile)
             else:
-                ## lNewFile.close()
+                # avoid overwriting an existing file with an empty one
+                if len(tmpFile) == 0: break
                 print 'creating/updating student answer file'
                 lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
                 lNewFile.write(tmpFile)
