@@ -81,7 +81,13 @@ class OmsiServer:
                 print 'request:', data
                 fields = data.split('\0')
                 print 'fields:',fields
+
+                #Validate the file name sent by the client to protect
+                #against directory traversal attacks.
                 lFileName = fields[1]
+                if "../" in lFileName:
+                   break
+
                 lStudentEmail = fields[2]
                 print 'file to be sent is', lFileName
                 print 'student ID:', lStudentEmail,
