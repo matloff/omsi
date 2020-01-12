@@ -2,7 +2,7 @@ import os
 import select
 import socket
 import sys
-import thread
+import _thread
 import threading
 import pdb
 import time
@@ -18,7 +18,7 @@ class OmsiServer:
         self.examName = examName
 
         self.socket = self.createSocket()  # listening socket
-        self.lock = thread.allocate_lock()
+        self.lock = _thread.allocate_lock()
         self.totalClients = 0
         self.clientMap = {}  # who has connected, indexed by IP
         self.examDirectory = os.path.join('InstructorDirectory',examName)
@@ -29,15 +29,15 @@ class OmsiServer:
 
     def awaitConnections(self):
         # blocks and waits for connections
-        print 'server awaiting connections\n'
+        print('server awaiting connections\n')
         clientSocket, clientAddr = self.socket.accept()
-        print 'connection from client at', clientAddr, '\n'
+        print('connection from client at', clientAddr, '\n')
         clientIP = clientAddr[0]
         if not clientIP in self.clientMap:
             self.clientMap[clientIP] = []
             self.totalClients += 1
-            print "new connection detected at {0}.\ntotal connections: {1}". \
-               format(clientAddr, self.totalClients)
+            print("new connection detected at {0}.\ntotal connections: {1}". \
+               format(clientAddr, self.totalClients))
 
         threading.Thread(target=self.requestHandler, 
            args=(clientSocket, clientAddr,)).start()
@@ -58,7 +58,8 @@ class OmsiServer:
             # TODO: might need to be placed after except block
             return lServerSocket
 
-        except socket.error, (value, message):
+        except socket.error as sockerror:
+            (value, message) = sockerror.args
             if lServerSocket:
                 lServerSocket.close()
             raise RuntimeError("Could not open socket on Server: " + message)
@@ -70,17 +71,17 @@ class OmsiServer:
         while 1:
             data = pClientSocket.recv(1024)
             if len(data) == 0:
-               print 'empty "data" received'
+               print('empty "data" received')
                break
-            print 'client request:', data, '\n'
+            print('client request:', data, '\n')
 
             lIsExecuted = ""
 
             if data[:8] == 'OMSI0001':  # client will send file to srvr
-                print time.ctime()
-                print 'request:', data
+                print(time.ctime())
+                print('request:', data)
                 fields = data.split('\0')
-                print 'fields:',fields
+                print('fields:',fields)
 
                 #Validate the file name sent by the client to protect
                 #against directory traversal attacks.
@@ -89,13 +90,13 @@ class OmsiServer:
                    break
 
                 lStudentEmail = fields[2]
-                print 'file to be sent is', lFileName
-                print 'student ID:', lStudentEmail,
-                print ', IP:', addr
+                print('file to be sent is', lFileName)
+                print('student ID:', lStudentEmail, end=' ')
+                print(', IP:', addr)
                 self.clientMap[addr[0]].append(lStudentEmail)
                 # print 'client list:'
                 # print self.clientMap
-                tmp = self.clientMap.keys()[0] 
+                tmp = list(self.clientMap.keys())[0] 
                 tmp += ' ' + lStudentEmail
                 tmp += ' ' + lFileName
                 if len(fields) > 3:
@@ -116,29 +117,29 @@ class OmsiServer:
                 if lIsExecuted == "s":
                     # transmits TCP message: success
                     successmsg = lStudentEmail + ' successfully submitted ' 
-                    print '************  client:'
-                    print pClientSocket.getpeername()
+                    print('************  client:')
+                    print(pClientSocket.getpeername())
                     successmsg = successmsg + lFileName 
-                    print successmsg
+                    print(successmsg)
                     pClientSocket.send(successmsg)
 
                 else:
                    # transmits TCP message: fail
                    failmsg =  \
                       lStudentEmail + ' did not successfully submit ' + lFileName                       
-                   print failmsg, '\n'
+                   print(failmsg, '\n')
                    pClientSocket.send(failmsg)
 
             # client is requesting the questions file
             elif data == "ClientWantsQuestions":
-                print 'sending questions to client'
+                print('sending questions to client')
                 # this function handles error messages + edge cases
                 qfl = self.sendQuestionsToClient(pClientSocket)
-                print 'total of ',qfl, 'bytes read from questions file' 
+                print('total of ',qfl, 'bytes read from questions file') 
             elif data == "ClientWantsSuppFile":
                 if os.path.isfile(self.suppFilePath):
                     qfl = self.sendFileToClient(pClientSocket)
-                    print 'total of ',qfl, 'bytes read from data file' 
+                    print('total of ',qfl, 'bytes read from data file') 
 
             # client is executing a function
             # TODO: refactor this or just get rid of it!
@@ -146,19 +147,19 @@ class OmsiServer:
             ### else:
             ###     lIsExecuted = self.interpretClientString(data)
             else: 
-               print 'illegal client request:', data, '\n'
+               print('illegal client request:', data, '\n')
                break
-            print "Server waiting to recv data"
+            print("Server waiting to recv data")
             data = pClientSocket.recv(1024)
             ## print "Server recvd data {0}".format(data)
-            print 'server received',len(data), 'bytes\n'
-            print 'first line:', data.split('\n')[0], '\n'
+            print('server received',len(data), 'bytes\n')
+            print('first line:', data.split('\n')[0], '\n')
 
         # pClientSocket.shutdown(socket.SHUT_WR)
 
         # pClientSocket.close()   this was commented out in 2016!
         self.totalClients -= 1
-        print "Closing socket at {0}".format(addr)
+        print("Closing socket at {0}".format(addr))
         return  # end while
 
 
@@ -225,7 +226,7 @@ class OmsiServer:
 
             return lNewFile
         except IOError:
-            print "File could not be created on the Server"
+            print("File could not be created on the Server")
             return False
 
     def parseSubmitFileRequest(self, pClientSocket, data):
@@ -258,7 +259,7 @@ class OmsiServer:
 
         newFile.write(data[i:])
 
-        print "Got file {0} from {1}".format(filename, email)
+        print("Got file {0} from {1}".format(filename, email))
         if len(data) < 1024:
             pClientSocket.send("success")
             return
@@ -292,13 +293,13 @@ class OmsiServer:
             if ready[0]:
                 lChunkOfFile = pClientSocket.recv(1024)
                 tmpFile += lChunkOfFile
-                print 'received from '+pStudentEmail+':'
-                print lChunkOfFile
+                print('received from '+pStudentEmail+':')
+                print(lChunkOfFile)
                 ## lNewFile.write(lChunkOfFile)
             else:
                 # avoid overwriting an existing file with an empty one
                 if len(tmpFile) == 0: break
-                print 'creating/updating student answer file'
+                print('creating/updating student answer file')
                 lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
                 lNewFile.write(tmpFile)
                 lNewFile.close()
@@ -311,7 +312,7 @@ class OmsiServer:
 
         if lSuccess == "f":
             # something went wrong
-            print "File transfer was not successful"
+            print("File transfer was not successful")
         ### close file, regardless of success
         ##lNewFile.close()
 
@@ -327,14 +328,14 @@ class OmsiServer:
             qfilelen = len(lFileChunk)
             lExceptionOccurred = False
         except IOError:
-            print "Something wrong with reading the Questions file"
+            print("Something wrong with reading the Questions file")
             lFileChunk = ""
             lExceptionOccurred = True
 
         # send the file
         while (lFileChunk):
-            print 'sending file chunk\n'
-            print 'first line:', lFileChunk.split('\n')[0], '\n'
+            print('sending file chunk\n')
+            print('first line:', lFileChunk.split('\n')[0], '\n')
             pClientSocket.send(lFileChunk)
             # print "Sending file chunk {0}".format(lFileChunk)
             lFileChunk = lOpenedQuestions.read(1024)
@@ -346,7 +347,7 @@ class OmsiServer:
         # display success message for debugging purposes only
         # TODO: comment this out for prod. It clogs up the command prompt unnecessarily
         if lExceptionOccurred == False:
-            print 'Successfully sent the questions file to a client'
+            print('Successfully sent the questions file to a client')
 
         return qfilelen
  
@@ -361,14 +362,14 @@ class OmsiServer:
                 qfilelen = len(lFileChunk)
                 lExceptionOccurred = False
             except IOError:
-                print "No such file"
+                print("No such file")
                 lFileChunk = ""
                 lExceptionOccurred = True
 
             # send the file
             while (lFileChunk):
-                print 'sending file chunk\n'
-                print 'first line:', lFileChunk.split('\n')[0], '\n'
+                print('sending file chunk\n')
+                print('first line:', lFileChunk.split('\n')[0], '\n')
                 pClientSocket.send(lFileChunk)
                 # print "Sending file chunk {0}".format(lFileChunk)
                 lFileChunk = lOpenedFile.read(1024)
@@ -380,11 +381,11 @@ class OmsiServer:
             # display success message for debugging purposes only
             # TODO: comment this out for prod. It clogs up the command prompt unnecessarily
             if lExceptionOccurred == False:
-                print 'Successfully sent file to a client'
+                print('Successfully sent file to a client')
 
             return qfilelen
         else:
-            print 'No file to send'
+            print('No file to send')
         return False
 
     # asks professor to specify directory to store exam questions and student submissions
@@ -419,8 +420,8 @@ class OmsiServer:
 
         # if attempt to open file fails, print error and return false
         except IOError:
-            print 'Error: File does not exist or is not readable. Please check that the specified path is spelled ' \
-                  'correctly and a file named \'Questions.txt\' is in the specified directory.'
+            print('Error: File does not exist or is not readable. Please check that the specified path is spelled ' \
+                  'correctly and a file named \'Questions.txt\' is in the specified directory.')
             return False
 
 
@@ -428,13 +429,13 @@ class OmsiServer:
 # set up the connection, start listening, start the threads and 
 # send feedback to client
 def main():
-    print "running"
+    print("running")
     v = open('VERSION')
     version = v.readline()
-    print 'Version', version
+    print('Version', version)
     # command line should be:  OmsiServer.py, port, exam name
     if len(sys.argv) <  3:
-        print "Usage: OmsiServer.py port exam_name"
+        print("Usage: OmsiServer.py port exam_name")
         sys.exit(1)
     hostname = socket.gethostname()
     omsiServer = OmsiServer(hostname,int(sys.argv[1]),sys.argv[2])
@@ -443,8 +444,8 @@ def main():
        open(omsiServer.examDirectory + '/LOGFILE','w')
     omsiServer.version = version
     # connection information.
-    print "Server for {0} is now running at {1}:{2}".format(sys.argv[2], \
-       hostname, sys.argv[1])
+    print("Server for {0} is now running at {1}:{2}".format(sys.argv[2], \
+       hostname, sys.argv[1]))
     while True:
         omsiServer.awaitConnections()
 
