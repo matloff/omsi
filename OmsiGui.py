@@ -156,7 +156,7 @@ class OmsiGui(Frame):
         with open(filename, 'w') as f:
             st = os.stat(filename)
             os.chmod(filename,st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-            f.write(self.QuestionsArr[qNum].getAnswer())
+            f.write(self.QuestionsArr[qNum].getAnswer().decode("utf-8"))
 
     #function compile Program
     #compiles the program file with given flags

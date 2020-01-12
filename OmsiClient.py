@@ -42,9 +42,9 @@ class OmsiClient:
             return pSocket
 
         # connection problem
-        except socket.error as xxx_todo_changeme:
+        except socket.error as sockerror:
             # if socket was created, close socket
-            (value, message) = xxx_todo_changeme.args
+            (value, message) = sockerror.args
             # if socket was created, close socket
             if pSocket:
                 pSocket.close()
@@ -97,7 +97,7 @@ class OmsiClient:
     # NEVER USED?
     def getResponseFromServer(pSocket):
         # block until server response received
-        lServerResponse = pSocket.recv(1024)
+        lServerResponse = pSocket.recv(1024).decode("utf-8")
         print("Server Response: " + lServerResponse, '\n')
         if lServerResponse != "file":
             pSocket.close()
@@ -152,14 +152,14 @@ class OmsiClient:
         # begin sending exam questions
         try:
             print("requesting exam questions from server")
-            pClientSocket.send("ClientWantsQuestions")
+            pClientSocket.send(str.encode("ClientWantsQuestions"))
 
             # write data from server to file
             qfilelen = 0
             while True:
                 # ready = select.select([pClientSocket], [], [], 2)
                 print("Client Waiting to recv")
-                lChunkOfFile = pClientSocket.recv(1024)
+                lChunkOfFile = pClientSocket.recv(1024).decode("utf-8")
                 if lChunkOfFile[-1] == chr(0):  # last chunk
                     lSuccess = True
                     lChunkOfFile = lChunkOfFile.rstrip(chr(0))
@@ -202,14 +202,14 @@ class OmsiClient:
         # begin sending exam questions
         try:
             print("requesting supplementary file from server")
-            pClientSocket.send("ClientWantsSuppFile")
+            pClientSocket.send(str.encode("ClientWantsSuppFile"))
 
             # write data from server to file
             qfilelen = 0
             while True:
                 # ready = select.select([pClientSocket], [], [], 2)
                 print("Client Waiting to recv")
-                lChunkOfFile = pClientSocket.recv(1024)
+                lChunkOfFile = pClientSocket.recv(1024).decode("utf-8")
                 if lChunkOfFile[-1] == chr(0):  # last chunk
                     lSuccess = True
                     lChunkOfFile = lChunkOfFile.rstrip(chr(0))
@@ -255,13 +255,13 @@ class OmsiClient:
                msg = "OMSI0001" + '\0' + pFileName + "\0" + \
                   self.gStudentEmail + "\0" + version \
                   + self.gExamID
-               self.omsiSocket.send(msg)
+               self.omsiSocket.send(str.encode(msg))
                print('notified server a file is coming,')
                print('via the message', msg)
                # send the file
                print("sending file %s" % pFileName)
                # wait for go-ahead from server
-               goahead = self.omsiSocket.recv(1024)
+               goahead = self.omsiSocket.recv(1024).decode("utf-8")
                if goahead != 'ReadyToAcceptClientFile':
                   print('server and client out of sync')
                   print('received from server:', goahead)
@@ -273,11 +273,11 @@ class OmsiClient:
                       print('end of file')
                       break
                    print("file chunk:\n", lFileChunk)
-                   self.omsiSocket.send(lFileChunk)
+                   self.omsiSocket.send(str.encode(lFileChunk))
                    print('sent', len(lFileChunk), 'bytes')
                lOpenFile.close()
                print('file closed\n')
-               lServerResponse = self.omsiSocket.recv(1024)
+               lServerResponse = self.omsiSocket.recv(1024).decode("utf-8")
                return lServerResponse
                ### raise ValueError("Error sending file to server!", \
                ###   pFileName, e)

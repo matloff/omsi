@@ -69,7 +69,7 @@ class OmsiServer:
     # requests to the corresponding routines
     def requestHandler(self, pClientSocket, addr):
         while 1:
-            data = pClientSocket.recv(1024)
+            data = pClientSocket.recv(1024).decode("utf-8")
             if len(data) == 0:
                print('empty "data" received')
                break
@@ -121,14 +121,14 @@ class OmsiServer:
                     print(pClientSocket.getpeername())
                     successmsg = successmsg + lFileName 
                     print(successmsg)
-                    pClientSocket.send(successmsg)
+                    pClientSocket.send(str.encode(successmsg))
 
                 else:
                    # transmits TCP message: fail
                    failmsg =  \
                       lStudentEmail + ' did not successfully submit ' + lFileName                       
                    print(failmsg, '\n')
-                   pClientSocket.send(failmsg)
+                   pClientSocket.send(str.encode(failmsg))
 
             # client is requesting the questions file
             elif data == "ClientWantsQuestions":
@@ -136,7 +136,7 @@ class OmsiServer:
                 # this function handles error messages + edge cases
                 qfl = self.sendQuestionsToClient(pClientSocket)
                 print('total of ',qfl, 'bytes read from questions file') 
-            elif data == "ClientWantsSuppFile":
+            elif data == b"ClientWantsSuppFile":
                 if os.path.isfile(self.suppFilePath):
                     qfl = self.sendFileToClient(pClientSocket)
                     print('total of ',qfl, 'bytes read from data file') 
@@ -150,7 +150,7 @@ class OmsiServer:
                print('illegal client request:', data, '\n')
                break
             print("Server waiting to recv data")
-            data = pClientSocket.recv(1024)
+            data = pClientSocket.recv(1024).decode("utf-8")
             ## print "Server recvd data {0}".format(data)
             print('server received',len(data), 'bytes\n')
             print('first line:', data.split('\n')[0], '\n')
@@ -261,14 +261,14 @@ class OmsiServer:
 
         print("Got file {0} from {1}".format(filename, email))
         if len(data) < 1024:
-            pClientSocket.send("success")
+            pClientSocket.send(str.encode("success"))
             return
 
         while True:
             data = pClientSocket.recv(1024)
             newFile.write(data)
             if len(data) < 1024:
-                pClientSocket.send("success")
+                pClientSocket.send(str.encode("success"))
                 return
 
 
@@ -283,7 +283,7 @@ class OmsiServer:
         # initialize success indicator to fail
         lSuccess = "f"
         # let the client know the server is ready
-        pClientSocket.send("ReadyToAcceptClientFile")
+        pClientSocket.send(str.encode("ReadyToAcceptClientFile"))
 
         # receive the file
         tmpFile = ''
@@ -291,7 +291,7 @@ class OmsiServer:
             # set a timeout for this
             ready = select.select([pClientSocket], [], [], 2)
             if ready[0]:
-                lChunkOfFile = pClientSocket.recv(1024)
+                lChunkOfFile = pClientSocket.recv(1024).decode("utf-8")
                 tmpFile += lChunkOfFile
                 print('received from '+pStudentEmail+':')
                 print(lChunkOfFile)
@@ -301,7 +301,7 @@ class OmsiServer:
                 if len(tmpFile) == 0: break
                 print('creating/updating student answer file')
                 lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
-                lNewFile.write(tmpFile)
+                lNewFile.write(str.encode(tmpFile))
                 lNewFile.close()
                 print("Finished accepting file")
                 lSuccess = "s"
@@ -336,11 +336,11 @@ class OmsiServer:
         while (lFileChunk):
             print('sending file chunk\n')
             print('first line:', lFileChunk.split('\n')[0], '\n')
-            pClientSocket.send(lFileChunk)
+            pClientSocket.send(str.encode(lFileChunk))
             # print "Sending file chunk {0}".format(lFileChunk)
             lFileChunk = lOpenedQuestions.read(1024)
             qfilelen = qfilelen + len(lFileChunk)
-        pClientSocket.send(chr(0))
+        pClientSocket.send(str.encode(chr(0)))
         # print "Sending eof chunk {0}".format(lFileChunk)
         # pClientSocket.send(lFileChunk)
 
@@ -370,7 +370,7 @@ class OmsiServer:
             while (lFileChunk):
                 print('sending file chunk\n')
                 print('first line:', lFileChunk.split('\n')[0], '\n')
-                pClientSocket.send(lFileChunk)
+                pClientSocket.send(str.encode(lFileChunk))
                 # print "Sending file chunk {0}".format(lFileChunk)
                 lFileChunk = lOpenedFile.read(1024)
                 qfilelen = qfilelen + len(lFileChunk)
