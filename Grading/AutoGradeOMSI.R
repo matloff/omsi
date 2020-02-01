@@ -160,7 +160,7 @@ grader <- function() {
    output <<- vector(mode="character")
    # loop across all student directories
    ### browser()
-   for (emailaddr in list.dirs(full.names=FALSE)) {  
+   for (emailaddr in list.dirs(full.names=FALSE,recursive=FALSE)) {  
       if (emailaddr == '') next
       cat("\n\n","  now grading",emailaddr,"\n")
       setwd(emailaddr)
