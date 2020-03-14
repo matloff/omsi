@@ -2,6 +2,8 @@
 # script to semi-automate quiz grading; see HOW TO RUN below for an
 # overview
 
+# note too the conversion of group quiz records at the end
+
 # HOW TO RUN:
 
 #    the term "top directory" will mean the OMSI student file directory,
@@ -278,6 +280,41 @@ num2ltr <- function(tot,cuts,lgs) {
    return("F")
 }
 
-
 topdir <<- getwd()
+
+# takes the global variable 'output', one line per group, of the form
+
+#    ajones.bsmith@ucdavis.edu scores.and.grade
+
+# and outputs one line per group member, e.g.
+
+#    ajones@ucdavis.edu scores.and.grade
+
+convertGrpQuizRecord <- function() {
+   outputIndiv <<- NULL
+   for (il in output) {
+      ucdPos <- gregexpr('ucd',il)[[1]][1]
+      if (ucdPos == -1) {
+         cat('error: ',il,'\n')
+         next
+      }
+      grp <- substr(il,1,ucdPos-2)
+      members <- strsplit(grp,'.',fix=TRUE)[[1]]
+      # no '.'s?
+      if (length(members) == length(grp)) {
+         cat('error: ',il,'\n')
+         next
+      }
+      restOfLine <- substr(il,ucdPos+12,nchar(il))
+      ucd <- '@ucdavis.edu'
+      for (m in members) {
+         m <- paste(m,restOfLine)
+         outputIndiv <<- c(outputIndiv,m)
+      }
+   }
+   write(outputIndiv,file=paste("../Quiz",testid,"Grades",sep=""))
+   outputIndiv
+}
+
+
 
