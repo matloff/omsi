@@ -1,25 +1,24 @@
 
 
+
 DESCRIPTION
 
-Students:  Please note instructions in paper copy of quiz.  Save your
-files often, make sure OMSI fills your entire screen at all times, etc.
+Students:  Please keep in mind the OMSI rules.  Save your files often,
+make sure OMSI fills your entire screen at all times, etc.  Remember
+that clicking CopyQtoA will copy the entire question box to the answer
+box.
 
-A question may not fully fit into your OMSI question box, which is not
-scrollable.  You can try adjusting the relative size of the question and
-answer boxes, but remember that clicking CopyQtoA will copy the entire
-question box to the answer box.
+In questions involving code which will PARTIALLY be given to you in the
+question specs, you may need add new lines.  There may not be
+information given as to where the lines should be inserted.
+
+MAKE SURE TO RUN THE CODE IN PROBLEMS THAT INVOLVE CODE!
+
+QUESTION 
+
+(50 pts) Write a line of R code to print the value of 88 squared.
 
 QUESTION
 
-What does "UCD" stand for?
-
-QUESTION -ext .py -run 'python omsi_answer2.py'
-
-Write a function f() that returns double its argument.  Fill in the blanks:
-
-def f(   ):
-   return 
-
-print f(5)
+(50 pts) True or false:  It's OK to cheat as long as you are not caught.
 
