@@ -308,7 +308,7 @@ convertGrpQuizRecord <- function() {
       restOfLine <- substr(il,ucdPos+12,nchar(il))
       ucd <- '@ucdavis.edu'
       for (m in members) {
-         m <- paste0(m,ucd,' ',restOfLine)
+         m <- paste(m,restOfLine)
          outputIndiv <<- c(outputIndiv,m)
       }
    }
