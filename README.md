@@ -21,6 +21,7 @@
 <blockquote>
 
 [Arnav Acharyya](mailto:aacharyya@ucdavis.edu),
+[Matt Donnelly](mailto:brilliantrocketscientist@outlook.com),
 [S. Ismail](mailto:sismail@ucdavis.edu), 
 [Sachin Kumawat](mailto:skumawat@ucdavis.edu),  
 [Thong Le](mailto:thmle@ucdavis.edu), 

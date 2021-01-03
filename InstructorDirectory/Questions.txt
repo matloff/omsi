@@ -14,7 +14,7 @@ information given as to where the lines should be inserted.
 
 MAKE SURE TO RUN THE CODE IN PROBLEMS THAT INVOLVE CODE!
 
-QUESTION 
+QUESTION -ext .R -run 'Rscript ./omsi_answer1.R'
 
 (50 pts) Write a line of R code to print the value of 88 squared.
 
