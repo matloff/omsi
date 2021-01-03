@@ -81,7 +81,7 @@ example for an exam using the R language in [a README file included in
 this package](READMEecs132.md).  You need not know R to follow the
 example.)
 
-You'll need Python 2.7 on your machine.
+You'll need Python 3.0 or higher on your machine.
 
 Here you will start the server (normally done by the instructor); 
 start the client (normally done by the student); play the role of the
@@ -90,9 +90,11 @@ the server; and play the role of the instructor, inspecting the student's
 submitted work.
 
 - Go to [the OMSI repo](http://github.com/matloff/omsi), download the
-  **.zip** file (**Clone or download | Download ZIP**), unzip it, and
-enter the resulting directory/folder **omsi-master**. You should see files
-**OmsiServer.py** etc.  Use this terminal window for the server.
+  **.zip** file (**Clone or download | Download ZIP**), unzip it, 
+
+- In a terminal window, change to the resulting directory/folder 
+  **omsi-master**. You should see files **OmsiServer.py** etc.  
+Use this terminal window for the server.
 
 - From the same directory/folder, open a second
   terminal window, this one for the client.
@@ -113,28 +115,21 @@ $ python OmsiGui.py localhost 2000 me@xyz.edu 88
 - In the client GUI that comes up, choose **File | Connect**.  Click
   **Enter** in the dialog box that pops up.
 
-- In the GUI, you'll now see a 2-question sample exam that comes with
-  the package. Choose Question 2.
+- In the GUI, you'll now see a sample exam that comes with
+  the package. Choose some question that asks you to write code.
 
-- You'll see the question ("Write a function...") in the upper-right box.
-  Type the answer in the lower-right box:
-
-``` 
-def f(x):
-    return 2*x
-
-print f(5)
-```
+- You'll see the question in the upper-right box.
+  Type the answer in the lower-right box.
 
 - Choose **File | Save** and **File | Submit & Run**.  A dialog box will
   pop up, reporting that the file was successfully submitted to the
 server, and the code will be run in another dialog box, showing the
-answer, 10.
+output.
 
 - Exit the client, **File | Exit**.  To see that your submitted answers
   (note plural) are indeed there at the server, enter the directory/folder
 **InstructorDirectory/abc/me@xyx.edu**, and observe that there it is, in
-the file **omsi_answer2.py**.
+the file **omsi_answer2.py** or whatever.
 
 - Kill the server by hitting ctrl-C.
 
@@ -333,7 +328,7 @@ Prompt* for  Windows (**cmd** command).
 <a name="install">Installing the package (instructors and students)</a>
 </h3>
 
-You will need Python 2.7 (not Python 3) installed on your machine. For Mac
+You will need Python 3.0 or higher installed on your machine. For Mac
 and Linux systems, it may already be there, but it is easily
 downloadable for Windows.
 
@@ -347,8 +342,8 @@ python
 in a terminal window.  Python should start, displaying the >>> prompt.
 (Exit via ctrl-d or by typing 'exit()'.)  If you have both Python 2.7 and
 3 on your system, you will need your login file, e.g. **.profile** for
-**bash** to give priority to version 2.7.  Note: OMSI, which runs in
-Python, will itself invoke Python.  Thus Python 2 must come first in the
+**bash** to give priority to version 3.  Note: OMSI, which runs in
+Python, will itself invoke Python.  Thus Python 3 must come first in the
 search path.
 
 In the case of exams involving coding, the same statements above about
@@ -360,10 +355,9 @@ open a terminal window and type
 R
 ```
 
-in a terminal window. (Start R directly in this manner, not from 
-RStudio.) R should start, displaying the > prompt.  (Exit 
-via ctrl-d or by typing
-'exit()'.)
+in a terminal window. (Start R directly in this manner, not from RStudio
+or the R screen icon.) R should start, displaying the > prompt.  Exit
+via ctrl-d or by typing 'exit()'.
 
 **Make absolutely sure Python and R can be run from the command line as
 above.**
@@ -449,7 +443,9 @@ This can be useful if you want to check later what you submitted.
 
 Save the code first.  Then, if the problem involves a compiled language
 such as C, select <b>File | Compile</b>. A new window will pop up,
-displaying the results.  Then select <b>File | Submit & Run</b> (or for
+confirming that your submission was received at the server, and then
+(possibly after a short delay) another window will pop up to
+display the results.  Then select <b>File | Submit & Run</b> (or for
 an interpreted language like R or Python, go to this step directly, no
 compile step). A new window will pop up, displaying the results.
 
@@ -462,7 +458,7 @@ number on the left side of the OMSI screen, and selecting <b>File |
 Submit</b>. This will upload your answer to the instructor.  A dialog
 box specifying whether submission was successful will then be displayed.
 
-Note that clicking the **Submit** only submits your answer to the
+Note again that clicking the **Submit** only submits your answer to the
 problem you are currently working on, **not all the problems**.
 
 **IMPORTANT:**  There may be a delay of a few seconds before the submit
@@ -605,7 +601,7 @@ questions is detailed below.
 
 *The Questions.txt file:*
 
-During the exam, a subdirectory of **InstructorDirectory** will be
+Upon startup of the server, a subdirectory of **InstructorDirectory** will be
 created for this exam, and within it there will be a further
 subdirectory for each student, using the e-mail address provided by the
 student.  In a student's subdirectory there will be an answer file for
@@ -811,7 +807,7 @@ considering:
 I usually run the server on a machine in our student computer lab,
 which gives me a static IP address. I use **ssh** to remotely log in to
 the server from the classroom, and start the server at the appropriate
-time.  Depending on configuration, **ssh** may time out about a certain
+time.  Depending on configuration, **ssh** may time out after a certain
 time, so I run **screen** and run the server within a terminal window
 there (Sachin's idea).  I also run **script** at the server, to get a
 full record of all transactions, possibly of great use if there is
