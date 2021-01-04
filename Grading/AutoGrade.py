@@ -99,7 +99,7 @@ def get_true_answers():
 	try:
 		answer_file = open(filename,'r')
 	except IOError:
-		print 'Error: The answer file %s does not exist' % filename
+		print('Error: The answer file %s does not exist' % filename)
 		exit() #Without the answer file, the program must close
 	file_contents = list(answer_file)
 	answer_file.close()
@@ -131,8 +131,8 @@ def get_true_answers():
 #Output: prints proper file format
 #Method to print out the proper file formatting in case of error
 def print_ansfile_format():
-	print 'Error!  Please make sure the answer file is in the following format:'
-	print """
+	print('Error!  Please make sure the answer file is in the following format:')
+	print("""
 #<question number> <question type> <point value>
 <correct answer>\n
 Examples:
@@ -140,7 +140,7 @@ Examples:
 2*(7/4)
 #2 S 15
 Christopher Columbus
-		  """
+		  """)
 
 #Function read_student_file
 #Input: string name of the file to be graded
@@ -159,7 +159,7 @@ def read_student_file(filename):
 	try:
 		student_file = open(filename,'r')
 	except IOError:
-		print '^^^Error: The student file %s does not exist^^^' % filename
+		print('^^^Error: The student file %s does not exist^^^' % filename)
 		return False
 	file_contents = list(student_file)
 	student_file.close()
@@ -202,27 +202,27 @@ def grade_student_ans(qnum_index):
 	
 	#Handling an unanswered problem
 	if student_ans=='00':
-		print 'Problem %s was left unanswered\n' % qnum
+		print('Problem %s was left unanswered\n' % qnum)
 		return (0,qvalue)
 	
 	#Print out problem/answer information and let teacher determine
 	#if problem is correct or not.  Evaluate numerical answers
-	print '**Question %s, %s points**' % (qnum, qvalue)
-	print 'Student answered \t%s' % student_ans
+	print('**Question %s, %s points**' % (qnum, qvalue))
+	print('Student answered \t%s' % student_ans)
 	
 	#Note: this only evaluates python expressions
 	if master_anslist[QTYPE_INDEX][qnum_index] == 'N':
-		print 'Ans evaluated to \t%s' % str(eval(student_ans))
-		if '/' in student_ans: print 'WARNING: this problem contains division.'
+		print('Ans evaluated to \t%s' % str(eval(student_ans)))
+		if '/' in student_ans: print('WARNING: this problem contains division.')
 		
-	print '\nAnswer key shows \t%s' % real_ans
-	points_received = raw_input("\nHow many points to award?  Leave blank for full credit >> ")
+	print('\nAnswer key shows \t%s' % real_ans)
+	points_received = input("\nHow many points to award?  Leave blank for full credit >> ")
 	if points_received == '':
 		points_received = qvalue
 	else:
 		points_received = float(points_received)
 	
-	print '\n' #Readability
+	print('\n') #Readability
 	return (points_received, qvalue)
 
 #Function grader
@@ -244,20 +244,20 @@ def grade_student_ans(qnum_index):
 
 def grader(outfile, verbose = False):
 	global test_id
-	test_id = raw_input('Please enter test ID >> ')
+	test_id = input('Please enter test ID >> ')
 	get_true_answers()
-	print 'Exam %s, %.2f points' % (test_id, test_value)
+	print('Exam %s, %.2f points' % (test_id, test_value))
 	
 	#Apply late penalty, if desired
 	late_penalty = 0 #Default
-	is_late = (raw_input('Are all submissions in this group late? y/n >> ') == 'y')
+	is_late = (input('Are all submissions in this group late? y/n >> ') == 'y')
 	if(is_late):
-		late_penalty = raw_input('Enter late penalty amount (leave blank for none) >> ')
+		late_penalty = input('Enter late penalty amount (leave blank for none) >> ')
 		if late_penalty != '':
 			late_penalty = float(late_penalty)
 	else:
-		print 'If only some submissions are late, you must grade those separately.'
-		if raw_input('Exit? y/n >> ') == 'y': exit()
+		print('If only some submissions are late, you must grade those separately.')
+		if input('Exit? y/n >> ') == 'y': exit()
 	
 	#Create a new output file to write to and add basic test info
 	f = open(outfile, 'a')
@@ -276,7 +276,7 @@ def grader(outfile, verbose = False):
 		email = dir
 		output_line.append(email)
 		
-		print '\n### Grading next file... ###\n'
+		print('\n### Grading next file... ###\n')
 		
 		#Check to see if the file exists.  If not, skip it
 		if not read_student_file(fl):
@@ -288,8 +288,8 @@ def grader(outfile, verbose = False):
 			output_line.append('-1')
 			output.append(output_line)
 			f.write(str(output_line) + '\n')
-			print 'WARNING: submission %s has a formatting error.' % email
-			print 'Setting total score to -1'
+			print('WARNING: submission %s has a formatting error.' % email)
+			print('Setting total score to -1')
 			continue
 		
 		#Begin grading the student's answers
@@ -319,15 +319,15 @@ def grader(outfile, verbose = False):
 		output.append(output_line)
 		
 		#Print a summary of the grading
-		print '[[Summary for %s]]' % email
-		print 'Points received/total possible: %.2f/%.2f' % (total, test_value)
-		print 'Late penalty applied: %s' % is_late
+		print('[[Summary for %s]]' % email)
+		print('Points received/total possible: %.2f/%.2f' % (total, test_value))
+		print('Late penalty applied: %s' % is_late)
 		if verbose:
-			print verbose_str
+			print(verbose_str)
 		
-	print '\nFinished grading %d files (%d with format errors)' % (count_files,bad_files)
-	print 'Couldn\'t locate the following students\' answer files:\n%s' % not_found
-	print 'Results stored in %s\n' % outfile
+	print('\nFinished grading %d files (%d with format errors)' % (count_files,bad_files))
+	print('Couldn\'t locate the following students\' answer files:\n%s' % not_found)
+	print('Results stored in %s\n' % outfile)
 	f.close()
 
 #Function: print_from_output
@@ -341,34 +341,34 @@ def print_from_output(out_file, verbose=False):
 	output_lines = list(f)
 	
 	#Print basic test info
-	print '\n%s' % output_lines[0]
+	print('\n%s' % output_lines[0])
 	
 	for line in output_lines[1:]: #Skip the first line (basic info)
 		word_list = line.split(',')
 		
 		#Skip student files with format issues
 		if len(word_list) == 2:
-			print word_list[0][2:-1] + ' had a formatting error!'
+			print(word_list[0][2:-1] + ' had a formatting error!')
 			continue
 		
-		print word_list[0][2:-1] #Student's name
+		print(word_list[0][2:-1]) #Student's name
 		
 		if verbose:
 			for word in word_list[1:-2]:
-				print word[2:-1] #Slice to remove leading & trailing ' marks
+				print(word[2:-1]) #Slice to remove leading & trailing ' marks
 		
-		print 'Late penalty: ' + word_list[-2][2:-1] #Remove ' marks
-		print 'Total: ' + word_list[-1][2:-3] + '/' + str(test_value) + '\n' #Remove '] marks
+		print('Late penalty: ' + word_list[-2][2:-1]) #Remove ' marks
+		print('Total: ' + word_list[-1][2:-3] + '/' + str(test_value) + '\n') #Remove '] marks
 		
 	f.close()
 
 if __name__ == "__main__":
-	print 'Please set up the grader:'
-	filename = raw_input('Enter name of output file (will be created if nonexistant)>> ')
-	verbose = (raw_input('Print detailed info about each student\'s results? (y/n) >> ') == 'y')
-	print '\nNow running grader...'
+	print('Please set up the grader:')
+	filename = input('Enter name of output file (will be created if nonexistant)>> ')
+	verbose = (input('Print detailed info about each student\'s results? (y/n) >> ') == 'y')
+	print('\nNow running grader...')
 	grader(filename,verbose)
-	print 'Program completed'
-	if (raw_input('View all students\' results? (y/n) >> ') == 'y'):
-		verbose = (raw_input('Display detailed info? (y/n) >> ') == 'y')
+	print('Program completed')
+	if (input('View all students\' results? (y/n) >> ') == 'y'):
+		verbose = (input('Display detailed info? (y/n) >> ') == 'y')
 		print_from_output(filename,verbose)

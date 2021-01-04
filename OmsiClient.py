@@ -42,7 +42,9 @@ class OmsiClient:
             return pSocket
 
         # connection problem
-        except socket.error, (value, message):
+        except socket.error as sockerror:
+            # if socket was created, close socket
+            (value, message) = sockerror.args
             # if socket was created, close socket
             if pSocket:
                 pSocket.close()
@@ -95,15 +97,15 @@ class OmsiClient:
     # NEVER USED?
     def getResponseFromServer(pSocket):
         # block until server response received
-        lServerResponse = pSocket.recv(1024)
-        print "Server Response: " + lServerResponse, '\n'
+        lServerResponse = pSocket.recv(1024).decode("utf-8")
+        print("Server Response: " + lServerResponse, '\n')
         if lServerResponse != "file":
             pSocket.close()
             if lServerResponse == "s":
                 return True
             else:
-                print 'server notifies us of fail:\n'
-                print lServerResponse
+                print('server notifies us of fail:\n')
+                print(lServerResponse)
                 return False
         else:
             return 'file'
@@ -116,10 +118,10 @@ class OmsiClient:
         try:
           lFilePath = os.path.join('', pFileName)
           lOpenFile = open(lFilePath, "r")
-          print 'client file opened'
+          print('client file opened')
           return lOpenFile
         except IOError:
-            print 'client file could not be opened'
+            print('client file could not be opened')
             try:
                 # file was not in the home directory, try to see id the file is in the code's directory
                 lOpenFile = open(pFileName, "r")
@@ -127,7 +129,7 @@ class OmsiClient:
             except:
                 # file was not to be found at all; 
                 # the name is wrong or the file is somewhere unexpected
-                print "Error: File %s could not be opened" % pFileName
+                print("Error: File %s could not be opened" % pFileName)
                 return False
 
 
@@ -140,7 +142,7 @@ class OmsiClient:
 
         # if file was not created, notify the user
         if not lExamQuestionsFile:
-            print 'Error: Exam questions file not created on client\'s machine.'
+            print('Error: Exam questions file not created on client\'s machine.')
             return
 
         # create boolean to track success
@@ -149,32 +151,32 @@ class OmsiClient:
         # if file was successfully created, notify server to 
         # begin sending exam questions
         try:
-            print "requesting exam questions from server"
-            pClientSocket.send("ClientWantsQuestions")
+            print("requesting exam questions from server")
+            pClientSocket.send(str.encode("ClientWantsQuestions"))
 
             # write data from server to file
             qfilelen = 0
             while True:
                 # ready = select.select([pClientSocket], [], [], 2)
-                print "Client Waiting to recv"
-                lChunkOfFile = pClientSocket.recv(1024)
+                print("Client Waiting to recv")
+                lChunkOfFile = pClientSocket.recv(1024).decode("utf-8")
                 if lChunkOfFile[-1] == chr(0):  # last chunk
                     lSuccess = True
                     lChunkOfFile = lChunkOfFile.rstrip(chr(0))
                 qfilelen = qfilelen + len(lChunkOfFile)
                 # print "Client recvd chunk {0}".format(lChunkOfFile)
-                print "Client recvd Quest. File chunk; first line:\n"
-                print lChunkOfFile.split('\n')[0], '\n'
+                print("Client recvd Quest. File chunk; first line:\n")
+                print(lChunkOfFile.split('\n')[0], '\n')
                 lExamQuestionsFile.write(lChunkOfFile)
                 if lSuccess: break
 
         finally:
             # if exam questions were not successfully downloaded, print error
             if lSuccess:
-                print "Exam questions successfully read from server."
-                print qfilelen, 'bytes in all'
+                print("Exam questions successfully read from server.")
+                print(qfilelen, 'bytes in all')
             else:
-                print "Error: Exam questions were not successfully read from server."
+                print("Error: Exam questions were not successfully read from server.")
 
             # close file, regardless of success
             lExamQuestionsFile.close()
@@ -190,7 +192,7 @@ class OmsiClient:
 
         # if file was not created, notify the user
         if not lCodeFile:
-            print 'Error: Supplementary file not created on client\'s machine.'
+            print('Error: Supplementary file not created on client\'s machine.')
             return
 
         # create boolean to track success
@@ -199,32 +201,32 @@ class OmsiClient:
         # if file was successfully created, notify server to 
         # begin sending exam questions
         try:
-            print "requesting supplementary file from server"
-            pClientSocket.send("ClientWantsSuppFile")
+            print("requesting supplementary file from server")
+            pClientSocket.send(str.encode("ClientWantsSuppFile"))
 
             # write data from server to file
             qfilelen = 0
             while True:
                 # ready = select.select([pClientSocket], [], [], 2)
-                print "Client Waiting to recv"
-                lChunkOfFile = pClientSocket.recv(1024)
+                print("Client Waiting to recv")
+                lChunkOfFile = pClientSocket.recv(1024).decode("utf-8")
                 if lChunkOfFile[-1] == chr(0):  # last chunk
                     lSuccess = True
                     lChunkOfFile = lChunkOfFile.rstrip(chr(0))
                 qfilelen = qfilelen + len(lChunkOfFile)
                 # print "Client recvd chunk {0}".format(lChunkOfFile)
-                print "Client recvd Supp. File chunk; first line:\n"
-                print lChunkOfFile.split('\n')[0], '\n'
+                print("Client recvd Supp. File chunk; first line:\n")
+                print(lChunkOfFile.split('\n')[0], '\n')
                 lCodeFile.write(lChunkOfFile)
                 if lSuccess: break
 
         finally:
             # if exam questions were not successfully downloaded, print error
             if lSuccess:
-                print "Supplementary file successfully read from server."
-                print qfilelen, 'bytes in all'
+                print("Supplementary file successfully read from server.")
+                print(qfilelen, 'bytes in all')
             else:
-                print "Error: Supplementary file not successfully read from server."
+                print("Error: Supplementary file not successfully read from server.")
 
             # close file, regardless of success
             lCodeFile.close()
@@ -238,9 +240,9 @@ class OmsiClient:
     def sendFileToServer(self, pFileName):
 
         # open the file -> this handles exceptions effectively
-        print "Opening file " + pFileName
+        print("Opening file " + pFileName)
         lOpenFile = self.openFileOnClient(pFileName)
-        print lOpenFile
+        print(lOpenFile)
         v = open('VERSION')
         version = v.readline()
         while True:
@@ -253,35 +255,35 @@ class OmsiClient:
                msg = "OMSI0001" + '\0' + pFileName + "\0" + \
                   self.gStudentEmail + "\0" + version \
                   + self.gExamID
-               self.omsiSocket.send(msg)
-               print 'notified server a file is coming,'
-               print 'via the message', msg
+               self.omsiSocket.send(str.encode(msg))
+               print('notified server a file is coming,')
+               print('via the message', msg)
                # send the file
-               print "sending file %s" % pFileName
+               print("sending file %s" % pFileName)
                # wait for go-ahead from server
-               goahead = self.omsiSocket.recv(1024)
+               goahead = self.omsiSocket.recv(1024).decode("utf-8")
                if goahead != 'ReadyToAcceptClientFile':
-                  print 'server and client out of sync'
-                  print 'received from server:', goahead
-                  print 'closing client socket, suggest reconnect'
+                  print('server and client out of sync')
+                  print('received from server:', goahead)
+                  print('closing client socket, suggest reconnect')
                while (True):
                    lFileChunk = lOpenFile.read(1024)
                    nread = len(lFileChunk)
                    if nread == 0: 
-                      print 'end of file'
+                      print('end of file')
                       break
-                   print "file chunk:\n", lFileChunk
-                   self.omsiSocket.send(lFileChunk)
-                   print 'sent', len(lFileChunk), 'bytes'
+                   print("file chunk:\n", lFileChunk)
+                   self.omsiSocket.send(str.encode(lFileChunk))
+                   print('sent', len(lFileChunk), 'bytes')
                lOpenFile.close()
-               print 'file closed\n'
-               lServerResponse = self.omsiSocket.recv(1024)
+               print('file closed\n')
+               lServerResponse = self.omsiSocket.recv(1024).decode("utf-8")
                return lServerResponse
                ### raise ValueError("Error sending file to server!", \
                ###   pFileName, e)
            except socket.error as e:
-               print 'exception'
-               print "Got error {0} for {1}".format(e, pFileName)
-               print "Setting socket to none, retrying"
+               print('exception')
+               print("Got error {0} for {1}".format(e, pFileName))
+               print("Setting socket to none, retrying")
                self.omsiSocket = None
 

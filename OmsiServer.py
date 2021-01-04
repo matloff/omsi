@@ -2,7 +2,7 @@ import os
 import select
 import socket
 import sys
-import thread
+import _thread
 import threading
 import pdb
 import time
@@ -18,7 +18,7 @@ class OmsiServer:
         self.examName = examName
 
         self.socket = self.createSocket()  # listening socket
-        self.lock = thread.allocate_lock()
+        self.lock = _thread.allocate_lock()
         self.totalClients = 0
         self.clientMap = {}  # who has connected, indexed by IP
         self.examDirectory = os.path.join('InstructorDirectory',examName)
@@ -29,15 +29,23 @@ class OmsiServer:
 
     def awaitConnections(self):
         # blocks and waits for connections
-        print 'server awaiting connections\n'
+        print('server awaiting connections\n')
+        self.examDirectoryLogFile.write('serverawaiting connections\n')
+
         clientSocket, clientAddr = self.socket.accept()
-        print 'connection from client at', clientAddr, '\n'
+        print('connection from client at', clientAddr, '\n')
+        self.examDirectoryLogFile.write('connection from client at' + str(clientAddr) + '\n')
+
         clientIP = clientAddr[0]
         if not clientIP in self.clientMap:
             self.clientMap[clientIP] = []
             self.totalClients += 1
-            print "new connection detected at {0}.\ntotal connections: {1}". \
-               format(clientAddr, self.totalClients)
+            print("New connection detected at {0}.\nTotal connections: {1}". \
+               format(clientAddr, self.totalClients))
+            
+            self.examDirectoryLogFile.write("""
+                 New connection detected at {0}.\nTotal connections: {1}\n"""\
+                 .format(clientAddr, self.totalClients))
 
         threading.Thread(target=self.requestHandler, 
            args=(clientSocket, clientAddr,)).start()
@@ -58,7 +66,8 @@ class OmsiServer:
             # TODO: might need to be placed after except block
             return lServerSocket
 
-        except socket.error, (value, message):
+        except socket.error as sockerror:
+            (value, message) = sockerror.args
             if lServerSocket:
                 lServerSocket.close()
             raise RuntimeError("Could not open socket on Server: " + message)
@@ -68,38 +77,53 @@ class OmsiServer:
     # requests to the corresponding routines
     def requestHandler(self, pClientSocket, addr):
         while 1:
-            data = pClientSocket.recv(1024)
+            data = pClientSocket.recv(1024).decode("utf-8")
             if len(data) == 0:
-               print 'empty "data" received'
+               print('Empty "data" received')
+               self.examDirectoryLogFile.write('Empty "data" received\n')
                break
-            print 'client request:', data, '\n'
+            print('client request:', data, '\n')
+            self.examDirectoryLogFile.write('client request:' + str(data) + '\n')
 
             lIsExecuted = ""
 
-            if data[:8] == 'OMSI0001':  # client will send file to srvr
-                print time.ctime()
-                print 'request:', data
+            if data[:8] == 'OMSI0001':  # client will send file to server
+                print(time.ctime())
+                print('Request: ', data)
+                
+                self.examDirectoryLogFile.write(time.ctime() + '\n')
+                self.examDirectoryLogFile.write('Request: ' + str(data) + '\n')
+
                 fields = data.split('\0')
-                print 'fields:',fields
+                print('Fields: ', fields)
+                self.examDirectoryLogFile.write('Fields: ' + str(fields) + '\n')
+
+                #Validate the file name sent by the client to protect
+                #against directory traversal attacks.
                 lFileName = fields[1]
+                if "../" in lFileName:
+                   break
+
                 lStudentEmail = fields[2]
-                print 'file to be sent is', lFileName
-                print 'student ID:', lStudentEmail,
-                print ', IP:', addr
+                print('File to be sent: ', lFileName)
+                print('Student ID: ', lStudentEmail, end=' ')
+                print('IP: ', addr)
+ 
+                self.examDirectoryLogFile.write('File to be sent: ' + str(lFileName) + '\n')
+                self.examDirectoryLogFile.write('Student ID: ' + str(lStudentEmail) + '\n')
+                self.examDirectoryLogFile.write('IP: ' + str(addr) + '\n')
+
                 self.clientMap[addr[0]].append(lStudentEmail)
-                # print 'client list:'
-                # print self.clientMap
-                tmp = self.clientMap.keys()[0] 
+
+                tmp = list(self.clientMap.keys())[0] 
                 tmp += ' ' + lStudentEmail
                 tmp += ' ' + lFileName
                 if len(fields) > 3:
                    tmp += ' ' + fields[3]
                    if len(fields) > 4:
                       tmp += ' ' + fields[4]
-                # tmp += '\n'
-                ### tmp = ' '.join(['{0} {1}'.format(k, v) for k,v in \
-                ###    self.clientMap.iteritems()])
-                self.examDirectoryLogFile.writelines(tmp)
+
+                self.examDirectoryLogFile.writelines(str(tmp) + '\n')
                 self.examDirectoryLogFile.flush()
 
                 # try to receive the (entire) file; lIsExecuted is
@@ -110,29 +134,40 @@ class OmsiServer:
                 if lIsExecuted == "s":
                     # transmits TCP message: success
                     successmsg = lStudentEmail + ' successfully submitted ' 
-                    print '************  client:'
-                    print pClientSocket.getpeername()
+                    print('************  client:')
+                    print(pClientSocket.getpeername())
+                
+                    self.examDirectoryLogFile.write('************  client:\n')
+                    self.examDirectoryLogFile.write(str(pClientSocket.getpeername()) + '\n')
+
                     successmsg = successmsg + lFileName 
-                    print successmsg
-                    pClientSocket.send(successmsg)
+                    print(successmsg)
+                    self.examDirectoryLogFile.write(successmsg + '\n')
+
+                    pClientSocket.send(str.encode(successmsg))
 
                 else:
                    # transmits TCP message: fail
                    failmsg =  \
                       lStudentEmail + ' did not successfully submit ' + lFileName                       
-                   print failmsg, '\n'
-                   pClientSocket.send(failmsg)
+                   print(failmsg, '\n')
+                   self.examDirectoryLogFile.write(failmsg + '\n')
+                   pClientSocket.send(str.encode(failmsg))
 
             # client is requesting the questions file
             elif data == "ClientWantsQuestions":
-                print 'sending questions to client'
+                print('Sending questions to client')
+                self.examDirectoryLogFile.write('Sending questions to client\n')
+
                 # this function handles error messages + edge cases
                 qfl = self.sendQuestionsToClient(pClientSocket)
-                print 'total of ',qfl, 'bytes read from questions file' 
-            elif data == "ClientWantsSuppFile":
+                print('Total of ',qfl, 'bytes read from questions file')
+                self.examDirectoryLogFile.write('Total of ' + str(qfl) + ' bytes read from questions file\n')
+            elif data == b"ClientWantsSuppFile":
                 if os.path.isfile(self.suppFilePath):
                     qfl = self.sendFileToClient(pClientSocket)
-                    print 'total of ',qfl, 'bytes read from data file' 
+                    print('Total of ',qfl, 'bytes read from data file') 
+                    self.examDirectoryLogFile.write('Total of ' + str(qfl) + ' bytes read from data file\n')
 
             # client is executing a function
             # TODO: refactor this or just get rid of it!
@@ -140,19 +175,24 @@ class OmsiServer:
             ### else:
             ###     lIsExecuted = self.interpretClientString(data)
             else: 
-               print 'illegal client request:', data, '\n'
+               print('Illegal client request:', data, '\n')
+               self.examDirectoryLogFile.write('Illegal client request: ' + str(data) + '\n')
                break
-            print "Server waiting to recv data"
-            data = pClientSocket.recv(1024)
-            ## print "Server recvd data {0}".format(data)
-            print 'server received',len(data), 'bytes\n'
-            print 'first line:', data.split('\n')[0], '\n'
+            print("Server waiting to recv data")
+            self.examDirectoryLogFile.write("Server waiting to recv data\n")
+            data = pClientSocket.recv(1024).decode("utf-8")
+
+            print('Server received', len(data), 'bytes\n')
+            print('First line:', data.split('\n')[0], '\n')
+            self.examDirectoryLogFile.write('Server received ' + str(len(data)) + ' bytes\n')
+            self.examDirectoryLogFile.write('First line: ' + str(data.split('\n')[0]) + '\n')
 
         # pClientSocket.shutdown(socket.SHUT_WR)
 
         # pClientSocket.close()   this was commented out in 2016!
         self.totalClients -= 1
-        print "Closing socket at {0}".format(addr)
+        print("Closing socket at {0}".format(addr))
+        self.examDirectoryLogFile.write("Closing socket at {0}\n".format(addr))
         return  # end while
 
 
@@ -219,7 +259,8 @@ class OmsiServer:
 
             return lNewFile
         except IOError:
-            print "File could not be created on the Server"
+            print("File could not be created on the Server")
+            self.examDirectoryLogFile.write("File could not be created on the Server\n")
             return False
 
     def parseSubmitFileRequest(self, pClientSocket, data):
@@ -252,16 +293,17 @@ class OmsiServer:
 
         newFile.write(data[i:])
 
-        print "Got file {0} from {1}".format(filename, email)
+        print("Got file {0} from {1}".format(filename, email))
+        self.examDirectoryLogFile.write("Got file {0} from {1}\n".format(filename, email))
         if len(data) < 1024:
-            pClientSocket.send("success")
+            pClientSocket.send(str.encode("success"))
             return
 
         while True:
             data = pClientSocket.recv(1024)
             newFile.write(data)
             if len(data) < 1024:
-                pClientSocket.send("success")
+                pClientSocket.send(str.encode("success"))
                 return
 
 
@@ -276,7 +318,7 @@ class OmsiServer:
         # initialize success indicator to fail
         lSuccess = "f"
         # let the client know the server is ready
-        pClientSocket.send("ReadyToAcceptClientFile")
+        pClientSocket.send(str.encode("ReadyToAcceptClientFile"))
 
         # receive the file
         tmpFile = ''
@@ -284,19 +326,23 @@ class OmsiServer:
             # set a timeout for this
             ready = select.select([pClientSocket], [], [], 2)
             if ready[0]:
-                lChunkOfFile = pClientSocket.recv(1024)
+                lChunkOfFile = pClientSocket.recv(1024).decode("utf-8")
                 tmpFile += lChunkOfFile
-                print 'received from '+pStudentEmail+':'
-                print lChunkOfFile
+                print('Received from '+pStudentEmail+':')
+                print(lChunkOfFile)
+                self.examDirectoryLogFile.write('Received from ' + pStudentEmail + ':\n')
+                self.examDirectoryLogFile.write(lChunkOfFile + '\n')
                 ## lNewFile.write(lChunkOfFile)
             else:
                 # avoid overwriting an existing file with an empty one
                 if len(tmpFile) == 0: break
-                print 'creating/updating student answer file'
+                print('creating/updating student answer file')
+                self.examDirectoryLogFile.write('Creating/updating student answer file\n')
                 lNewFile = self.openNewFileServerSide(pFileName, pStudentEmail)
-                lNewFile.write(tmpFile)
+                lNewFile.write(str.encode(tmpFile))
                 lNewFile.close()
                 print("Finished accepting file")
+                self.examDirectoryLogFile.write("Finished accepting file\n")
                 lSuccess = "s"
                 break
 
@@ -305,7 +351,8 @@ class OmsiServer:
 
         if lSuccess == "f":
             # something went wrong
-            print "File transfer was not successful"
+            print("File transfer was not successful")
+            self.examDirectoryLogFile.write("File transfer was not successful\n")
         ### close file, regardless of success
         ##lNewFile.close()
 
@@ -321,26 +368,31 @@ class OmsiServer:
             qfilelen = len(lFileChunk)
             lExceptionOccurred = False
         except IOError:
-            print "Something wrong with reading the Questions file"
+            print("Something wrong with reading the Questions file")
+            self.examDirectoryLogFile.write("Something wrong with reading the Questions file\n")
             lFileChunk = ""
             lExceptionOccurred = True
 
         # send the file
         while (lFileChunk):
-            print 'sending file chunk\n'
-            print 'first line:', lFileChunk.split('\n')[0], '\n'
-            pClientSocket.send(lFileChunk)
+            print('Sending file chunk\n')
+            print('First line:', lFileChunk.split('\n')[0], '\n')
+            self.examDirectoryLogFile.write("Sending file chunk\n")
+            self.examDirectoryLogFile.write("First line: " + str(lFileChunk.split('\n')[0]) + '\n')
+
+            pClientSocket.send(str.encode(lFileChunk))
             # print "Sending file chunk {0}".format(lFileChunk)
             lFileChunk = lOpenedQuestions.read(1024)
             qfilelen = qfilelen + len(lFileChunk)
-        pClientSocket.send(chr(0))
+        pClientSocket.send(str.encode(chr(0)))
         # print "Sending eof chunk {0}".format(lFileChunk)
         # pClientSocket.send(lFileChunk)
 
         # display success message for debugging purposes only
         # TODO: comment this out for prod. It clogs up the command prompt unnecessarily
         if lExceptionOccurred == False:
-            print 'Successfully sent the questions file to a client'
+            print('Successfully sent the questions file to a client')
+            self.examDirectoryLogFile.write("Successfully sent the questions file to a client\n")
 
         return qfilelen
  
@@ -355,15 +407,19 @@ class OmsiServer:
                 qfilelen = len(lFileChunk)
                 lExceptionOccurred = False
             except IOError:
-                print "No such file"
+                print("No such file")
+                self.examDirectoryLogFile.write("No such file\n")
                 lFileChunk = ""
                 lExceptionOccurred = True
 
             # send the file
             while (lFileChunk):
-                print 'sending file chunk\n'
-                print 'first line:', lFileChunk.split('\n')[0], '\n'
-                pClientSocket.send(lFileChunk)
+                print('Sending file chunk\n')
+                print('First line:', lFileChunk.split('\n')[0], '\n')
+                self.examDirectoryLogFile.write("Sending file chunk\n")
+                self.examDirectoryLogFile.write("First line: " + str(lFileChunk.split('\n')[0]) + '\n')
+
+                pClientSocket.send(str.encode(lFileChunk))
                 # print "Sending file chunk {0}".format(lFileChunk)
                 lFileChunk = lOpenedFile.read(1024)
                 qfilelen = qfilelen + len(lFileChunk)
@@ -374,11 +430,13 @@ class OmsiServer:
             # display success message for debugging purposes only
             # TODO: comment this out for prod. It clogs up the command prompt unnecessarily
             if lExceptionOccurred == False:
-                print 'Successfully sent file to a client'
+                print('Successfully sent file to a client')
+                self.examDirectoryLogFile.write("Successfully sent file to a client\n")
 
             return qfilelen
         else:
-            print 'No file to send'
+            print('No file to send')
+            self.examDirectoryLogFile.write("No file to send\n")
         return False
 
     # asks professor to specify directory to store exam questions and student submissions
@@ -413,8 +471,10 @@ class OmsiServer:
 
         # if attempt to open file fails, print error and return false
         except IOError:
-            print 'Error: File does not exist or is not readable. Please check that the specified path is spelled ' \
-                  'correctly and a file named \'Questions.txt\' is in the specified directory.'
+            print('Error: File does not exist or is not readable. Please check that the specified path is spelled ' \
+                  'correctly and a file named \'Questions.txt\' is in the specified directory.')
+            self.examDirectoryLogFile.write('Error: File does not exist or is not readable. Please check that the specified path is spelled ' \
+                  'correctly and a file named \'Questions.txt\' is in the specified directory.\n')
             return False
 
 
@@ -422,13 +482,13 @@ class OmsiServer:
 # set up the connection, start listening, start the threads and 
 # send feedback to client
 def main():
-    print "running"
+    print("Running")
     v = open('VERSION')
     version = v.readline()
-    print 'Version', version
-    # command line should be:  OmsiServer.py, port, exam name
+    print('Version: ', version)
+    # command line should be:  python3 OmsiServer.py <port> <exam name>
     if len(sys.argv) <  3:
-        print "Usage: OmsiServer.py port exam_name"
+        print("Usage: python3 OmsiServer.py <port> <exam name>")
         sys.exit(1)
     hostname = socket.gethostname()
     omsiServer = OmsiServer(hostname,int(sys.argv[1]),sys.argv[2])
@@ -437,8 +497,10 @@ def main():
        open(omsiServer.examDirectory + '/LOGFILE','w')
     omsiServer.version = version
     # connection information.
-    print "Server for {0} is now running at {1}:{2}".format(sys.argv[2], \
-       hostname, sys.argv[1])
+    print("Server for {0} is now running at {1}:{2}".format(sys.argv[2], \
+       hostname, sys.argv[1]))
+    omsiServer.examDirectoryLogFile.write("Server for {0} is now running at {1}:{2}\n"\
+          .format(sys.argv[2], hostname, sys.argv[1]))
     while True:
         omsiServer.awaitConnections()
 

@@ -1,8 +1,8 @@
-from Tkinter import *
+from tkinter import *
 from threading import Timer
-import tkMessageBox
-import tkFileDialog
-import tkSimpleDialog
+import tkinter.messagebox
+import tkinter.filedialog
+import tkinter.simpledialog
 import os
 import stat
 import OmsiQuestion
@@ -40,7 +40,7 @@ class OmsiGui(Frame):
     # menu. Not currently used. Probably should delete.
     def onOpen(self):
         ftypes = [('Python files', '*.py'), ('All files', '*')]
-        dlg = tkFileDialog.Open(self, filetypes=ftypes)
+        dlg = tkinter.filedialog.Open(self, filetypes=ftypes)
         fl = dlg.show()
         if fl != '':
             f = open(fl, "r")
@@ -49,7 +49,7 @@ class OmsiGui(Frame):
 
     def helloCallback(self):
         s = "This size is {0}".format(self.parent.winfo_height())
-        tkMessageBox.showinfo("Hello Python", s)
+        tkinter.messagebox.showinfo("Hello Python", s)
 
     # Updates the question box with the question when a question
     # is clicked in the listbox
@@ -118,7 +118,7 @@ class OmsiGui(Frame):
             self.dBox.update_idletasks()
             self.cancel()
         except ValueError as e:
-            tkMessageBox.showwarning("Error", e)
+            tkinter.messagebox.showwarning("Error", e)
 
     # The user canceled the connect to server box.
     def cancel(self, event=None):
@@ -156,7 +156,7 @@ class OmsiGui(Frame):
         with open(filename, 'w') as f:
             st = os.stat(filename)
             os.chmod(filename,st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-            f.write(self.QuestionsArr[qNum].getAnswer())
+            f.write(self.QuestionsArr[qNum].getAnswer().decode("utf-8"))
 
     #function compile Program
     #compiles the program file with given flags
@@ -189,7 +189,7 @@ class OmsiGui(Frame):
             if not os.path.isfile(fName):   #check if file exists
                 msg = \
                    "File not found. Please make sure you have saved the file."
-                tkMessageBox.showinfo("Error", msg)
+                tkinter.messagebox.showinfo("Error", msg)
                 return False 
             infile = None  #for proc
             outfile = open("com_" + str(qNum), 'w') #for proc
@@ -197,8 +197,8 @@ class OmsiGui(Frame):
 
             #generating executable...
             startTime = time.time()  #start time
-            print "Compiling with {0} {1} -o {2} {3}".\
-               format(compiler, ' '.join(flags), execName,fName)
+            print("Compiling with {0} {1} -o {2} {3}".\
+               format(compiler, ' '.join(flags), execName,fName))
 
             ## proc = subprocess.Popen([compiler] + flags + ["-o", 
             ##    execName, fName], stdin = infile, stdout = outfile, 
@@ -232,7 +232,7 @@ class OmsiGui(Frame):
             os.remove("com_" + str(qNum))
         else:
             msg = "\nNot authorised!\n"
-            tkMessageBox.showinfo("Compiler", msg)
+            tkinter.messagebox.showinfo("Compiler", msg)
             return False
         
         # display msg in pop-up box
@@ -261,7 +261,7 @@ class OmsiGui(Frame):
                 os.system(self.pdfCmd.split(' ')[0] + " Rplots.pdf")
                 pass
             except:
-                tkMessageBox.showwarning("Error with open command!")
+                tkinter.messagebox.showwarning("Error with open command!")
 
     def runProgram(self, qNum = None):       
         self.submitAnswer()
@@ -284,13 +284,13 @@ class OmsiGui(Frame):
                 execName = "omsi_answer" + str(qNum)  #name of the executable    
                 if not os.path.isfile(execName):   #check if file exists
                     msg = "Executable not found!\nPlease make sure you have compiled the program."
-                    tkMessageBox.showinfo("Run", msg)
+                    tkinter.messagebox.showinfo("Run", msg)
                     return False
             else:
             #check if file exists
                 if not os.path.isfile(fName):   #check if file exists
                     msg = "File not found! Please make sure you have saved the file."
-                    tkMessageBox.showinfo("Run", msg)
+                    tkinter.messagebox.showinfo("Run", msg)
                     return False 
 
             infile = None  #for proc
@@ -299,7 +299,7 @@ class OmsiGui(Frame):
 
             # get the runCmd - in instructor questions.txt
             runCmd = self.QuestionsArr[qNum].getRunCmd() 
-            print runCmd
+            print(runCmd)
             # NM, Nov. 19, 2017:  Originally wanted to use commands
             # module, in order to get both output and runtime errors.
             # But it turns out that this is not available on Windows.
@@ -335,7 +335,7 @@ class OmsiGui(Frame):
         else:
         # this question does not allow run
             msg = "\nNot authorised!\n"
-            tkMessageBox.showinfo("Run", msg)
+            tkinter.messagebox.showinfo("Run", msg)
             return False
 
         # display msg in pop-up box
@@ -364,11 +364,11 @@ class OmsiGui(Frame):
 
         try:
             lServerResponse = self.OmsiClient.sendFileToServer(filename)
-            print 'server response seen from submitAnswer():', lServerResponse
-            tkMessageBox.showinfo("Submission Results", str(lServerResponse))
+            print('server response seen from submitAnswer():', lServerResponse)
+            tkinter.messagebox.showinfo("Submission Results", str(lServerResponse))
             self.OmsiClient.omsiSocket.close()
         except ValueError as e:
-            tkMessageBox.showwarning("Error!", e)
+            tkinter.messagebox.showwarning("Error!", e)
             return
 
     def submitAllAnswers(self):
@@ -464,37 +464,37 @@ class OmsiGui(Frame):
        try:
           v = open('VERSION')
        except:
-          print 'ERROR  ERROR  ERROR  ERROR  ERROR  ERROR ' 
-          print 'no VERSION file; did you start from the OMSI directory?'
+          print('ERROR  ERROR  ERROR  ERROR  ERROR  ERROR ') 
+          print('no VERSION file; did you start from the OMSI directory?')
           sys.exit(1)
        tmp = v.readline()
        self.version = tmp
-       print 'Version', tmp
+       print('Version', tmp)
 
     # downloads the exam questions from the server
     def getQuestionsFromServer(self):
-        print 'downloading the exam questions'
+        print('downloading the exam questions')
         try:
             socket = self.OmsiClient.configureSocket()
             self.OmsiClient.getExamQuestionsFile(socket)
-            print "closing socket"
+            print("closing socket")
             socket.close()
         except ValueError as e:
-            tkMessageBox.showwarning("Error in downloading questions", e)
+            tkinter.messagebox.showwarning("Error in downloading questions", e)
         return True
 
     def getSuppFileFromServer(self):
-        print 'downloading code from server'
+        print('downloading code from server')
         try:
             socket = self.OmsiClient.configureSocket()
             self.OmsiClient.getSuppFile(socket)
-            print "closing socket"
+            print("closing socket")
             socket.close()
         except ValueError as e:
-            tkMessageBox.showwarning("Error in downloading supplementary file", e)
+            tkinter.messagebox.showwarning("Error in downloading supplementary file", e)
         
         msg = "\n Successfully copied supplementary file to OMSI directory. \n"
-        tkMessageBox.showinfo("Successful copy", msg)
+        tkinter.messagebox.showinfo("Successful copy", msg)
         return True
 
     # Ensures the info entered in the for the server is valid.
@@ -509,7 +509,7 @@ class OmsiGui(Frame):
                 raise ValueError
             return 1
         except ValueError:
-            tkMessageBox.showwarning(
+            tkinter.messagebox.showwarning(
                 "Bad input", "Enter host, post, email, exam code!"
             )
             return 0

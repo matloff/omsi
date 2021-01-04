@@ -38,7 +38,7 @@ def ParseQuestions(filename):
 						if i+1 >= len(words):
 							print("Error! Unexpected end of arguments...")
 						else:
-							print("Setting type to {0}".format(words[i+1]))
+							print(("Setting type to {0}".format(words[i+1])))
 							filetype = words[i+1]
 						i+= 1
 					if words[i] == '-flags':
@@ -46,14 +46,14 @@ def ParseQuestions(filename):
 							print("Error! Unexpected end of arguments...")
 						else:
 							fl = words[i+1]
-							print("Setting flags to {0}".format(fl))
+							print(("Setting flags to {0}".format(fl)))
 							flags = fl
 					if words[i] == '-com':  #check if question can be compiled
 						if i+1 >= len(words):
 							print("Error! Unexpected end of arguments...")
 						else:
 							com = words[i+1]
-							print("Setting compiler option to {0}".format(com))
+							print(("Setting compiler option to {0}".format(com)))
 							compileProgram = 'y'
 							compiler = com
 					if words[i] == '-run':  #check if question can be run
@@ -62,7 +62,7 @@ def ParseQuestions(filename):
 						else:
 							runCmd = words[i+1]
 							runProgram = 'y'
-							print("Setting run-command option to {0}".format(runCmd))
+							print(("Setting run-command option to {0}".format(runCmd)))
 							runCmd = runCmd
 
 
