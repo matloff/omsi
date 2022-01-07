@@ -583,7 +583,7 @@ class OmsiGui(Frame):
         self.questionFrame = Frame(self.parent, bg="ghost white")
         self.questionFrame.grid(row=0, column=0, sticky="nswe")
 
-        self.lb = Listbox(self.questionFrame, width=20, bg="lavender")
+        self.lb = Listbox(self.questionFrame, width=20, bg="lavender", fg="black")
         self.lb.insert(1, "Click on File to connect to server...")
         self.lb.bind('<<ListboxSelect>>', self.listboxSelected)
 
@@ -601,7 +601,7 @@ class OmsiGui(Frame):
 
         # Question text box
         qframe = Frame(pWindow, bd=0)
-        self.question = Text(qframe, bg="pale turquoise", 
+        self.question = Text(qframe, bg="pale turquoise", fg="black",
            font=("sans-serif", 20),wrap=WORD)
         ## pWindow.add(self.question,sticky = "nwe")
         self.question.config(state=DISABLED)
@@ -615,7 +615,7 @@ class OmsiGui(Frame):
 
         # Answer text box
         aframe = Frame(pWindow, bd=0)
-        self.txt = Text(aframe, bg="khaki", 
+        self.txt = Text(aframe, bg="khaki", fg="black",
            font=("sans-serif", 16),wrap=WORD)
         avscroll = Scrollbar(aframe, orient=VERTICAL, command=self.txt.yview)
         self.txt['yscroll'] = avscroll.set
