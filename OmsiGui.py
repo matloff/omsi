@@ -17,17 +17,17 @@ import pdb
 
 # This is the GUI portion of the OMSI application.
 class OmsiGui(Frame):
-    def __init__(self, master):
+    def __init__(self, master, pdf_list):
         Frame.__init__(self, master)
         self.parent = master
         self.QuestionsArr = []
         self.curqNum = -1
-        self.widgets()
         self.host = None
         self.port = None
         self.email = None
         self.examID = None
-        self.pdfCmd = None
+        self.pdfCmd = pdf_list
+        self.widgets()
         self.OmsiClient = None
         self.version = None
 
@@ -253,12 +253,19 @@ class OmsiGui(Frame):
        self.updateAnswerBox('cpyqtoa')
 
     def viewPDF(self):
-       os.system(self.pdfCmd)
+       if self.pdfCmd:
+           for comm in self.pdfCmd:
+              os.system(comm)
+
+    def viewSinglePDF(self, index):
+        def runner():
+            os.system(self.pdfCmd[index])
+        return runner
 
     def viewGraph(self):
         if self.pdfCmd != None:
             try:
-                os.system(self.pdfCmd.split(' ')[0] + " Rplots.pdf")
+                os.system(self.pdfCmd[0].split(' ')[0] + " Rplots.pdf")
                 pass
             except:
                 tkinter.messagebox.showwarning("Error with open command!")
@@ -557,7 +564,11 @@ class OmsiGui(Frame):
         filemenu.add_command(label="Compile", command=self.compileProgram)
         filemenu.add_command(label="Submit & Run", command=self.runProgram)
         filemenu.add_command(label="CopyQtoA", command=self.copyQtoA)
-        filemenu.add_command(label="View PDF", command=self.viewPDF)
+        if self.pdfCmd:
+            for i in range(len(self.pdfCmd)):
+                filename = self.pdfCmd[i].split(" ")[1]
+                filemenu.add_command(label="View "+filename, command=self.viewSinglePDF(i))
+        filemenu.add_command(label="View All PDF", command=self.viewPDF)
         filemenu.add_command(label="View R graphs", command=self.viewGraph)
 
         filemenu.add_separator()
@@ -633,7 +644,15 @@ def main():
        format(top.winfo_screenwidth(), top.winfo_screenheight()))
     top.update()
     # top.minsize(top.winfo_width(),top.winfo_height())
-    app = OmsiGui(top)
+    pdf_list = None
+    if len(sys.argv) > 5:
+        pdf_list = []
+        pos = 5
+        while pos < len(sys.argv):
+            pdf_list.append(sys.argv[pos])
+            pos += 1
+
+    app = OmsiGui(top, pdf_list)
     narg = len(sys.argv)
     if narg > 1:
        app.host = sys.argv[1]
@@ -643,8 +662,7 @@ def main():
              app.email = sys.argv[3]
              if narg > 4:
                 app.examID = sys.argv[4]
-                if narg > 5:
-                   app.pdfCmd = sys.argv[5]
+
 
     top.mainloop()
 
