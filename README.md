@@ -23,6 +23,7 @@
 [Arnav Acharyya](mailto:aacharyya@ucdavis.edu),
 [Matt Donnelly](mailto:brilliantrocketscientist@outlook.com),
 [S. Ismail](mailto:sismail@ucdavis.edu), 
+[Lan Jiang](mailto:lanjiang@ucdavis.edu),
 [Sachin Kumawat](mailto:skumawat@ucdavis.edu),  
 [Thong Le](mailto:thmle@ucdavis.edu), 
 [Chase Maguire](mailto:cmaguire@ucdavis.edu), 
@@ -89,8 +90,8 @@ student, working a quick exam problem and submitting it to
 the server; and play the role of the instructor, inspecting the student's
 submitted work.
 
-- Go to [the OMSI repo](http://github.com/matloff/omsi), download the
-  **.zip** file (**Clone or download | Download ZIP**), unzip it, 
+- If you know **git**, just clone [the OMSI repo](http://github.com/matloff/omsi).  Otherwise, go to the repor and download the
+  **.zip** file (**Clone or download | Download ZIP**), and unzip it, 
 
 - In a terminal window, change to the resulting directory/folder 
   **omsi-master**. You should see files **OmsiServer.py** etc.  
@@ -134,7 +135,12 @@ the file **omsi_answer2.py** or whatever.
 - Kill the server by hitting ctrl-C.
 
 Note that since you had the host and client on the same machine, the
-host was 'localhost'.
+host was 'localhost'.  On a real exam, the instructor announces the
+location of the server, and the students use that instead of
+'localhost'.
+
+<b>IMPORTANT NOTE:</b> The students may need a VPN to access the server.
+If so, they must keep this in mind when starting up OMSI. 
 
 <h2>
 <a name="what"> What is OMSI?</a> 
