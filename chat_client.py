@@ -11,8 +11,8 @@ def query(server_addr, port, my_question):
         soc.send(str.encode(my_question))
         msg_received = soc.recv(1024).decode()
         soc.close()
-    except Exception:
-        msg_received = str(Exception)
+    except Exception as e:
+        msg_received = str(e)
     return msg_received
 
 
@@ -52,7 +52,7 @@ def gui_setup():
             msg_received = query(server_addr, port, outbound_msg)
 
             response_entry.configure(state="normal")
-            response_entry.insert("end", msg_received)
+            response_entry.insert("end", msg_received+"\n")
             response_entry.configure(state="disabled")
             send_button["state"] = "normal"
 
