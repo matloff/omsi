@@ -29,7 +29,7 @@ def gui_setup():
     entry_label = tkinter.Label(top, text="Question (Please make it clear and concise): ")
     response_label = tkinter.Label(top, text="Responses: ")
     entry_label.grid(row=0)
-    response_label.grid(row=2)
+    response_label.grid(row=3)
 
     question_entry = tkinter.Text(top, font=("sans-serif", 12), bg="azure")
     question_entry.insert("end", "<Please entry your question here>")
@@ -37,7 +37,7 @@ def gui_setup():
 
     response_entry = tkinter.Text(top, font=("sans-serif", 12), bg="azure")
     response_entry.configure(state="disabled")
-    response_entry.grid(row=3)
+    response_entry.grid(row=4)
 
     # Callback for the button
     def send_message():
@@ -60,7 +60,7 @@ def gui_setup():
         threading.Thread(target=actions_after_responses).start()
 
     send_button = tkinter.Button(text="Send", command=send_message)
-    send_button.grid(row=4)
+    send_button.grid(row=2)
 
     # Set sail!
     top.mainloop()
