@@ -155,13 +155,14 @@ gradestudentans <- function(i) {
 }
 
 grader <- function() {
+   setwd('StudentFiles')
+   topdir <- getwd()  # 4/18/23
    on.exit(setwd(topdir))
    testid <<- readline("enter test ID: ") 
    # set up R list that will contain the true answers
    getkey()  
    output <<- vector(mode="character")
    # loop across all student directories
-   ### browser()
    for (emailaddr in list.dirs(full.names=FALSE,recursive=FALSE)) {  
       if (emailaddr == '') next
       cat("\n\n","  now grading",emailaddr,"\n")
