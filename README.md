@@ -43,11 +43,11 @@ Norm Matloff
 <UL>
 
 <li> 
-<a href="#quickstart">5-Minute Quick start for students and instructors:</a> 
+<a href="#what">What is OMSI?</a> 
 </li> </p> 
 
 <li> 
-<a href="#what">What is OMSI?</a> 
+<a href="#quickstart">5-Minute Quick start for students and instructors:</a> 
 </li> </p> 
 
 <li> 
